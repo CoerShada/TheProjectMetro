@@ -1,0 +1,109 @@
+{
+    "resperating_mask":
+    {
+        "category": "master",
+        "sounds":
+        [
+            {
+                "name": "entity/player/mask_breathing",
+                "stream": true
+            }
+        ]
+    },
+
+    "hit_rock":
+    {
+        "category": "master",
+        "sounds":
+        [
+            {
+                "name": "blocks/hit_rock",
+                "stream": false
+            }
+        ]
+    },
+
+    "item_firearm_mag_weapon_ppsh_shoot":
+    {
+        "category": "master",
+        "sounds":
+        [
+            {
+                "name": "guns/ppsh/shoot_1",
+                "stream": false
+            }
+        ]
+    },
+
+	"ak74_shoot":
+    {
+        "category": "master",
+        "sounds":
+        [
+            {
+                "name": "guns/ak74/shoot",
+                "stream": false
+            }
+        ]
+    },
+
+    "ak74_load":
+    {
+        "category": "master",
+        "sounds":
+        [
+            {
+                "name": "guns/ak74/load",
+                "stream": false
+            }
+        ]
+    },
+
+    "ak74_unload":
+    {
+        "category": "master",
+        "sounds":
+        [
+            {
+                "name": "guns/ak74/unload",
+                "stream": false
+            }
+        ]
+    },
+
+
+    "main_menu_music":
+    {
+        "category": "master",
+        "sounds":
+        [
+            {
+                "name": "music/mainmenu/mainmenu1",
+                "stream": true
+            }
+        ]
+    },
+
+    "mob.example_entity":
+    {
+        "category": "hostile",
+        "sounds":
+        [
+            {
+                "name": "nani"
+            }
+        ]
+    },
+
+    "Example_sounds_two":
+    {
+        "category": "block",
+        "sounds":
+        [
+            {
+                "name": "nani",
+                "stream": true
+            }
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+ItemWeaponModule{
+	name=test_name;
+	weight=0.105;
+	verticalRecoil=0.23;
+	horizontalRecoil=0.013;
+	convenience=7.12;
+	accuracy=0;
+	powerMod=0;
+	jummingMod=0;
+	potentialInstalledModules=null;
+	//description??
+}
+
+ItemWeaponModule{
+	name=test_name1;
+	weight=0.105;
+	verticalRecoil=0;
+	horizontalRecoil=0;
+	convenience=-1;
+	accuracy=0;
+	powerMod=0;
+	jummingMod=0;
+	potentialInstalledModules=test_name;
+	//description??
+}

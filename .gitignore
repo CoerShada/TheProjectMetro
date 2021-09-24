@@ -1,0 +1,11 @@
+/*.txt
+/*.classpath
+.settings
+/bin
+/build
+/config
+/eclipse
+/logs
+/mods
+/resourcepacks
+/saves

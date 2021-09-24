@@ -1,0 +1,29 @@
+bullet{
+	name=bullet_shell_factory_9x18mm;
+	weight = 10;
+	damage = 22;
+	penetration = 90;
+	jamming = 0.1;
+	armorDamage=7;
+	fragmentationChance=0.15;
+	parts = 1;
+
+	sizeModel=1;			//Размеер модели
+	sizeModelOnInventory=1;	//Размер модели в инвенатре
+
+	posX=1;					//Позиция предмета в руках
+	posY=1;
+	posZ=1;
+
+	rotationX=1;			//Поворот предмета в руках
+	rotationY=1;
+	rotationZ=1;
+
+	rightHandPosX=1;		//Позиция правой руки
+	rightHandPosY=1;
+	rightHandPosZ=1;
+
+	rightHandRotationX=1;
+	rightHandRotationY=1;
+	rightHandRotationZ=1;
+}
