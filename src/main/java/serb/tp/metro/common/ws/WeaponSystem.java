@@ -42,15 +42,6 @@ public class WeaponSystem implements IExtendedEntityProperties {
 		return changed;
 	}
 	
-	public boolean mouseLeftButtonPressed() {
-		return Mouse.isButtonDown(0);
-	}
-	
-	public boolean mouseRightButtonPressed() {
-		return Mouse.isButtonDown(1);
-	}
-	
-
 	
 	public void reg(EntityPlayer player) {
 		player.registerExtendedProperties(TAG, new WeaponSystem());
