@@ -52,10 +52,7 @@ public class ItemMag extends ItemWeaponModule
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean isAdv) {
         if (!itemStack.hasTagCompound()) return;
         NBTTagCompound nbt = itemStack.getTagCompound();
-        if (new ItemStack(bullets[nbt.getInteger("getBullet")])!=null)
-        	list.add(Type.getTranslate("characteristic.guns.loadammo") +": " + (new ItemStack(bullets[nbt.getInteger("getBullet")]).getDisplayName()));
-        else
-        	System.out.println("NULL: " + nbt.getInteger("getBullet"));
+        list.add(Type.getTranslate("characteristic.guns.loadammo") +": " + (new ItemStack(bullets[nbt.getInteger("getBullet")]).getDisplayName()));
         list.add(Type.getTranslate("characteristic.guns.ammunition") + ": " + nbt.getIntArray("bullets").length); 
         list.add(Type.getTranslate("characteristic.all.weight")+": " + String.format("%.2f", nbt.getFloat("weight")/1000) + Type.getTranslate("characteristic.all.weight.kg"));
 
@@ -74,9 +71,14 @@ public class ItemMag extends ItemWeaponModule
     }
     
     
-    public void unloadAmmo(ItemStack hold, EntityPlayer player) 
+    
+    public ItemStack unloadAmmo(EntityPlayer player, World world) 
     {
-    	if (hold.hasTagCompound() && hold.getTagCompound().getIntArray("bullets").length>0 && hold.stackTagCompound.getLong("counter")+cooldownUnloading <= new Date().getTime())
+    	
+    	ItemStack bullet = null;
+    	ItemStack hold = player.inventory.getCurrentItem();
+    	
+    	if (hold.hasTagCompound() && hold.getTagCompound().getIntArray("bullets").length>0 && hold.stackTagCompound.getLong("counter")+cooldownUnloading <= world.getTotalWorldTime())
     	{
         	if (player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(19).hasTagCompound()) 
         	{
@@ -87,18 +89,21 @@ public class ItemMag extends ItemWeaponModule
         		{
         			if(inv.getStackInSlot(i)!=null && Item.getIdFromItem(inv.getStackInSlot(i).getItem()) == hold.getTagCompound().getIntArray("bullets")[0] && inv.getStackInSlot(i).stackSize<64) {
         				
-        				PacketDispatcher.sendToServer(new UnloadAmmoMessage(1, i));
+        				bullet = unload(player, world);
+        				
+        				inv.getStackInSlot(i).stackSize++;
         				inv.closeInventory();
-        				return;
+        				return hold;
         			}
         		}
         		for (int i = 0; i<rig.getTagCompound().getByte("size"); i++) 
         		{
         			if(inv.getStackInSlot(i)==null) {
         				
-        				PacketDispatcher.sendToServer(new UnloadAmmoMessage(1, i));
+        				bullet = unload(player, world);
+        				inv.setInventorySlotContents(i, bullet);
         				inv.closeInventory();
-        				return;
+        				return hold;
         			}
         		}
         	}
@@ -106,8 +111,11 @@ public class ItemMag extends ItemWeaponModule
     		{
     			if (player.inventory.getStackInSlot(i)!=null && Item.getIdFromItem(player.inventory.getStackInSlot(i).getItem()) == hold.getTagCompound().getIntArray("bullets")[0] && player.inventory.getStackInSlot(i).stackSize<64) 
     			{
-    				PacketDispatcher.sendToServer(new UnloadAmmoMessage(2, i));
-    				return;
+    				bullet = unload(player, world);
+    				if (!world.isRemote)
+    					player.inventory.getStackInSlot(i).stackSize++;
+    				
+    				return hold;
     			}
     		}
 
@@ -115,13 +123,16 @@ public class ItemMag extends ItemWeaponModule
     		{
     			if (player.inventory.getStackInSlot(i)==null) 
     			{
-    				PacketDispatcher.sendToServer(new UnloadAmmoMessage(2, i));
-    				return;
+    				bullet = unload(player, world);
+    				if (!world.isRemote)
+    					player.inventory.setInventorySlotContents(i, bullet);
+    				return bullet;
     			}
     		}
-
-    		PacketDispatcher.sendToServer(new UnloadAmmoMessage(-1, -1));
+    		bullet = unload(player, world);
+    		player.func_146097_a(bullet, true, false);
     	}
+    	return hold;
     }
     
     public void loadAmmo(ItemStack hold, EntityPlayer player)
@@ -155,6 +166,8 @@ public class ItemMag extends ItemWeaponModule
         
     }
     
+    
+    
     public ItemStack chengeAmmo(ItemStack hold, World world ,EntityPlayer player) 
     {
         if (world.isRemote)
@@ -163,4 +176,22 @@ public class ItemMag extends ItemWeaponModule
         return hold;
     }
     
+    
+    private ItemStack unload(EntityPlayer player, World world) {
+    	ItemStack hold = player.inventory.getCurrentItem();
+		int[] bullets = hold.getTagCompound().getIntArray("bullets");
+		int[] bulletsNew = new int[bullets.length-1];
+		ItemBullet bullet = (ItemBullet) Item.getItemById(bullets[0]);
+		ItemStack bulletStack = new ItemStack(bullet);
+		for (int j = 0; j<bullets.length-1; j++) {
+			bulletsNew[j] = bullets[j+1];
+		}
+		hold.getTagCompound().setIntArray("bullets", bulletsNew);
+		hold.getTagCompound().setDouble("weight", hold.getTagCompound().getDouble("weight") - bullet.weight);
+		hold.stackTagCompound.setLong("counter", world.getTotalWorldTime());
+		bulletStack.setTagCompound(new NBTTagCompound());
+		bulletStack.getTagCompound().setFloat("weight", bullet.weight);
+		//player.inventoryContainer.detectAndSendChanges();
+		return bulletStack;
+    }
 }

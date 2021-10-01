@@ -18,13 +18,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import serb.tp.metro.client.Type;
+import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.items.Item3D;
 import serb.tp.metro.network.PacketDispatcher;
 import serb.tp.metro.network.server.ChangeFireModMessage;
 import serb.tp.metro.network.server.ChangeSafetyModMessage;
 import serb.tp.metro.network.server.ShootMessage;
 
-public abstract class ItemWeapon extends Item3D{
+public abstract class ItemWeapon extends Item3D {
 	
 	Random rnd = new Random();
     protected final float penetrationMod;
@@ -72,7 +73,7 @@ public abstract class ItemWeapon extends Item3D{
     	this.accuracy = accuracy;
     	this.soundRadius = soundRadius;
     	this.fireMods = fireMods;
-    	this.setCreativeTab(CreativeTabs.tabCombat);
+    	this.setCreativeTab(LoadTabs.weapons);
     	this.setMaxStackSize(1);
     	this.setFull3D();  
 	}
@@ -83,6 +84,12 @@ public abstract class ItemWeapon extends Item3D{
 
     public float getJummingChance() {
     	return this.jummingChance;
+    }
+    
+    public void onUpdate(ItemStack hold, World world, Entity entity, int integer, boolean isHold) {
+    	if (!isHold) return;
+    	
+    	
     }
     
     @SideOnly(Side.CLIENT)
@@ -124,7 +131,7 @@ public abstract class ItemWeapon extends Item3D{
 
     @Override
     public boolean onLeftClickEntity(ItemStack is, EntityPlayer player, Entity entity) {
-	return true;
+    	return true;
     }
     
     @Override

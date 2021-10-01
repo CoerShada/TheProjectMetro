@@ -18,7 +18,7 @@ import serb.tp.metro.network.PacketDispatcher;
 public class Main {
 	public static final String name = "The project Metro";
 	public static final String modid = "tp";
-	public static final String version = "Pre Alpha Build 1.9.0";
+	public static final String version = "Pre Alpha Build 1.9.8";
 	public static final boolean debug = false;
 	
 	@Mod.Instance(Main.modid)

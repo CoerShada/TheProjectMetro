@@ -15,8 +15,8 @@ import serb.tp.metro.client.resources.Resources;
 import serb.tp.metro.items.ItemBackpack;
 import serb.tp.metro.items.armor.ItemHelmet;
 import serb.tp.metro.items.armor.LoadItemArmor;
-import serb.tp.metro.items.guns.ItemBullet;
-import serb.tp.metro.items.guns.ItemGun;
+import serb.tp.metro.items.weapons.ItemBullet;
+import serb.tp.metro.items.weapons.ItemWeapon;
 
 public class RenderItem {			
 
@@ -46,7 +46,7 @@ public class RenderItem {
 			texture =  new ResourceLocation(Main.modid, "textures/models/items/armor/backpack_gekkon.png");
 			model = "armor/masks/"+ item.getUnlocalizedName().substring(5);
 		}
-		if(equip instanceof ItemGun) {
+		if(equip instanceof ItemWeapon) {
 			texture =  new ResourceLocation(Main.modid, "textures/models/items/weapons/automatic/"+item.getUnlocalizedName().substring(5)+".png");
 			model = "weapons/automatic/" +item.getUnlocalizedName().substring(5);
 		}
@@ -76,14 +76,6 @@ public class RenderItem {
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 				GL11.glScalef(0.4F, 0.4F, 0.4F);
 				GL11.glCallList(ClientProxy.getRenderAll(model));
-				if(item.hasTagCompound() && item.getTagCompound().getString("visor").equalsIgnoreCase("open")) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "open"));
-				}
-				else if(item.hasTagCompound() && item.getTagCompound().getString("visor").equalsIgnoreCase("close")) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "close"));
-				}
 				GL11.glPopMatrix();	
 			} 
 			else if (type == ItemRenderType.EQUIPPED) 
@@ -92,15 +84,7 @@ public class RenderItem {
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 				GL11.glTranslatef(0.25F, 0F, 0.5F);
 				GL11.glScalef(0.55F, 0.55F, 0.55F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "head"));
-				if(item.hasTagCompound() && item.getTagCompound().getString("visor").equalsIgnoreCase("open")) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "open"));
-				}
-				else if(item.hasTagCompound() && item.getTagCompound().getString("visor").equalsIgnoreCase("close")) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "close"));
-				}
+				GL11.glCallList(ClientProxy.getRenderAll(model));
 				GL11.glPopMatrix();
 			}
 			else 
@@ -109,15 +93,7 @@ public class RenderItem {
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 				GL11.glTranslatef(0F, 0F, 0F);
 				GL11.glScalef(0.55F, 0.55F, 0.55F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "head"));
-				if(item.hasTagCompound() && item.getTagCompound().getString("visor").equalsIgnoreCase("open")) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "open"));
-				}
-				else if(item.hasTagCompound() && item.getTagCompound().getString("visor").equalsIgnoreCase("close")) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "close"));
-				}
+				GL11.glCallList(ClientProxy.getRenderAll(model));
 				GL11.glPopMatrix();
 			}
 		}
@@ -250,17 +226,7 @@ public class RenderItem {
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 				GL11.glTranslatef(0F, -1.1F, 0F);
 				GL11.glScalef(0.32F, 0.32F, 0.32F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "body"));
-				if (item.hasTagCompound() && item.getTagCompound().getInteger("defanceArms")==2) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "leftarm"));
-					GL11.glCallList(ClientProxy.getRenderPart(model, "rightarm"));
-				}
-				if (item.hasTagCompound() && item.getTagCompound().getInteger("defanceLegs")==2) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "legs"));
-					GL11.glCallList(ClientProxy.getRenderPart(model, "legs"));
-				}
+				GL11.glCallList(ClientProxy.getRenderAll(model));
 				GL11.glPopMatrix();	
 			} 
 			else if (type == ItemRenderType.EQUIPPED) 
@@ -269,17 +235,7 @@ public class RenderItem {
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 				GL11.glTranslatef(-0.25F, 1.5F, 0.75F);
 				GL11.glScalef(1F, 1F, 1F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "body"));
-				if (item.hasTagCompound() && item.getTagCompound().getInteger("defanceArms")==2) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "leftarm"));
-					GL11.glCallList(ClientProxy.getRenderPart(model, "rightarm"));
-				}
-				if (item.hasTagCompound() && item.getTagCompound().getInteger("defanceLegs")==2) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "legs"));
-					GL11.glCallList(ClientProxy.getRenderPart(model, "legs"));
-				}
+				GL11.glCallList(ClientProxy.getRenderAll(model));
 				GL11.glPopMatrix();
 			} 
 			else 
@@ -288,17 +244,7 @@ public class RenderItem {
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 				GL11.glTranslatef(0F, 0.5F, 0F);
 				GL11.glScalef(0.5F, 0.5F, 0.5F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "body"));
-				if (item.hasTagCompound() && item.getTagCompound().getInteger("defanceArms")==2) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "leftarm"));
-					GL11.glCallList(ClientProxy.getRenderPart(model, "rightarm"));
-				}
-				if (item.hasTagCompound() && item.getTagCompound().getInteger("defanceLegs")==2) 
-				{
-					GL11.glCallList(ClientProxy.getRenderPart(model, "legs"));
-					GL11.glCallList(ClientProxy.getRenderPart(model, "legs"));
-				}
+				GL11.glCallList(ClientProxy.getRenderAll(model));
 				GL11.glPopMatrix();
 			}
 		}
@@ -399,7 +345,7 @@ public class RenderItem {
 
 
 
-	public static class renderItemGun implements IItemRenderer {
+	public static class renderItemWeapon implements IItemRenderer {
 
 		@Override
 		public boolean handleRenderType(ItemStack item, ItemRenderType type) { 
@@ -468,132 +414,7 @@ public class RenderItem {
 		}
 	}
 
-	public static class renderItemBracers implements IItemRenderer {
-
-		@Override
-		public boolean handleRenderType(ItemStack item, ItemRenderType type) { 
-			return true; 
-		}
-
-		@Override
-		public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-			return true; 
-		}
-
-		@Override
-		public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-			setResources(item);
-
-			if (type == ItemRenderType.INVENTORY) {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(-1F, 1.4F, 0.1F);
-				GL11.glScalef(1.4F, 1.4F, 1.4F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "bracerLeft"));
-				//model.renderPart("bracerRight");
-				GL11.glPopMatrix();	
-			} else if (type == ItemRenderType.EQUIPPED) {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(-0.25F, 1.5F, 0.75F);
-				GL11.glScalef(1F, 1F, 1F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "bracerLeft"));
-				//model.renderPart("bracerRight");
-				GL11.glPopMatrix();
-			} else {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(0F, 0.5F, 0F);
-				GL11.glScalef(0.5F, 0.5F, 0.5F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "bracerLeft"));
-				GL11.glCallList(ClientProxy.getRenderPart(model, "bracerRight"));
-				GL11.glPopMatrix();
-			}
-		}
-	}
-
-	public static class renderItemGloves implements IItemRenderer {
-
-		@Override
-		public boolean handleRenderType(ItemStack item, ItemRenderType type) { 
-			return true; 
-		}
-
-		@Override
-		public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-			return true; 
-		}
-
-		@Override
-		public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-			setResources(item);
-
-			if (type == ItemRenderType.INVENTORY) {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(-0.9F, 1.9F, 0.1F);
-				GL11.glScalef(1.4F, 1.4F, 1.4F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "gloveLeft"));
-				//model.renderPart("gloveRight");
-				GL11.glPopMatrix();	
-			} else if (type == ItemRenderType.EQUIPPED) {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(-0.25F, 1.9F, 0.75F);
-				GL11.glScalef(1F, 1F, 1F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "gloveLeft"));
-				//model.renderPart("gloveRight");
-				GL11.glPopMatrix();
-			} else {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(0F, 0.7F, 0F);
-				GL11.glScalef(0.5F, 0.5F, 0.5F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "gloveLeft"));
-				GL11.glCallList(ClientProxy.getRenderPart(model, "gloveRight"));
-				GL11.glPopMatrix();
-			}
-		}
-	}
-
-	public static class renderItemBelt implements IItemRenderer {
-
-		@Override
-		public boolean handleRenderType(ItemStack item, ItemRenderType type) { 
-			return true; 
-		}
-
-		@Override
-		public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-			return true; 
-		}
-
-		@Override
-		public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-			setResources(item);
-
-			if (type == ItemRenderType.INVENTORY) {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(0F, 2F, 0F);
-				GL11.glScalef(1.3F, 1.3F, 1.3F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "belt"));
-				GL11.glPopMatrix();	
-			} else if (type == ItemRenderType.EQUIPPED) {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-				GL11.glTranslatef(0.25F, 2F, 0.5F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "belt"));
-				GL11.glPopMatrix();
-			} else {
-				GL11.glPushMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(texture);		
-				GL11.glTranslatef(0F, 1.2F, 0F);
-				GL11.glScalef(0.5F, 0.5F, 0.5F);
-				GL11.glCallList(ClientProxy.getRenderPart(model, "belt"));
-				GL11.glPopMatrix();
-			}
-		}
-	}
+	
+	
 
 }

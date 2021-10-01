@@ -9,7 +9,9 @@ public class LoadTabs {
 								furnitureBlocks,
 								tunnelsBlocks, 
 								furnitureUnbreakebleBlocks,
-								itemsComponents,
+								bullets,
+								weapons,
+								modules,
 								blocksInvisible;
 
 	public static void registerTabs() {
@@ -19,8 +21,9 @@ public class LoadTabs {
 		tunnelsBlocks = new TunnelsBlocks(CreativeTabs.getNextID(), "tunnelsBlocks");
 		furnitureBlocks = new BlocksFurniture(CreativeTabs.getNextID(), "furnitureBlocks");
 		blocksInvisible = new BlocksInvisible(CreativeTabs.getNextID(), "blocksInvisible");
-		//itemsComponents = new BuildersBlocks(CreativeTabs.getNextID(), "itemsComponents");
-		
+		bullets = new CreativeTab(CreativeTabs.getNextID(), "bullets", "bullet_shell_factory_9x18mm");
+		weapons = new CreativeTab(CreativeTabs.getNextID(), "weapons", "item_firearm_mag_weapon_ppsh");
+		modules = new CreativeTab(CreativeTabs.getNextID(), "modules", "item_mag_ppsh_35");
 		
 	}
 

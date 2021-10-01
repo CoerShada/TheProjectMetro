@@ -45,7 +45,11 @@ public class SoundsToPlayersMessage extends AbstractClientMessage<SoundsToPlayer
 		if (item instanceof ItemWeapon) {
 			EntityPlayer playerSoundSource = (EntityPlayer) player.worldObj.getEntityByID(playerID);
 			ItemWeapon gun = (ItemWeapon) item;
-			ResourceLocation path = new ResourceLocation(Main.modid,  gun.getUnlocalizedName().substring(5).toLowerCase()+"_shoot");
+			ResourceLocation path;
+			if (playerSoundSource.inventory.getCurrentItem().getTagCompound().getBoolean("jumming"))
+				path = new ResourceLocation(Main.modid,  gun.getUnlocalizedName().substring(5).toLowerCase()+"_shoot");
+			else
+				path = new ResourceLocation(Main.modid,  "jumming");
 			SoundsManager.stopPositionSound();
 			SoundsManager.playPositionSound(path, (int)playerSoundSource.posX, (int)playerSoundSource.posY, (int)playerSoundSource.posZ, playerID);
 		}

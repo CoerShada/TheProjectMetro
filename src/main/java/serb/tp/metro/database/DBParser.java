@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import net.minecraft.util.ResourceLocation;
+import serb.tp.metro.Main;
 
 public class DBParser {
 
@@ -22,6 +23,10 @@ public class DBParser {
 		for (String nameTable : namesTables)
 		{
 	        try{
+	        	if (Main.debug)
+	        		nameTable = "debug_"+nameTable;
+	        	else
+	        		nameTable = "server_"+nameTable;
 	            String link = "http://the-project.ru/site/get_items.php?table="+nameTable;
 	            URL url = new URL(link);
 	            URLConnection conn = url.openConnection();

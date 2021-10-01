@@ -8,6 +8,7 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
 
 public class Bullet extends EntityThrowable
@@ -32,6 +33,7 @@ public class Bullet extends EntityThrowable
         this.damage = damage;
         this.penetration = penetration;
         this.setSize(0.1F, 0.1F);
+        DebugMessage.printMessage("bullet has been spawned " + penetration, this);
     }
     
     // Перезаписываем то, что происходит при попадании
@@ -99,7 +101,7 @@ public class Bullet extends EntityThrowable
     	        else if (block.getMaterial().equals(Material.sand) || block.getMaterial().equals(Material.ground) || block.getMaterial().equals(Material.clay)) 
     	        {
     	        	penetration-=320F;
-    	        	//System.out.println("Попали в землю!");
+    	        	
     	        }
     	        else if (block.getMaterial().equals(Material.wood))
     	        {
@@ -110,7 +112,7 @@ public class Bullet extends EntityThrowable
     	        {
     	        	this.worldObj.playSoundEffect(par1MovingObjectPosition.blockX, par1MovingObjectPosition.blockY, par1MovingObjectPosition.blockZ, Main.modid +":hit_glass", 15F, 1.5F);
     	        }
-
+    	        DebugMessage.printMessage(penetration, this);
 
 
     	        
@@ -129,8 +131,8 @@ public class Bullet extends EntityThrowable
 
             if (penetration<=0) 
             {
-    		setDead();
-    		System.out.println("Умер");
+            	setDead();
+            	DebugMessage.printMessage("bullet has been destroyed", this);
             }
         }
     }

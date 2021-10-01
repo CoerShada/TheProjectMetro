@@ -16,6 +16,7 @@ import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipGun;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipMask;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipOuterwear;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipPants;
+import serb.tp.metro.common.ws.WeaponSystem;
 import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.database.BulletsReader;
 import serb.tp.metro.database.ModulesReader;
@@ -29,6 +30,7 @@ import serb.tp.metro.entities.player.handlers.WeightHandler;
 public class CommonProxy {
 	
 	private static int modGuiIndex = 0;
+	public WeaponSystem ws;
 	public static final int GUI_CUSTOM_INV = modGuiIndex++,
 			GUI_BACPACK= modGuiIndex++, 
 			GUI_FACTIONS = modGuiIndex++,

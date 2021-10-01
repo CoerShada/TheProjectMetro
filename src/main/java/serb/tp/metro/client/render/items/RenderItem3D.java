@@ -51,7 +51,7 @@ public class RenderItem3D implements IItemRenderer{
 		} else if (type == ItemRenderType.EQUIPPED) {
 			GL11.glPushMatrix();
 			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-			GL11.glRotated(this.item.rotation[0], 1, 0, 0F);
+			GL11.glRotated(this.item.rotation[0], 1, 0, 0);
 			GL11.glRotated(this.item.rotation[1], 0, 1, 0);
 			GL11.glRotated(this.item.rotation[2], 0, 0, 1);
 			GL11.glScalef(this.item.sizeModel[2], this.item.sizeModel[2], this.item.sizeModel[2]);

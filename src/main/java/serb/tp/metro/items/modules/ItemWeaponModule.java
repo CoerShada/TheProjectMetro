@@ -22,7 +22,6 @@ public class ItemWeaponModule extends ItemModule{
 		this.accuracyMod = accuracyMod;
 		this.penetrationMod = penetrationMod;
 		this.jummingMod = jummingMod;
-		this.setCreativeTab(LoadTabs.blocksInvisible);
 	}
 
 

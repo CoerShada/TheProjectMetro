@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import serb.tp.metro.client.Type;
+import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.items.Item3D;
 
 public class ItemBullet extends Item3D {
@@ -30,7 +31,7 @@ public class ItemBullet extends Item3D {
 		this.parts = parts;
 		this.armorDamage = armorDamage;
 		this.fragmentationChance = fragmentationChance;
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(LoadTabs.bullets);
 	}
 	
 	

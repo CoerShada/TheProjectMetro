@@ -57,7 +57,7 @@ public class ShootMessage extends AbstractServerMessage<ShootMessage> {
 		}
 		ItemWeapon holdItem = (ItemWeapon) hold.getItem();
 		int[] bullets = hold.getTagCompound().getIntArray("bullets");
-		hold.getTagCompound().setLong("notfire", new Date().getTime());
+		hold.getTagCompound().setLong("notfire", world.getTotalWorldTime());
 		if (bullets.length>0) {
 			int[] bulletsNew = new int[bullets.length-1];
 			ItemBullet bullet = (ItemBullet) Item.getItemById(bullets[0]);
@@ -71,7 +71,7 @@ public class ShootMessage extends AbstractServerMessage<ShootMessage> {
 				
 				PacketDispatcher.sendToAllAround(new SoundsToPlayersMessage(player.getEntityId(), Item.getIdFromItem(holdItem)), player, holdItem.getSoundRadius(hold)*2);
 				world.spawnEntityInWorld(new Bullet(world, player, hold.getTagCompound().getDouble("accuracy"), bullet.damage, bullet.penetration));
-				hold.getTagCompound().setDouble("weight", hold.getTagCompound().getDouble("weight")- bullet.weight);
+				hold.getTagCompound().setFloat("weight", hold.getTagCompound().getFloat("weight")- bullet.weight);
 				hold.getTagCompound().setIntArray("bullets", bulletsNew);
 				player.inventoryContainer.detectAndSendChanges();
 				return;

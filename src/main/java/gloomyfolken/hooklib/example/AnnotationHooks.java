@@ -99,31 +99,6 @@ public class AnnotationHooks {
     	button.buttonTextures = new ResourceLocation(Main.modid, "textures/gui/guiScreen/guiBattonsMainMenu/background.png");
     }
     
-    /*@Hook(injectOnExit = true)
-    @SideOnly(Side.CLIENT)
-    public static void initGui(GuiOptions menu)
-    {
-    	
-    }*/
-    
-    /*@Hook(returnCondition = ReturnCondition.ALWAYS)
-    public static Vertex calculateFaceNormal(Face face)
-    {
-    	
-        Vec3 v2 = Vec3.createVectorHelper(face.vertices[1].x - face.vertices[0].x, face.vertices[1].y - face.vertices[0].y, face.vertices[1].z - face.vertices[0].z);
-        Vec3 v3 = Vec3.createVectorHelper(face.vertices[2].x - face.vertices[1].x, face.vertices[2].y - face.vertices[1].y, face.vertices[2].z - face.vertices[1].z);
-        //рассчитываем нормаль к полигону
-        Vec3 normalVector = v2.crossProduct(v3).normalize();
-        //если нормали в obj модели нет, то рассчитываем
-        if(face.vertexNormals == null) {
-
-        	return new Vertex((float) normalVector.xCoord, (float) normalVector.yCoord, (float) normalVector.zCoord);
-        } 
-        else { //если есть, то берем готовую из obj модели
-
-        	return new Vertex((float) face.vertexNormals[0].x, (float) face.vertexNormals[0].y, (float) face.vertexNormals[0].z);
-        }
-    }*/
     
     @SideOnly(Side.CLIENT)
     @Hook(returnCondition = ReturnCondition.ALWAYS)
@@ -173,7 +148,7 @@ public class AnnotationHooks {
     	for (int i = 0; i<menu.buttonList.size(); i++) {
     		GuiButton tempbutton = ((GuiButton) menu.buttonList.get(i));
     		
-    		if (tempbutton.id==6 /*|| tempbutton.id==7*/ || tempbutton.id==12)
+    		if (tempbutton.id==6 || tempbutton.id==7 || tempbutton.id==12)
     			tempbutton.visible=false;
     		}
     	

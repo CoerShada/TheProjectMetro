@@ -75,8 +75,8 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
 		itemStack.getTagCompound().setBoolean("safetyMod", true);
 		itemStack.getTagCompound().setString("fireMod", fireMods[0].toString());
 		itemStack.getTagCompound().setBoolean("jumming", false);
-        itemStack.getTagCompound().setLong("notfire", new Date().getTime());
-        itemStack.getTagCompound().setLong("notreload", new Date().getTime());   
+        itemStack.getTagCompound().setLong("notfire", 0);
+        itemStack.getTagCompound().setLong("notreload", 0);   
         //itemStack.getTagCompound().removeTag(p_82580_1_);("mag", null);
         itemStack.getTagCompound().setIntArray("bullets", new int[]{});
     }

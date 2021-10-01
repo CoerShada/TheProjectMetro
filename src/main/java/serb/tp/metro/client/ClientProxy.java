@@ -82,7 +82,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void Init() {
 		super.Init();
-		renderOBJModels();
+		
 		renderIcons();
 		renderEquip();
 		renderBlocks();
@@ -100,7 +100,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postInit() {
 		super.postInit();
-
+		renderOBJModels();
 	}
 
 	
