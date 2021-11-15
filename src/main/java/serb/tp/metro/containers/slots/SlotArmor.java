@@ -10,12 +10,12 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import serb.tp.metro.containers.CustomSlots;
-import serb.tp.metro.containers.slots.SlotType.customArmorSlot;
+import serb.tp.metro.containers.slots.SlotType.CustomArmorSlot;
 import serb.tp.metro.entities.player.ExtendedPlayer;
 import serb.tp.metro.items.armor.ItemHelmet;
 import serb.tp.metro.items.modules.ItemMag;
 
-public class SlotArmor extends Slot implements customArmorSlot {
+public class SlotArmor extends Slot implements CustomArmorSlot {
 
 	final int armorType;
 

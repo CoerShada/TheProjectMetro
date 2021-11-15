@@ -15,6 +15,7 @@ public class ModulesReader extends Reader{
 		for (String module: modules) {
 			
 			if (module.contains(ModuleType.ItemWeaponModule.toString())) {
+				
 				addItemWeaponModule(module.substring(module.indexOf("{")+1));
 			}
 			else if(module.contains(ModuleType.ItemMag.toString())){
@@ -25,6 +26,7 @@ public class ModulesReader extends Reader{
 	
 	private static void addItemWeaponModule(String parameters) {
 		String[] splitParameters = parameters.split(";");
+
 		items.add(new ItemWeaponModule(getString(splitParameters, "name"),
 							getString(splitParameters, "description"),
 							getFloat(splitParameters, "weight"),
@@ -35,11 +37,11 @@ public class ModulesReader extends Reader{
 							getFloatsArray(splitParameters, "rotation"), 
 							getFloatsArray(splitParameters, "rightHandPos"), 
 							getFloatsArray(splitParameters, "rightHandRotation"), 
-							getFloat(splitParameters, "verticalRecoil"), 
-							getFloat(splitParameters, "horizontalRecoil"),
-							getFloat(splitParameters, "convenience"),
-							getFloat(splitParameters, "accuracy"),
-							getFloat(splitParameters, "powerMod"),
+							getFloat(splitParameters, "verticalRecoilMod"), 
+							getFloat(splitParameters, "horizontalRecoilMod"),
+							getFloat(splitParameters, "convenienceMod"),
+							getFloat(splitParameters, "accuracyMod"),
+							getFloat(splitParameters, "penetrationMod"),
 							getFloat(splitParameters, "jummingMod")));
 	}
 	

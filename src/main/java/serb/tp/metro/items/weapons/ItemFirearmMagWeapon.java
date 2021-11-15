@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
+import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.items.ItemChestrig;
 import serb.tp.metro.items.modules.ItemMag;
@@ -34,12 +35,12 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
     		float[] onAimingPos, float[] onAimingRotation,  float[] onAimingLeftHandPos, float[] onAimingLeftHandRotation, 
     		float[] onAimingRightHandPos, float[] onAimingRightHandRotation, int soundRadius, int rateOfFire, float penetrationMod, 
     		float jummingChance, int loadTime, int unloadTime, 
-    		float recoilVert, float recoilHoriz, float accuracy, FireMod[] fireMods, 
+    		float recoilVert, float recoilHoriz, float accuracy, float convenience ,FireMod[] fireMods, 
     		String[] mags) {
 		super(name, description, weight, model, sizeModel, pos, rotation, onInventoryPos, rightHandPos, rightHandRotation,
 				leftHandPos, leftHandRotation, onAimingPos, onAimingRotation, onAimingLeftHandPos, onAimingLeftHandRotation,
 				onAimingRightHandPos, onAimingRightHandRotation, soundRadius, rateOfFire, penetrationMod, jummingChance,
-				loadTime+unloadTime, recoilVert, recoilHoriz, accuracy, fireMods);
+				loadTime+unloadTime, recoilVert, recoilHoriz, accuracy, convenience, fireMods);
 		this.loadTime = loadTime;
 		this.unloadTime = unloadTime;
 		this.mags = new ItemMag[mags.length];
@@ -67,18 +68,7 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
     @Override
     public void getSubItems(Item item, CreativeTabs ct, List list)
     {
-    	ItemStack itemStack = new ItemStack(item);
-		itemStack.setTagCompound(new NBTTagCompound());
-		list.add(itemStack);
-		itemStack.getTagCompound().setFloat("weight", weight);
-		itemStack.getTagCompound().setFloat("rateOfFire", rateOfFire);
-		itemStack.getTagCompound().setBoolean("safetyMod", true);
-		itemStack.getTagCompound().setString("fireMod", fireMods[0].toString());
-		itemStack.getTagCompound().setBoolean("jumming", false);
-        itemStack.getTagCompound().setLong("notfire", 0);
-        itemStack.getTagCompound().setLong("notreload", 0);   
-        //itemStack.getTagCompound().removeTag(p_82580_1_);("mag", null);
-        itemStack.getTagCompound().setIntArray("bullets", new int[]{});
+    	super.getSubItems(item, ct, list);
     }
     
     @Override
@@ -126,9 +116,9 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
     	InventoryItemStorage inv;
     	if (player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(19).hasTagCompound()) 
     	{
-			inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
+			inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));
 			inv.openInventory();
-			for (int i = 0; i < player.inventory.getStackInSlot(19).getTagCompound().getByte("size"); i++) 
+			for (int i = 0; i < player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getTagCompound().getByte("size"); i++) 
 			{
 				if (inv.getStackInSlot(i)==null) {
 					PacketDispatcher.sendToServer(new UnloadGunMagMessage(1, i));

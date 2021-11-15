@@ -148,7 +148,7 @@ public class AnnotationHooks {
     	for (int i = 0; i<menu.buttonList.size(); i++) {
     		GuiButton tempbutton = ((GuiButton) menu.buttonList.get(i));
     		
-    		if (tempbutton.id==6 || tempbutton.id==7 || tempbutton.id==12)
+    		if (tempbutton.id==6 /*|| tempbutton.id==7*/ || tempbutton.id==12)
     			tempbutton.visible=false;
     		}
     	

@@ -59,8 +59,8 @@ public class ContainerBackpackStorage extends Container {
 		inventoryBackpack = inventoryItemStorage;
 		inventoryBackpack.openInventory();//Типа инициализируем открытия инвентаря
 		InventoryPlayer inventoryPlayer = player.inventory;
-		if (player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig)
-			inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
+		if (player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex())!=null && player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem() instanceof ItemChestrig)
+			inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));
 		else
 			inv = null;
 		numColumns = inventoryBackpack.getSizeInventory() / 3;
@@ -69,13 +69,13 @@ public class ContainerBackpackStorage extends Container {
 		int k;
 
 
-		addSlotToContainer(new SlotKnife(inventoryPlayer, 0, 66, 64)); 
-		addSlotToContainer(new SlotPistol(inventoryPlayer, 1, 84, 64)); 
-		addSlotToContainer(new SlotGun(inventoryPlayer, 2, 102, 64)); 
+		addSlotToContainer(new SlotKnife(inventoryPlayer, CustomSlots.KNIFE.getIndex(), 66, 64)); 
+		addSlotToContainer(new SlotPistol(inventoryPlayer, CustomSlots.PISTOL.getIndex(), 84, 64)); 
+		addSlotToContainer(new SlotGun(inventoryPlayer, CustomSlots.WEAPON.getIndex(), 102, 64)); 
 		
-		for (i = 0; i < 3; i++) 
+		for (i = 0; i < CustomSlots.END_HOTBAR.getIndex() - CustomSlots.BEGIN_HOTBAR.getIndex()+1; i++) 
 		{
-			addSlotToContainer(new SlotHotbar(inventoryPlayer, 3 + i, 127 + i * 18, 64));
+			addSlotToContainer(new SlotHotbar(inventoryPlayer, CustomSlots.BEGIN_HOTBAR.getIndex() + i, 127 + i * 18, 64));
 		}
 		
 		//инвентарь	все 3 ряда
@@ -83,7 +83,7 @@ public class ContainerBackpackStorage extends Container {
 		{
 			for (j = 0; j < 3; ++j) 
 			{
-				addSlotToContainer(new Slot(inventoryPlayer, 6 + j + i * 3, 127 + j * 18, 8 + i * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, CustomSlots.BEGIN_INV.getIndex() + j + i * 3, 127 + j * 18, 8 + i * 18));
 			}
 		}
 
@@ -93,12 +93,12 @@ public class ContainerBackpackStorage extends Container {
 			addSlotToContainer(new SlotArmor(player, inventoryPlayer, inventoryPlayer.getSizeInventory() - 1 - i, 84, 8 + i * 18, i));
 		}
 		
-		addSlotToContainer(new SlotMask(player, inventoryPlayer, 15, 66, 8)); 
-		addSlotToContainer(new SlotOuterwear(inventoryPlayer, 16, 66, 26)); 
-		addSlotToContainer(new SlotPants(inventoryPlayer, 17, 66, 44)); 
+		addSlotToContainer(new SlotMask(player, inventoryPlayer, CustomSlots.MASK.getIndex(), 66, 8)); 
+		addSlotToContainer(new SlotOuterwear(inventoryPlayer, CustomSlots.OUTERWEAR.getIndex(), 66, 26)); 
+		addSlotToContainer(new SlotPants(inventoryPlayer, CustomSlots.PANTS.getIndex(), 66, 44)); 
 		
-		addSlotToContainer(new SlotBackpackFromBackpack(inventoryPlayer, 18, 102, 8));        
-		slotRig = addSlotToContainer(new SlotChestrig(inventoryPlayer, 19, 102, 26)); 
+		addSlotToContainer(new SlotBackpackFromBackpack(inventoryPlayer, CustomSlots.BACKPACK.getIndex(), 102, 8));        
+		slotRig = addSlotToContainer(new SlotChestrig(inventoryPlayer, CustomSlots.CHESTRIG.getIndex(), 102, 26)); 
 		
 		
 		
@@ -163,9 +163,9 @@ public class ContainerBackpackStorage extends Container {
 	@Override
 	public ItemStack slotClick(int slot, int button, int modifier, EntityPlayer player) {
 		
-		if (slot == 18) return null;
+		if (slot == CustomSlots.BACKPACK.getIndex()) return null;
 		if (modifier == 2) return null;//Блокируем возможность использование игроком цифровых кнопок, чтобы не было попытки подмены
-		if (slot>19 && modifier==4)
+		if (slot>CustomSlots.CHESTRIG.getIndex() && modifier==4)
 			modifier = 0;
 		
 		ItemStack itemStack = super.slotClick(slot, button, modifier, player);
@@ -177,7 +177,7 @@ public class ContainerBackpackStorage extends Container {
 			}
 			inv.save();
 			inv.closeInventory();
-			inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));;
+			inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));;
 			slotsRig = new Slot[inv.getSizeInventory()];
 			inv.openInventory();
 			int columns = 2;
@@ -204,9 +204,9 @@ public class ContainerBackpackStorage extends Container {
 				inv = null;
 				slotsRig = null;
 			}
-			if (inv==null && itemStack==null && player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig) 
+			if (inv==null && itemStack==null && player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex())!=null && player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem() instanceof ItemChestrig) 
 			{
-				inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
+				inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));
 				inv.openInventory();
 				slotsRig = new Slot[inv.getSizeInventory()];
 				int columns = 2;
@@ -233,7 +233,7 @@ public class ContainerBackpackStorage extends Container {
 				{
 					weight+=is.getTagCompound().getFloat("weight")*is.stackSize;
 				}
-			PacketDispatcher.sendToServer(new ChangeItemWeight(19, weight));
+			PacketDispatcher.sendToServer(new ChangeItemWeight(CustomSlots.CHESTRIG.getIndex(), weight));
 			}
 		}
 		
@@ -247,7 +247,7 @@ public class ContainerBackpackStorage extends Container {
 				{
 					weight+=is.getTagCompound().getFloat("weight")*is.stackSize;
 				}
-			PacketDispatcher.sendToServer(new ChangeItemWeight(18, weight));
+			PacketDispatcher.sendToServer(new ChangeItemWeight(CustomSlots.BACKPACK.getIndex(), weight));
 			}
 		}
 		

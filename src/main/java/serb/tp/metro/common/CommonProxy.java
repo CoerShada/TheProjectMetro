@@ -11,6 +11,7 @@ import serb.tp.metro.blocks.LoadTunnels;
 import serb.tp.metro.common.handlers.CustomArmorTick;
 import serb.tp.metro.common.handlers.DeathPlayerHandler;
 import serb.tp.metro.common.handlers.PickupHandler;
+import serb.tp.metro.common.handlers.WeaponSystemHandler;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipBackpuck;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipGun;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipMask;
@@ -19,6 +20,7 @@ import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipPants;
 import serb.tp.metro.common.ws.WeaponSystem;
 import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.database.BulletsReader;
+import serb.tp.metro.database.CustomizationSlotsReader;
 import serb.tp.metro.database.ModulesReader;
 import serb.tp.metro.database.WeaponsReader;
 import serb.tp.metro.entities.player.PropertiesRegistry;
@@ -36,7 +38,8 @@ public class CommonProxy {
 			GUI_FACTIONS = modGuiIndex++,
 			GUI_STORAGE = modGuiIndex++,
 			GUI_STORAGE_SPAWNER = modGuiIndex++,
-			GUI_CREATOR = modGuiIndex++;
+			GUI_CREATOR = modGuiIndex++,
+			GUI_MODIFY = modGuiIndex++;
 
 	public void preInit() {
 		loadTabs();
@@ -44,15 +47,19 @@ public class CommonProxy {
 		loadBlocks();
 		noPickup();
 		atribute();
+		ws = new WeaponSystem();
 		//death();
 		BulletsReader.LoadBullets();
 		ModulesReader.LoadModules();
 		WeaponsReader.LoadWeapons();
+		CustomizationSlotsReader.LoadCustomizationSlots();
 	}
 
 	public void Init() {	
 		playerHandler();
 		playerUpdateEquip();
+		MinecraftForge.EVENT_BUS.register(new WeaponSystemHandler());
+		
 
 	}
 

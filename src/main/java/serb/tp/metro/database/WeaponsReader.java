@@ -47,6 +47,7 @@ public class WeaponsReader extends Reader{
 						getFloat(splitParameters, "recoilVert"),
 						getFloat(splitParameters, "recoilHoriz"),
 						getFloat(splitParameters, "accuracy"),
+						getFloat(splitParameters, "convenience"),
 						getFireMods(splitParameters, "fireMods"),
 						getStringArray(splitParameters, "mags", ", ")));
 		

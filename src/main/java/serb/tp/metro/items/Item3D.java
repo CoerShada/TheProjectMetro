@@ -7,11 +7,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
 
@@ -25,6 +27,7 @@ public abstract class Item3D extends Item{
 	public final float[] onInventoryPos;
     public final float[] rightHandPos;
     public final float[] rightHandRotation;
+    protected ItemStack baseItemStack;
 	
 
 	public Item3D(String name, String description, float weight, String model, float[] sizeModel, float[] pos, float[] rotation, float[] onInventoryPos,float[] rightHandPos, float[] rightHandRotation) {
@@ -70,6 +73,7 @@ public abstract class Item3D extends Item{
 	    this.rightHandPos = rightHandPos;
 	    this.rightHandRotation = rightHandRotation;
 		GameRegistry.registerItem(this, this.getUnlocalizedName());
+		this.baseItemStack = new ItemStack(this);
 	}
 	
 	
@@ -91,8 +95,24 @@ public abstract class Item3D extends Item{
         
 
     }
+    
+    @Override
+    public void getSubItems(Item item, CreativeTabs ct, List list)
+    {
+    	if(!this.baseItemStack.hasTagCompound()) {
+    		this.baseItemStack.setTagCompound(new NBTTagCompound());
+			
+    	}
+    	list.add(this.baseItemStack);
+    	this.baseItemStack.getTagCompound().setFloat("weight", weight);
+    }
 	
     
-    
+    public ItemStack onItemRightClick(ItemStack hold, World world, EntityPlayer player) {
+    	return hold;
+    }
 	
+    public ItemStack onItemLeftClick(ItemStack hold, World world, EntityPlayer player) {
+    	return hold;
+    }
 }

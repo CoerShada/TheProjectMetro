@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import net.minecraft.util.ResourceLocation;
+import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
 
 public class DBParser {
@@ -27,7 +28,7 @@ public class DBParser {
 	        		nameTable = "debug_"+nameTable;
 	        	else
 	        		nameTable = "server_"+nameTable;
-	            String link = "http://the-project.ru/site/get_items.php?table="+nameTable;
+	            String link = "http://the-project.ru/site/get_db_content.php?table="+nameTable;
 	            URL url = new URL(link);
 	            URLConnection conn = url.openConnection();
 	            conn.setDoOutput(true);
@@ -37,9 +38,7 @@ public class DBParser {
 	            while ((line = reader.readLine()) != null){
 	                sb.append(line);
 	                break;
-	            }
-	            System.out.println("[Data Base]" + sb.toString());
-	            
+	            }	            
 	        }
 	        catch (Exception e){
 	

@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.resources.Resources;
 import serb.tp.metro.containers.ContainerCustomPlayer;
+import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.entities.player.handlers.RadiationHandler;
 import serb.tp.metro.entities.player.handlers.ThirstyHandler;
@@ -80,9 +81,9 @@ public class GuiCustomPlayerInventory extends GuiContainer {
 			}
 			drawTexturedModalRect(guiLeft + 65 + 18 * i, guiTop + 63, noEquip, 18 * i + ySize, 18, 18);
 		}
-		if (inventoryDefault.getStackInSlot(19)!=null && inventoryDefault.getStackInSlot(19).getItem() instanceof ItemChestrig) 
+		if (inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex())!=null && inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem() instanceof ItemChestrig) 
 		{
-			ItemChestrig item = (ItemChestrig) inventoryDefault.getStackInSlot(19).getItem();
+			ItemChestrig item = (ItemChestrig) inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem();
 			mc.getTextureManager().bindTexture(Resources.chestrig_Texture);
 			drawTexturedModalRect(guiLeft+xSize-4, guiTop, 0, 0, xSize, ySize);
 			InventoryItemStorage inv = cont.inv;
@@ -108,20 +109,20 @@ public class GuiCustomPlayerInventory extends GuiContainer {
 					
 		mc.getTextureManager().bindTexture(Resources.thirst_icon);
 		Gui.func_146110_a(guiLeft+3, guiTop+26, 0, 0, 8, 8, 8, 8);				
-		mc.fontRenderer.drawString(String.valueOf((int)(ThirstyHandler.getThirsty(mc.thePlayer)/ThirstyHandler.getThirstyMax(mc.thePlayer)*100)) + "%", guiLeft+12, guiTop+26, 0x303030);
+		mc.fontRenderer.drawString(String.valueOf((int)(ThirstyHandler.getThirsty(mc.thePlayer)/ThirstyHandler.getThirstyMax(mc.thePlayer)*100)) + "%", guiLeft+14, guiTop+26, 0xFFFFFF, true);
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(Resources.food_icon);
 		Gui.func_146110_a(guiLeft+3, guiTop+38, 0, 0, 9, 9, 9, 9);				
-		mc.fontRenderer.drawString(String.valueOf(100 * mc.thePlayer.getFoodStats().getFoodLevel()/20) + "%", guiLeft+12, guiTop+38, 0x303030);
+		mc.fontRenderer.drawString(String.valueOf(100 * mc.thePlayer.getFoodStats().getFoodLevel()/20) + "%", guiLeft+14, guiTop+38, 0xFFFFFF, true);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(Resources.weight_icon);
 		Gui.func_146110_a(guiLeft+3, guiTop+68, 0, 0, 9, 9, 9, 9);				
-		mc.fontRenderer.drawString(String.format("%.2f", WeightHandler.getWeight(mc.thePlayer)/1000), guiLeft+12, guiTop+70, 0x303030);
+		mc.fontRenderer.drawString(String.format("%.2f", WeightHandler.getWeight(mc.thePlayer)/1000), guiLeft+14, guiTop+69, 0xFFFFFF, true);
 		
 		
-		mc.fontRenderer.drawString(String.format("%.2f", RadiationHandler.getRadiation(mc.thePlayer))+" M3B", guiLeft+12, guiTop+50, 0x303030);
+		//mc.fontRenderer.drawString(String.format("%.2f", RadiationHandler.getRadiation(mc.thePlayer))+" M3B", guiLeft+12, guiTop+50, 0xFFFFFF);
 		//рендер игрока в инвентаре
 		GuiInventory.func_147046_a(guiLeft - 70, guiTop + 165, 85, guiLeft + 51 - xSize_lo, guiTop + 25 - ySize_lo, mc.thePlayer);		
 	}

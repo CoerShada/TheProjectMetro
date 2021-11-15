@@ -2,11 +2,11 @@ package serb.tp.metro.containers.slots;
 
 public class SlotType {
 
-	public interface customArmorSlot {
+	public interface CustomArmorSlot {
 
 	}
 	
-	public interface customGunSlot{
+	public interface CustomWeaponSlot{
 		
 	}
 

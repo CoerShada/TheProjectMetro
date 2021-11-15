@@ -4,6 +4,9 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import serb.tp.metro.Main;
+import serb.tp.metro.common.ws.WeaponSystem;
+import serb.tp.metro.items.Item3D;
 import serb.tp.metro.network.AbstractMessage.AbstractServerMessage;
 
 public class ChangeItemWeight extends AbstractServerMessage<ChangeItemWeight> {
@@ -36,9 +39,13 @@ public class ChangeItemWeight extends AbstractServerMessage<ChangeItemWeight> {
 	public void process(EntityPlayer player, Side side) 
 	{
 		ItemStack itemStack = player.inventory.getStackInSlot(slotIndex);
-		if (itemStack!=null && itemStack.hasTagCompound()) 
+		if (itemStack!=null && itemStack.hasTagCompound() && itemStack.getItem() instanceof Item3D) 
 		{
-			itemStack.getTagCompound().setFloat("weight", itemStack.getTagCompound().getFloat("weightStandart")+weight);
+			
+			Item3D item3D = (Item3D) itemStack.getItem();
+			itemStack.getTagCompound().setFloat("weight", item3D.weight+weight);
+	    	WeaponSystem ws = Main.proxy.ws.get(player);
+	    	ws.updateCurrentItem();
 		}
 		player.inventoryContainer.detectAndSendChanges();
 		

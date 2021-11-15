@@ -1,6 +1,15 @@
 package serb.tp.metro.items.modules;
 
-import serb.tp.metro.creativetabs.LoadTabs;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import serb.tp.metro.containers.InventoryItemStorage;
+import serb.tp.metro.customization.ICustomizable;
+import serb.tp.metro.utils.MathHelper;
 
 public class ItemWeaponModule extends ItemModule{
 	
@@ -23,6 +32,45 @@ public class ItemWeaponModule extends ItemModule{
 		this.penetrationMod = penetrationMod;
 		this.jummingMod = jummingMod;
 	}
+	
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean isAdv) {
+        super.addInformation(itemStack, entityPlayer, list, isAdv);
+        //list.add(jummingMod);
+
+    }
+
+	@Override
+	public NBTTagCompound updateCharacteristics(ItemStack is) {
+		if (is==null || !is.hasTagCompound()) return null;
+		InventoryItemStorage inv = new InventoryItemStorage(is);
+		inv.openInventory();
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setFloat("verticalRecoilMod", verticalRecoilMod);
+		tag.setFloat("horizontalRecoilMod", horizontalRecoilMod);
+		tag.setFloat("convenienceMod", convenienceMod);
+		tag.setFloat("accuracyMod", accuracyMod);
+		tag.setFloat("penetrationMod", penetrationMod);
+		tag.setFloat("jummingMod", jummingMod);
+		for (int i = 0; i<inv.getSizeInventory(); i++) {
+			
+			if (inv.getStackInSlot(i)==null || !(inv.getStackInSlot(i).getItem() instanceof ICustomizable)) continue;
+			NBTTagCompound tempTag = new NBTTagCompound();
+			ICustomizable customizable = (ICustomizable) inv.getStackInSlot(i).getItem();
+			tempTag = customizable.updateCharacteristics(inv.getStackInSlot(i));
+			tag.setFloat("verticalRecoilMod", 	MathHelper.sumPercent(tag.getFloat("verticalRecoilMod"), tempTag.getFloat("verticalRecoilMod")));
+			tag.setFloat("horizontalRecoilMod", MathHelper.sumPercent(tag.getFloat("horizontalRecoilMod"), tempTag.getFloat("horizontalRecoilMod")));
+			tag.setFloat("convenienceMod", 		MathHelper.sumPercent(tag.getFloat("convenienceMod"), tempTag.getFloat("convenienceMod")));
+			tag.setFloat("accuracyMod",  		tag.getFloat("accuracyMod") *  tempTag.getFloat("accuracyMod"));
+			tag.setFloat("penetrationMod", 		MathHelper.sumPercent(tag.getFloat("penetrationMod"), tempTag.getFloat("penetrationMod")));
+			tag.setFloat("jummingMod", 			MathHelper.sumPercent(tag.getFloat("jummingMod"), tempTag.getFloat("jummingMod")));
+		}
+
+		return tag;
+		
+	}
+	
 
 
 }

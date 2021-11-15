@@ -37,7 +37,7 @@ public class ChangeFilterMessage extends AbstractServerMessage<ChangeFilterMessa
 	@Override
 	public void process(EntityPlayer player, Side side) 
 	{
-		ItemStack mask = player.inventory.getStackInSlot(15);
+		ItemStack mask = player.inventory.getStackInSlot(CustomSlots.MASK.getIndex());
 		if (slot>=0 && mask.getTagCompound().getInteger("filter")!=0) 
 		{
 			ItemStack filterOld = new ItemStack(Item.getItemById(mask.getTagCompound().getInteger("filter")));

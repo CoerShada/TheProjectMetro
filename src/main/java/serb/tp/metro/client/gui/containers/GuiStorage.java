@@ -17,6 +17,7 @@ import serb.tp.metro.blocks.tiles.storages.TileEntityStorage;
 import serb.tp.metro.client.resources.Resources;
 import serb.tp.metro.containers.ContainerBackpackStorage;
 import serb.tp.metro.containers.ContainerCustomPlayer;
+import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.containers.StorageContainer;
 import serb.tp.metro.items.ItemBackpack;
@@ -88,9 +89,9 @@ public class GuiStorage extends GuiContainer {
 			}
 			drawTexturedModalRect(guiLeft + 65 + 18 * i, guiTop + 123, noEquip, 18 * i + ySize, 18, 18);
 		}
-		if (inventoryDefault.getStackInSlot(19)!=null && inventoryDefault.getStackInSlot(19).getItem() instanceof ItemChestrig) 
+		if (inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex())!=null && inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem() instanceof ItemChestrig) 
 		{
-			ItemChestrig item = (ItemChestrig) inventoryDefault.getStackInSlot(19).getItem();
+			ItemChestrig item = (ItemChestrig) inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem();
 			mc.getTextureManager().bindTexture(Resources.chestrig_Texture);
 			drawTexturedModalRect(guiLeft+xSize-18, guiTop+60, 0, 0, xSize, ySize);
 			InventoryItemStorage inv = cont.inv;
@@ -110,9 +111,9 @@ public class GuiStorage extends GuiContainer {
 				}
 			}
 		}
-		if (inventoryDefault.getStackInSlot(18)!=null && inventoryDefault.getStackInSlot(18).getItem() instanceof ItemBackpack) {
+		if (inventoryDefault.getStackInSlot(CustomSlots.BACKPACK.getIndex())!=null && inventoryDefault.getStackInSlot(CustomSlots.BACKPACK.getIndex()).getItem() instanceof ItemBackpack) {
 			
-			ItemBackpack itemBackpack = (ItemBackpack) inventoryDefault.getStackInSlot(18).getItem();
+			ItemBackpack itemBackpack = (ItemBackpack) inventoryDefault.getStackInSlot(CustomSlots.BACKPACK.getIndex()).getItem();
 			InventoryItemStorage inv = cont.inventoryBackpack;
 			mc.getTextureManager().bindTexture(Resources.backpack_texture);
 			drawTexturedModalRect(guiLeft, guiTop+143, 0, 0, xSize, ySize);

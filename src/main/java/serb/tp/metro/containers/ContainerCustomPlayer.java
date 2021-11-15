@@ -64,8 +64,8 @@ public class ContainerCustomPlayer extends Container {
 		this.player = player;
 		int i;
 		int j;
-		if (player.inventory.getStackInSlot(19)!=null)
-			inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
+		if (player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex())!=null)
+			inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));
 		else
 			inv = null;
 		InventoryPlayer inventoryPlayer = player.inventory;
@@ -74,14 +74,14 @@ public class ContainerCustomPlayer extends Container {
 		
 		//хотбар
 		
-		addSlotToContainer(new SlotKnife(inventoryPlayer, 0, 66, 64)); 
-		addSlotToContainer(new SlotPistol(inventoryPlayer, 1, 84, 64)); 
-		addSlotToContainer(new SlotGun(inventoryPlayer, 2, 102, 64)); 
+		addSlotToContainer(new SlotKnife(inventoryPlayer, CustomSlots.KNIFE.getIndex(), 66, 64)); 
+		addSlotToContainer(new SlotPistol(inventoryPlayer, CustomSlots.PISTOL.getIndex(), 84, 64)); 
+		addSlotToContainer(new SlotGun(inventoryPlayer, CustomSlots.WEAPON.getIndex(), 102, 64)); 
 		
 		for (i = 0; i < 3; i++) 
 		{
 
-			addSlotToContainer(new SlotHotbar(inventoryPlayer, 3 + i, 127 + i * 18, 64));
+			addSlotToContainer(new SlotHotbar(inventoryPlayer, CustomSlots.BEGIN_HOTBAR.getIndex() + i, 127 + i * 18, 64));
 		}
 		
 		//инвентарь	все 3 ряда
@@ -89,7 +89,7 @@ public class ContainerCustomPlayer extends Container {
 		{
 			for (j = 0; j < 3; ++j) 
 			{
-				addSlotToContainer(new Slot(inventoryPlayer, 6 + j + i * 3, 127 + j * 18, 8 + i * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, CustomSlots.BEGIN_INV.getIndex() + j + i * 3, 127 + j * 18, 8 + i * 18));
 			}
 		}
 
@@ -99,12 +99,12 @@ public class ContainerCustomPlayer extends Container {
 			addSlotToContainer(new SlotArmor(player, inventoryPlayer, inventoryPlayer.getSizeInventory() - 1 - i, 84, 8 + i * 18, i));
 		}
 		
-		addSlotToContainer(new SlotMask(player, inventoryPlayer, 15, 66, 8)); 
-		addSlotToContainer(new SlotOuterwear(inventoryPlayer, 16, 66, 26)); 
-		addSlotToContainer(new SlotPants(inventoryPlayer, 17, 66, 44)); 
+		addSlotToContainer(new SlotMask(player, inventoryPlayer, CustomSlots.MASK.getIndex(), 66, 8)); 
+		addSlotToContainer(new SlotOuterwear(inventoryPlayer, CustomSlots.OUTERWEAR.getIndex(), 66, 26)); 
+		addSlotToContainer(new SlotPants(inventoryPlayer, CustomSlots.PANTS.getIndex(), 66, 44)); 
 		
-		addSlotToContainer(new SlotBackpack(inventoryPlayer, 18, 102, 8));        
-		slotRig = addSlotToContainer(new SlotChestrig(inventoryPlayer, 19, 102, 26));
+		addSlotToContainer(new SlotBackpack(inventoryPlayer, CustomSlots.BACKPACK.getIndex(), 102, 8));        
+		slotRig = addSlotToContainer(new SlotChestrig(inventoryPlayer, CustomSlots.CHESTRIG.getIndex(), 102, 26));
 		
 		
 		if (inv!=null) 
@@ -319,7 +319,7 @@ public class ContainerCustomPlayer extends Container {
 	@Override
 	public ItemStack slotClick(int slot, int button, int modifier, EntityPlayer player) {
 		if (modifier == 2) return null;
-		if (slot>19 && modifier==4)
+		if (slot>CustomSlots.CHESTRIG.getIndex() && modifier==4)
 			modifier = 0;
 		ItemStack itemStack = super.slotClick(slot, button, modifier, player);
 		if (itemStack!= null && itemStack.getItem() instanceof ItemChestrig && slot==slotRig.slotNumber && slotRig.getStack()!=null && slotRig.getStack()!=itemStack) {
@@ -329,7 +329,7 @@ public class ContainerCustomPlayer extends Container {
 			}
 			inv.save();
 			inv.closeInventory();
-			inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));;
+			inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));;
 			slotsRig = new Slot[inv.getSizeInventory()];
 			inv.openInventory();
 			int columns = 2;
@@ -356,9 +356,9 @@ public class ContainerCustomPlayer extends Container {
 				inv = null;
 				slotsRig = null;
 			}
-			if (inv==null && itemStack==null && player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig) 
+			if (inv==null && itemStack==null && player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex())!=null && player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem() instanceof ItemChestrig) 
 			{
-				inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
+				inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));
 				inv.openInventory();
 				slotsRig = new Slot[inv.getSizeInventory()];
 				int columns = 2;
@@ -384,7 +384,7 @@ public class ContainerCustomPlayer extends Container {
 				{
 					weight+=is.getTagCompound().getFloat("weight")*is.stackSize;
 				}
-			PacketDispatcher.sendToServer(new ChangeItemWeight(19, weight));
+			PacketDispatcher.sendToServer(new ChangeItemWeight(CustomSlots.CHESTRIG.getIndex(), weight));
 			}
 		}
 		float weight = 0;

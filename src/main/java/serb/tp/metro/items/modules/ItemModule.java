@@ -1,29 +1,32 @@
 package serb.tp.metro.items.modules;
 
+import java.util.ArrayList;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import serb.tp.metro.creativetabs.LoadTabs;
+import serb.tp.metro.customization.AbstractCustomizableSlot;
+import serb.tp.metro.customization.ICustomizable;
 import serb.tp.metro.items.Item3D;
 
-public abstract class ItemModule extends Item3D{
+public abstract class ItemModule extends Item3D implements ICustomizable{
 
+	ArrayList<AbstractCustomizableSlot> slotsCustomization = new ArrayList<AbstractCustomizableSlot>();
 
 
 	public ItemModule(String name, String description, float weight, String model, float[] sizeModel, float[] pos,
 			float[] rotation, float[] onInventoryPos, float[] rightHandPos, float[] rightHandRotation) {
-		super(name, description, weight, model, sizeModel, pos, rotation, onInventoryPos, rightHandPos, rightHandRotation);
+		super(name, description, weight, model, sizeModel, pos, rotation, onInventoryPos, rightHandPos, rightHandRotation) ;
 		this.setCreativeTab(LoadTabs.modules);
+		this.maxStackSize = 1;
 	}
 
-	protected SlotInstalledModules[] potentialInstalledModules;
 	
-
-	
-	public void addSlotInstalledModules(SlotInstalledModules[] potentialInstalledModules) {
-		this.potentialInstalledModules = potentialInstalledModules;
-	}
 
     @Override
     public boolean onLeftClickEntity(ItemStack is, EntityPlayer player, Entity entity) {
@@ -34,4 +37,36 @@ public abstract class ItemModule extends Item3D{
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
         return true;
     }
+    
+	public void addSlot(AbstractCustomizableSlot slotCustomization) {
+		slotsCustomization.add(slotCustomization);
+		
+	}
+	
+	public ArrayList<AbstractCustomizableSlot> getSlotsCustomization() {
+		return this.slotsCustomization;
+	}
+	
+	public int getIndexNewSlot() {
+		return this.slotsCustomization.size();
+	}
+	
+	public boolean isCustomizable() {
+		return slotsCustomization.size()>0;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public float[] getModsCoordsForRendere(ItemRenderType type) {
+		switch (type) {
+			case INVENTORY:
+				return this.onInventoryPos;
+			case EQUIPPED:
+				return this.pos;
+			case EQUIPPED_FIRST_PERSON:
+				return this.pos;
+			default:
+				return new float[] {0, 0, 0};
+		
+		}
+	}
 }

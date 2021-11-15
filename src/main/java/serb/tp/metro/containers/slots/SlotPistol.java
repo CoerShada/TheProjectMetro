@@ -3,9 +3,9 @@ package serb.tp.metro.containers.slots;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import serb.tp.metro.containers.slots.SlotType.customGunSlot;
+import serb.tp.metro.containers.slots.SlotType.CustomWeaponSlot;
 
-public class SlotPistol extends Slot implements customGunSlot {
+public class SlotPistol extends Slot implements CustomWeaponSlot {
 
 	public SlotPistol(IInventory inventory, int slotIndex, int x, int y) {
 		super(inventory, slotIndex, x, y);

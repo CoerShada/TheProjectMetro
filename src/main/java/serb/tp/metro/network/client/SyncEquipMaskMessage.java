@@ -65,7 +65,7 @@ public class SyncEquipMaskMessage extends AbstractClientMessage<SyncEquipMaskMes
 			itemStack.getTagCompound().setInteger("filter", filter);
 		}
 		else itemStack = null;
-		playerToUpd.inventory.mainInventory[15] = itemStack;
+		playerToUpd.inventory.mainInventory[CustomSlots.MASK.getIndex()] = itemStack;
 		
 	}
 

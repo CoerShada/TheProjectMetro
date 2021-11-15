@@ -27,9 +27,11 @@ import serb.tp.metro.network.server.ChangeSpawnProbabilityMessage;
 import serb.tp.metro.network.server.ChangeSpawnTimeMessage;
 import serb.tp.metro.network.server.ChangeVisorMessage;
 import serb.tp.metro.network.server.ChengeMaxQuantityLootMessage;
+import serb.tp.metro.network.server.EditCustomizationMessage;
 import serb.tp.metro.network.server.LoadAmmoMessage;
 import serb.tp.metro.network.server.LoadGunMagMessage;
 import serb.tp.metro.network.server.NewCraftMessage;
+import serb.tp.metro.network.server.OnItemLeftClickMessage;
 import serb.tp.metro.network.server.OpenGuiMessage;
 import serb.tp.metro.network.server.PickupMessage;
 import serb.tp.metro.network.server.RemovingFilterMessage;
@@ -80,6 +82,8 @@ public class PacketDispatcher {
 		registerMessage(SyncGuiContainerSpawnerMaxQuantityLootMessage.class);
 		registerMessage(ChangeSpawnTimeMessage.class);
 		registerMessage(NewCraftMessage.class);
+		registerMessage(OnItemLeftClickMessage.class);
+		registerMessage(EditCustomizationMessage.class);
 	}
 
 	private static final <T extends AbstractMessage<T> & IMessageHandler<T, IMessage>> void registerMessage(Class<T> clazz) {

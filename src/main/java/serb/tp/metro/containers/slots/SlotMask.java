@@ -6,11 +6,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import serb.tp.metro.containers.slots.SlotType.customArmorSlot;
+import serb.tp.metro.containers.slots.SlotType.CustomArmorSlot;
 import serb.tp.metro.items.ItemMask;
 import serb.tp.metro.items.armor.ItemHelmet;
 
-public class SlotMask extends Slot implements customArmorSlot {
+public class SlotMask extends Slot implements CustomArmorSlot {
 	EntityPlayer player;
 	
 	public SlotMask(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y) {

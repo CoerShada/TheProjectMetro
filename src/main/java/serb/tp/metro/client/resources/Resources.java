@@ -26,5 +26,7 @@ public class Resources {
 	public static final ResourceLocation chestrig_Texture = new ResourceLocation(Main.modid, "textures/gui/containers/chestrig.png");
 	public static final ResourceLocation factionStartPageTexture = new ResourceLocation(Main.modid, "textures/gui/faction_page.png");
 	public static final ResourceLocation inventoryTexture = new ResourceLocation(Main.modid, "textures/gui/containers/inventory.png");
+	public static final ResourceLocation customizationTexture = new ResourceLocation(Main.modid, "textures/gui/containers/customization.png");
+	
 
 }

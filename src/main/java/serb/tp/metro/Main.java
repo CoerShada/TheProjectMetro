@@ -19,7 +19,7 @@ public class Main {
 	public static final String name = "The project Metro";
 	public static final String modid = "tp";
 	public static final String version = "Pre Alpha Build 1.9.8";
-	public static final boolean debug = false;
+	public static final boolean debug = true;
 	
 	@Mod.Instance(Main.modid)
 	public static Main mod;

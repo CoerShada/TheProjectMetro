@@ -5,30 +5,61 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import serb.tp.metro.containers.InventoryItemStorage;
+import serb.tp.metro.items.Item3D;
+import serb.tp.metro.items.ItemChestrig;
+import serb.tp.metro.network.PacketDispatcher;
+import serb.tp.metro.network.server.LoadAmmoMessage;
 
 
 public abstract class CurrentItem {
 	protected EntityPlayer player;
 	protected World world;
+	protected ItemStack is;
 	protected String name;
 	protected ArrayList<Integer> ammo;
-	protected long counter;
+	protected float weight;
+	protected final int slotId;
 	protected float[] pos = new float[3];
 	protected float[] rotation = new float[3];
 	
+	
 	public CurrentItem(EntityPlayer player, World world) {
+		this(player, world, -1);
+	}
+	
+	public CurrentItem(EntityPlayer player, World world, long counter) {
 		this.player = player;
 		this.world = world;
-		this.counter = world.getTotalWorldTime();
+		this.is = player.inventory.getCurrentItem();
+		this.slotId = player.inventory.currentItem;
+		this.name = player.inventory.getCurrentItem().getUnlocalizedName();
+		this.weight = player.inventory.getCurrentItem().getTagCompound().getFloat("weight");
+	}
+	
+	
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public void onUpdate() {
 		
 	}
 	
-	public long getCounter() {
-		return counter;
+	public int getSlotId() {
+		return slotId;
+	}
+	
+	public ItemStack getCurrentItemStack() {
+		return is;
 	}
 	
 	public void setAmmo(int[] ammo) {
@@ -48,11 +79,8 @@ public abstract class CurrentItem {
 		return player;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
+	protected enum State{
+		LOAD,
+		UNLOAD
 	}
 }

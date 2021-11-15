@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.containers.InventoryItemStorage;
@@ -31,6 +32,7 @@ public class ItemMag extends ItemWeaponModule
     public final int cooldownLoading;
     public final int cooldownUnloading;
     private final ItemBullet[] bullets;
+    
 
     public ItemMag(String name, String description, float weight, String model, float[] sizeModel, float[] pos,
 			float[] rotation, float[] onInventoryPos, float[] rightHandPos, float[] rightHandRotation,
@@ -70,7 +72,9 @@ public class ItemMag extends ItemWeaponModule
         par3List.add(hold);
     }
     
-    
+    public ItemBullet getBullet(ItemStack itemStack) {
+    	return bullets[itemStack.stackTagCompound.getInteger("getBullet")];
+    }
     
     public ItemStack unloadAmmo(EntityPlayer player, World world) 
     {
@@ -135,9 +139,9 @@ public class ItemMag extends ItemWeaponModule
     	return hold;
     }
     
-    public void loadAmmo(ItemStack hold, EntityPlayer player)
+    public ItemStack loadAmmo(ItemStack hold, EntityPlayer player)
     {
-    	
+    	DebugMessage.printMessage("Load ammo", this);
     	if(hold.hasTagCompound() && hold.stackTagCompound.getLong("counter")+cooldownLoading <= new Date().getTime() && hold.getTagCompound().getIntArray("bullets").length<maxAmmo) 
     	{
     		if (player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(19).hasTagCompound() ) 
@@ -149,7 +153,7 @@ public class ItemMag extends ItemWeaponModule
     				if (inv.getStackInSlot(i)!=null && inv.getStackInSlot(i).getItem() == (Item) bullets[hold.getTagCompound().getInteger("getBullet")]) 
     				{
     					PacketDispatcher.sendToServer(new LoadAmmoMessage(1, i ,this.maxAmmo));
-    					return;
+    					return hold;
     				}
     			}
     		}
@@ -157,15 +161,32 @@ public class ItemMag extends ItemWeaponModule
     		{
     			if (player.inventory.getStackInSlot(i)!=null && player.inventory.getStackInSlot(i).getItem() == (Item) bullets[hold.getTagCompound().getInteger("getBullet")]) 
     			{
-    				PacketDispatcher.sendToServer(new LoadAmmoMessage(2, i ,this.maxAmmo));
-    				return;
+    				
+    				//PacketDispatcher.sendToServer(new LoadAmmoMessage(2, i ,this.maxAmmo));
+    				int [] bullets = hold.stackTagCompound.getIntArray("bullets");
+    			    int [] bulletsNew = new int[bullets.length + 1];
+    			    ItemBullet bullet = (ItemBullet) player.inventory.getStackInSlot(i).getItem();
+    				player.inventory.decrStackSize(i, 1);
+    				for(int j=0; j<bullets.length; j++) 
+    				{
+    					bulletsNew[j+1] = bullets[j];
+    				}
+    				bulletsNew[0] =  bullet.getIdFromItem(bullet);
+    				hold.stackTagCompound.setFloat("weight", hold.stackTagCompound.getFloat("weight")+bullet.weight);
+    				hold.stackTagCompound.setIntArray("bullets", bulletsNew);
+    				//hold.stackTagCompound.setLong("counter", new Date().getTime());
+    				player.inventoryContainer.detectAndSendChanges();
+    				return hold;
     			}
     		}
+    		
     	}
-        	
-        
+    	return hold;	
     }
     
+    public ItemStack onItemLeftClick(ItemStack hold, World world, EntityPlayer player) {
+    	return loadAmmo(hold, player);
+    }
     
     
     public ItemStack chengeAmmo(ItemStack hold, World world ,EntityPlayer player) 

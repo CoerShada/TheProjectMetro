@@ -86,13 +86,13 @@ public class StorageContainer extends Container {
 
 
 
-		addSlotToContainer(new SlotKnife(inventoryPlayer, 0, 66, 124)); 
-		addSlotToContainer(new SlotPistol(inventoryPlayer, 1, 84, 124)); 
-		addSlotToContainer(new SlotGun(inventoryPlayer, 2, 102, 124)); 
+		addSlotToContainer(new SlotKnife(inventoryPlayer, CustomSlots.KNIFE.getIndex(), 66, 124)); 
+		addSlotToContainer(new SlotPistol(inventoryPlayer, CustomSlots.PISTOL.getIndex(), 84, 124)); 
+		addSlotToContainer(new SlotGun(inventoryPlayer, CustomSlots.WEAPON.getIndex(), 102, 124)); 
 		
-		for (int i = 0; i < 3; i++) 
+		for (int i = 0; i < CustomSlots.END_HOTBAR.getIndex() - CustomSlots.BEGIN_HOTBAR.getIndex() + 1; i++) 
 		{
-			addSlotToContainer(new SlotHotbar(inventoryPlayer, 3 + i, 127 + i * 18, 124));
+			addSlotToContainer(new SlotHotbar(inventoryPlayer, CustomSlots.BEGIN_HOTBAR.getIndex() + i, 127 + i * 18, 124));
 		}
 		
 		//инвентарь	все 3 ряда
@@ -100,7 +100,7 @@ public class StorageContainer extends Container {
 		{
 			for (int j = 0; j < 3; ++j) 
 			{
-				addSlotToContainer(new Slot(inventoryPlayer, 6 + j + i * 3, 127 + j * 18, 68 + i * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, CustomSlots.BEGIN_INV.getIndex() + j + i * 3, 127 + j * 18, 68 + i * 18));
 			}
 		}
 
@@ -110,9 +110,9 @@ public class StorageContainer extends Container {
 			addSlotToContainer(new SlotArmor(player, inventoryPlayer, inventoryPlayer.getSizeInventory() - 1 - i, 84, 68 + i * 18, i));
 		}
 		
-		addSlotToContainer(new SlotMask(player, inventoryPlayer, 15, 66, 68)); 
-		addSlotToContainer(new SlotOuterwear(inventoryPlayer, 16, 66, 86)); 
-		addSlotToContainer(new SlotPants(inventoryPlayer, 17, 66, 104)); 
+		addSlotToContainer(new SlotMask(player, inventoryPlayer, CustomSlots.MASK.getIndex(), 66, 68)); 
+		addSlotToContainer(new SlotOuterwear(inventoryPlayer, CustomSlots.OUTERWEAR.getIndex(), 66, 86)); 
+		addSlotToContainer(new SlotPants(inventoryPlayer, CustomSlots.PANTS.getIndex(), 66, 104)); 
 		
 		slotBackpack = addSlotToContainer(new SlotBackpack(inventoryPlayer, 18, 102, 68));        
 		slotRig = addSlotToContainer(new SlotChestrig(inventoryPlayer, 19, 102, 86)); 

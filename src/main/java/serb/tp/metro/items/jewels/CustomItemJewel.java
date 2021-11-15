@@ -32,8 +32,8 @@ public class CustomItemJewel extends Item {
 			itemStack.stackSize = 0;
 		}    	
 
-		if(itemStack.getItem() instanceof jewelTypeGun && ExtendedPlayer.get(player).inventory.getStackInSlot(CustomSlots.GUN.ordinal()) == null) {
-			ExtendedPlayer.get(player).inventory.setInventorySlotContents(CustomSlots.GUN.ordinal(), itemStack.copy());
+		if(itemStack.getItem() instanceof jewelTypeGun && ExtendedPlayer.get(player).inventory.getStackInSlot(CustomSlots.WEAPON.ordinal()) == null) {
+			ExtendedPlayer.get(player).inventory.setInventorySlotContents(CustomSlots.WEAPON.ordinal(), itemStack.copy());
 			itemStack.stackSize = 0;
 		}    	
 

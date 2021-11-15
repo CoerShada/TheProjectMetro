@@ -27,15 +27,19 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import serb.tp.metro.KeybindingRegistry;
 import serb.tp.metro.client.render.RenderItemOnGround;
 import serb.tp.metro.common.CommonProxy;
+import serb.tp.metro.customization.ICustomizable;
 import serb.tp.metro.items.ItemBackpack;
 import serb.tp.metro.items.ItemMask;
 import serb.tp.metro.items.armor.ItemHelmet;
 import serb.tp.metro.items.modules.ItemMag;
 import serb.tp.metro.items.weapons.ItemWeapon;
 import serb.tp.metro.network.PacketDispatcher;
+import serb.tp.metro.network.server.ChangeFireModMessage;
+import serb.tp.metro.network.server.ChangeSafetyModMessage;
 import serb.tp.metro.network.server.OpenGuiMessage;
 import serb.tp.metro.network.server.PickupMessage;
 import serb.tp.metro.network.server.RemovingFilterMessage;
+import serb.tp.metro.network.server.ShootMessage;
 
 
 public class KeyBindingHandler {
@@ -122,8 +126,9 @@ public class KeyBindingHandler {
 	    		ItemStack itemStack = player.inventory.getCurrentItem();
 	    		if(itemStack!=null && itemStack.getItem() instanceof ItemWeapon && itemStack.hasTagCompound()) 
 	    		{
-	    		    ItemWeapon gun = (ItemWeapon) itemStack.getItem();
-	    		    gun.fireModChange(itemStack);
+	    		    ItemWeapon weapon = (ItemWeapon) itemStack.getItem();
+	    		    weapon.fireModChange(itemStack, player.worldObj, player);
+	    		    PacketDispatcher.sendToServer(new ChangeFireModMessage());
 	    		}
 			}
 	    		
@@ -134,8 +139,9 @@ public class KeyBindingHandler {
 	    		ItemStack itemStack = player.inventory.getCurrentItem();
 	    		if(itemStack!=null && itemStack.getItem() instanceof ItemWeapon && itemStack.hasTagCompound()) 
 	    		{
-	    		    ItemWeapon gun = (ItemWeapon) itemStack.getItem();
-	    		    gun.safetyModChange();
+	    		    ItemWeapon weapon = (ItemWeapon) itemStack.getItem();
+	    		    weapon.safetyModChange(itemStack, player.worldObj, player);
+	    		    PacketDispatcher.sendToServer(new ChangeSafetyModMessage());
 	    		}
 			}
 		}
@@ -217,6 +223,16 @@ public class KeyBindingHandler {
 	    		if (player.inventory.getStackInSlot(18)!=null && player.inventory.getStackInSlot(18).getItem() instanceof ItemBackpack) 
 	    		{
 	    			PacketDispatcher.sendToServer(new OpenGuiMessage(CommonProxy.GUI_BACPACK));
+	    		}
+			}
+		}
+		
+		if (KeybindingRegistry.KEY_MODIFY.isPressed()) {
+			if(mc.theWorld.isRemote) {
+	    		EntityPlayer playerServer = (EntityPlayer) mc.thePlayer;
+	    		if (player.inventory.getCurrentItem()!=null && player.inventory.getCurrentItem().getItem() instanceof ICustomizable) 
+	    		{
+	    			PacketDispatcher.sendToServer(new OpenGuiMessage(CommonProxy.GUI_MODIFY));
 	    		}
 			}
 		}

@@ -5,12 +5,11 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import serb.tp.metro.client.gui.containers.GuiStorageCreator;
@@ -19,11 +18,11 @@ import serb.tp.metro.client.resources.Resources;
 public class GuiItem extends GuiButton{
 	private ResourceLocation texture = Resources.creator_texture;
 	private ItemStack itemStack;
-	private GuiStorageCreator parent;
+	private GuiContainer parent;
 	boolean show;
 
 
-    public GuiItem(GuiStorageCreator parent, int id, int posX, int posY, int width, int height, ItemStack itemStack)
+    public GuiItem(GuiContainer parent, int id, int posX, int posY, int width, int height, ItemStack itemStack)
     {
     	super(id, posX, posY, width, height, "");
     	this.itemStack = itemStack;
@@ -35,6 +34,7 @@ public class GuiItem extends GuiButton{
     {
     	if (this.visible)
         {
+    		GuiStorageCreator parent = (GuiStorageCreator) this.parent;
     		GL11.glEnable(GL11.GL_SCISSOR_TEST);
     		glScissor(this.xPosition, parent.getGuiTop()-14, this.width, 72);
             FontRenderer fontrenderer = mc.fontRenderer;
@@ -87,7 +87,7 @@ public class GuiItem extends GuiButton{
     }
 
     @Override
-    public boolean mousePressed(Minecraft p_146116_1_, int mouseX, int mouseY)
+    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY)
     {
     	return false;
     }

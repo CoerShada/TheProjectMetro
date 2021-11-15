@@ -54,7 +54,7 @@ public class MouseHandler {
 	    if (itemStack == null) return;
 	   
 	    
-		shoot(itemStack, mc.thePlayer, mc.theWorld);
+		//shoot(itemStack, mc.thePlayer, mc.theWorld);
 		workWithMag(itemStack, mc.thePlayer, mc.theWorld);
 	    
 	    
@@ -117,7 +117,7 @@ public class MouseHandler {
 	    	System.out.println(world.getTotalWorldTime());
     		if(mc.theWorld.isRemote && itemStack!=null && itemStack.getItem() instanceof ItemWeapon && itemStack.getTagCompound().getLong("notfire")+(60/itemStack.getTagCompound().getFloat("rateOfFire")*100)<=world.getTotalWorldTime()) {
 
-    			((ItemWeapon) itemStack.getItem()).shoot(itemStack, mc.thePlayer);
+    			//((ItemWeapon) itemStack.getItem()).shoot(itemStack, mc.thePlayer);
     			nextRound--;
     		}
     		

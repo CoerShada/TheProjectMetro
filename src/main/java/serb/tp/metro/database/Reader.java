@@ -43,9 +43,11 @@ public class Reader {
 	
 	protected static float getFloat(String[] currentString, String name) {
 		try {
+			
 			return Float.parseFloat(getString(currentString, name));
 		}
 		catch(Exception e){
+			System.out.println(name);
 			System.err.println(e);
 		}
 		return 0;
@@ -88,7 +90,6 @@ public class Reader {
 	
 	protected static float[] getFloatsArray(String[] currentString, String name) {
 		String[] strings = getStringArray(currentString, name, ", ");
-		System.out.println("strings" + strings.toString());
 		float[] floats = new float[strings.length];
 		for (int i = 0; i<strings.length; i++)
 			floats[i] = Float.valueOf(strings[i]);
@@ -99,7 +100,7 @@ public class Reader {
 		String[] itemNames = getStringArray(currentString, name, ", ");
 		Item3D[] items = new Item3D[itemNames.length];
 		for(int i = 0; i<itemNames.length; i++) {
-			items[i] = (Item3D) GameRegistry.findItem(Main.modid, itemNames[i]);
+			items[i] = (Item3D) GameRegistry.findItem(Main.modid, "item."+itemNames[i]);
 		}
 		return items;
 	}
