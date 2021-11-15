@@ -294,7 +294,7 @@ public class GuiCustomization extends GuiContainer {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		
 		RenderHelper.enableStandardItemLighting();
-		IItemRenderer render = MinecraftForgeClient.getItemRenderer(player.inventory.getCurrentItem(), ItemRenderType.EQUIPPED);
+		IItemRenderer render = MinecraftForgeClient.getItemRenderer(player.inventory.getCurrentItem(), ItemRenderType.EQUIPPED_FIRST_PERSON);
 		
 		
 		GL11.glPushMatrix();
@@ -303,10 +303,11 @@ public class GuiCustomization extends GuiContainer {
 		int size = 70;
 		GL11.glTranslated(this.guiLeft+this.xSize/2, this.guiTop + this.ySize/2, 0);
 		GL11.glScalef(size, size, size);
+		GL11.glRotated(-45, 0, 1, 0);
 		GL11.glRotated(-90, 1, 0, 0);
 		GL11.glRotated(90, 0, 1, 0);
 		GL11.glRotated(-90, 0, 0, 1);
-		render.renderItem(ItemRenderType.INVENTORY, player.inventory.getCurrentItem(), this);
+		render.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, player.inventory.getCurrentItem(), this);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glPopMatrix();
 		

@@ -44,48 +44,55 @@ public class RenderItem3D implements IItemRenderer{
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-		float [] mods = new float[] {0, 0, 0};
+		float [] mods = new float[] {this.item.pos[0], this.item.pos[1], this.item.pos[2]};
 		if (data.length==2 && data[1] instanceof float[]) {
 			mods = (float[]) data[1];
 		}
 		
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		//GL11.glDisable(GL11.GL_CULL_FACE);
+
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GL11.glPushMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		int index;
 		if (type == ItemRenderType.INVENTORY) {
-			GL11.glScalef(this.item.sizeModel[3], this.item.sizeModel[3], this.item.sizeModel[3]);
+			index = 2;
 			
+
 		} else if (type == ItemRenderType.EQUIPPED) {
-			if (item.getItem() instanceof ItemWeapon) {
-				//GL11.glRotated(360, 0, 0.125, 0.125);
+			index = 1;
+			if (mods[0]==this.item.pos[0] && mods[1]==this.item.pos[1] && mods[2]==this.item.pos[2]) {
 				GL11.glRotated(45, 0, 1, 0);
-				GL11.glRotated(45, 1, 0, 0);
+				GL11.glRotated(-45, 1, 0, 0);
 			}
 			GL11.glRotated(this.item.rotation[1], 1, 0, 0);
 			GL11.glRotated(this.item.rotation[0], 0, 1, 0);
 			GL11.glRotated(this.item.rotation[2], 0, 0, 1);
-			GL11.glScalef(this.item.sizeModel[2], this.item.sizeModel[2], this.item.sizeModel[2]);
 			
 		} 
 		else if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-	
+			index = 0;
 			GL11.glRotated(this.item.rotation[0], 1, 0, 0);
 			GL11.glRotated(this.item.rotation[1], 0, 1, 0);
 			GL11.glRotated(this.item.rotation[2], 0, 0, 1);
-			GL11.glScalef(this.item.sizeModel[1], this.item.sizeModel[1], this.item.sizeModel[1]);		
+			
 		}	
 		else {
-			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-			GL11.glTranslatef(0F, 0.5F, 0F);
+			index = 3;
 			GL11.glRotated(this.item.rotation[0], 1, 0, 0);
 			GL11.glRotated(this.item.rotation[1], 0, 1, 0);
 			GL11.glRotated(this.item.rotation[2], 0, 0, 1);
-			GL11.glScalef(this.item.sizeModel[3], this.item.sizeModel[3], this.item.sizeModel[3]);
+			//if (mods[0]==this.item.pos[0] && mods[1]==this.item.pos[1] && mods[2]==this.item.pos[2]) GL11.glTranslatef(0F, 0.5F, 0F);
+			//if (mods[0]==this.item.pos[0] && mods[1]==this.item.pos[1] && mods[2]==this.item.pos[2])
+				//GL11.glTranslatef(0F, 0.5F, 0F);
 
 		}
-		GL11.glTranslatef(this.item.pos[0]+mods[0], this.item.pos[1]+mods[1], this.item.pos[2]+mods[2]);
+
+		float coef = this.item.sizeModel[1]/this.item.sizeModel[index];
+		//System.out.println(coef);
+		GL11.glTranslatef(mods[0] + this.item.pos[0] * 1, mods[1] + this.item.pos[1] * 1, mods[2] + this.item.pos[2] * 1);
+		
+		GL11.glScalef(this.item.sizeModel[index], this.item.sizeModel[index], this.item.sizeModel[index]);
 
 		GL11.glCallList(list);
 		
@@ -100,7 +107,7 @@ public class RenderItem3D implements IItemRenderer{
 				AbstractCustomizableSlot slot = customizable.getSlotsCustomization().get(i);
 				IItemRenderer render = MinecraftForgeClient.getItemRenderer(is, type);
 				
-				render.renderItem(type, is, data, new float[] {mods[0]+slot.pos[0], mods[1]+slot.pos[1], mods[2]+slot.pos[2]});			}
+				render.renderItem(type, is, data, new float[] {mods[0]+slot.pos[0] * 1, slot.pos[1] + mods[1]* 1, slot.pos[2] + mods[2]* 1});			}
 			catch(Exception e) {}
 		}
 
