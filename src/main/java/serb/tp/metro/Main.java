@@ -6,6 +6,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import serb.tp.metro.common.CommonProxy;
 import serb.tp.metro.handlers.GuiHandler;
@@ -44,6 +45,11 @@ public class Main {
 		System.out.println(Main.name + " has been successfully initialized");
 	}
 
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+    	this.proxy.serverStarting(event);
+    }
+	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();

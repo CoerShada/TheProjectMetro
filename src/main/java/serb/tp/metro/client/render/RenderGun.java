@@ -18,7 +18,7 @@ public class RenderGun {
 	    
 	    ItemStack equipStack = player.inventory.getStackInSlot(2);
 	    Item equip = equipStack.getItem();
-	    if(equip instanceof ItemWeapon && player.inventory.getCurrentItem() != equipStack) RenderEquipArmor.renderGun(renderModel, equip);
+	    //if(equip instanceof ItemWeapon && player.inventory.getCurrentItem() != equipStack) RenderEquipArmor.renderGun(renderModel, equip);
 	}
 
 }

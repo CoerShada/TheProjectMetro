@@ -44,76 +44,105 @@ public class RenderItem3D implements IItemRenderer{
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-		float [] mods = new float[] {this.item.pos[0], this.item.pos[1], this.item.pos[2]};
-		if (data.length==2 && data[1] instanceof float[]) {
-			mods = (float[]) data[1];
+		int index;
+		switch(type) {
+			case EQUIPPED_FIRST_PERSON:
+				index = 0;
+				break;
+			case EQUIPPED:
+				index = 1;
+				break;
+			case INVENTORY:
+				index = 2;
+				break;
+			default:
+				index = 3;
+				break;
 		}
-		
+		float coef = this.item.sizeModel[index]/this.item.sizeModel[1];
+		float coefOld = 1;
+		//float coef = 1;
+		float [] mods = new float[] {this.item.pos[0]*coef, this.item.pos[1]*coef, this.item.pos[2]*coef, 0, 0, 0};
+		boolean firstRender = true;
+		for (int i = 0; i<data.length; i++) {
+			if (data[i] instanceof float[]) {
+				//System.out.println(type.toString());
+				float [] modsTemp = (float[]) data[i];
+				coefOld=modsTemp[6];
+				mods[0] = mods[0] + modsTemp[0] * coefOld;
+				mods[1] = mods[1] + modsTemp[1] * coefOld;
+				mods[2] = mods[2] + modsTemp[2] * coefOld;
+				
+				mods[3] = modsTemp[3];
+				mods[4] = modsTemp[4];
+				mods[5] = modsTemp[5];
+			}
+			if (data[i] instanceof Boolean) {
+				firstRender = (boolean) data[i];
+			}
+		}
+
+		//System.out.println(this.item.rotation[1]);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GL11.glPushMatrix();
+		GL11.glRotated(mods[3], 1, 0, 0);
+		GL11.glRotated(mods[4], 0, 1, 0);
+		GL11.glRotated(mods[5], 0, 0, 1);
+
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		int index;
-		if (type == ItemRenderType.INVENTORY) {
-			index = 2;
-			
+		//System.out.println(item.getDisplayName().toString() + " " + this.item.rotation[1]);
 
-		} else if (type == ItemRenderType.EQUIPPED) {
-			index = 1;
-			if (mods[0]==this.item.pos[0] && mods[1]==this.item.pos[1] && mods[2]==this.item.pos[2]) {
-				GL11.glRotated(45, 0, 1, 0);
-				GL11.glRotated(-45, 1, 0, 0);
-			}
-			GL11.glRotated(this.item.rotation[1], 1, 0, 0);
-			GL11.glRotated(this.item.rotation[0], 0, 1, 0);
-			GL11.glRotated(this.item.rotation[2], 0, 0, 1);
-			
-		} 
-		else if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-			index = 0;
-			GL11.glRotated(this.item.rotation[0], 1, 0, 0);
-			GL11.glRotated(this.item.rotation[1], 0, 1, 0);
-			GL11.glRotated(this.item.rotation[2], 0, 0, 1);
-			
-		}	
-		else {
-			index = 3;
-			GL11.glRotated(this.item.rotation[0], 1, 0, 0);
-			GL11.glRotated(this.item.rotation[1], 0, 1, 0);
-			GL11.glRotated(this.item.rotation[2], 0, 0, 1);
-			//if (mods[0]==this.item.pos[0] && mods[1]==this.item.pos[1] && mods[2]==this.item.pos[2]) GL11.glTranslatef(0F, 0.5F, 0F);
-			//if (mods[0]==this.item.pos[0] && mods[1]==this.item.pos[1] && mods[2]==this.item.pos[2])
-				//GL11.glTranslatef(0F, 0.5F, 0F);
-
-		}
-
-		float coef = this.item.sizeModel[1]/this.item.sizeModel[index];
-		//System.out.println(coef);
-		GL11.glTranslatef(mods[0] + this.item.pos[0] * 1, mods[1] + this.item.pos[1] * 1, mods[2] + this.item.pos[2] * 1);
 		
+		
+		GL11.glRotated(this.item.rotation[0], 1, 0, 0);
+		GL11.glRotated(this.item.rotation[1], 0, 1, 0);
+		GL11.glRotated(this.item.rotation[2], 0, 0, 1);
+
+		if(firstRender && type==ItemRenderType.EQUIPPED) {
+			GL11.glRotated(-45, 0, 1, 0);
+			
+		}
+		if(firstRender && type==ItemRenderType.EQUIPPED_FIRST_PERSON) {
+			GL11.glRotated(-45, 0, 1, 0);
+		}
+		GL11.glTranslatef(mods[0], mods[1], mods[2]);
+		
+		if (item.getItem() instanceof ICustomizable) {
+			ICustomizable customizable = (ICustomizable) item.getItem();
+			InventoryItemStorage inv = new InventoryItemStorage(item);
+			for (int i = 0; i<inv.getSizeInventory(); i++) {
+				ItemStack is = inv.getStackInSlot(i);
+				if (is==null) continue;
+				
+				try {
+					AbstractCustomizableSlot slot = customizable.getSlotsCustomization().get(i);
+					RenderItem3D render = (RenderItem3D) MinecraftForgeClient.getItemRenderer(is, type);
+					//coef = render.item.sizeModel[index]/render.item.sizeModel[1];
+					//coef = 1;
+					render.renderItem(type, is, data, new float[] {slot.pos[0],  slot.pos[1],  slot.pos[2], slot.rotation[0], slot.rotation[1], slot.rotation[2], coef}, false);			
+				}
+				catch(Exception e) {
+					
+				}
+			}
+			
+		}
+		
+
 		GL11.glScalef(this.item.sizeModel[index], this.item.sizeModel[index], this.item.sizeModel[index]);
 
-		GL11.glCallList(list);
+
+
+
 		
-		if (!(item.getItem() instanceof ICustomizable)) return;
-		ICustomizable customizable = (ICustomizable) item.getItem();
-		InventoryItemStorage inv = new InventoryItemStorage(item);
-		for (int i = 0; i<inv.getSizeInventory(); i++) {
-			ItemStack is = inv.getStackInSlot(i);
-			if (is==null) continue;
-			
-			try {
-				AbstractCustomizableSlot slot = customizable.getSlotsCustomization().get(i);
-				IItemRenderer render = MinecraftForgeClient.getItemRenderer(is, type);
-				
-				render.renderItem(type, is, data, new float[] {mods[0]+slot.pos[0] * 1, slot.pos[1] + mods[1]* 1, slot.pos[2] + mods[2]* 1});			}
-			catch(Exception e) {}
-		}
+		GL11.glCallList(list);
 
 		GL11.glPopMatrix();
 		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+	
+		
 	}
 	
 }

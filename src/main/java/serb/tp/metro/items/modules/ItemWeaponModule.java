@@ -14,12 +14,12 @@ import serb.tp.metro.utils.MathHelper;
 public class ItemWeaponModule extends ItemModule{
 	
 
-	private float verticalRecoilMod;
-	private float horizontalRecoilMod;
-	private float convenienceMod;
-	private float accuracyMod;
-	private float penetrationMod;
-	private float jummingMod;
+	protected float verticalRecoilMod;
+	protected float horizontalRecoilMod;
+	protected float convenienceMod;
+	protected float accuracyMod;
+	protected float penetrationMod;
+	protected float jummingMod;
 	
 	public ItemWeaponModule(String name, String description, float weight, String model, float[] sizeModel, float[] pos,
 			float[] rotation, float[] onInventoryPos, float[] rightHandPos, float[] rightHandRotation, float verticalRecoilMod, 
@@ -32,6 +32,8 @@ public class ItemWeaponModule extends ItemModule{
 		this.penetrationMod = penetrationMod;
 		this.jummingMod = jummingMod;
 	}
+	
+
 	
     @SideOnly(Side.CLIENT)
     @Override

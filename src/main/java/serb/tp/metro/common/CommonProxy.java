@@ -1,5 +1,7 @@
 package serb.tp.metro.common;
 
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -8,8 +10,10 @@ import serb.tp.metro.blocks.LoadBuildersBlocks;
 import serb.tp.metro.blocks.LoadFurniture;
 import serb.tp.metro.blocks.LoadFurnitureUnbreakable;
 import serb.tp.metro.blocks.LoadTunnels;
+import serb.tp.metro.common.commands.CommandSyncDatabase;
 import serb.tp.metro.common.handlers.CustomArmorTick;
 import serb.tp.metro.common.handlers.DeathPlayerHandler;
+import serb.tp.metro.common.handlers.HandlerRegisterCommands;
 import serb.tp.metro.common.handlers.PickupHandler;
 import serb.tp.metro.common.handlers.WeaponSystemHandler;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipBackpuck;
@@ -49,18 +53,14 @@ public class CommonProxy {
 		atribute();
 		ws = new WeaponSystem();
 		//death();
-		BulletsReader.LoadBullets();
-		ModulesReader.LoadModules();
-		WeaponsReader.LoadWeapons();
-		CustomizationSlotsReader.LoadCustomizationSlots();
+		loadOrUpdateContent();
 	}
 
 	public void Init() {	
 		playerHandler();
 		playerUpdateEquip();
 		MinecraftForge.EVENT_BUS.register(new WeaponSystemHandler());
-		
-
+		//MinecraftForge.EVENT_BUS.register(new HandlerRegisterCommands());
 	}
 
 	public void postInit() {    
@@ -74,7 +74,13 @@ public class CommonProxy {
 		//LoadItemArmor.registerItems();
 	}
 
-
+	public void loadOrUpdateContent() {
+		BulletsReader.LoadBullets();
+		ModulesReader.LoadModules();
+		WeaponsReader.LoadWeapons();
+		CustomizationSlotsReader.LoadCustomizationSlots();
+	}
+	
 	
 	public void loadBlocks() {
 		
@@ -124,6 +130,11 @@ public class CommonProxy {
 	
 
 	
+    public void serverStarting(FMLServerStartingEvent event) {
+    	
+    	event.registerServerCommand(new CommandSyncDatabase());//Регистрация команд	
+
+    }
 
 	
 }

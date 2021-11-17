@@ -1,3 +1,5 @@
+database.updated=Конфигурация предметов успешно синхронизирована!
+database.error_updated=Ошибка во время синхронизации конфигурации предметов! Пожалуйста сообщите об этом администрации проекта. 
 itemGroup.buildersBlocks=Блоки для билдеров
 itemGroup.furnitureBlocks=Мебель
 itemGroup.tunnelsBlocks=Туннели

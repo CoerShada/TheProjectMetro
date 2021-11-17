@@ -207,9 +207,10 @@ public class ContainerCustomization extends Container{
 					
 					is = this.player.inventory.getStackInSlot(slotID);
 					this.player.inventory.setInventorySlotContents(slotID, isFromCustomization);
-
-					subContainers[nextSlotID] = new ContainerCustomization(IntHelper.concat(nextContID, nextSlotID), player, is, this.slots.get(nextSlotID).xDisplayPosition, this.slots.get(nextSlotID).yDisplayPosition);
-
+					if (is!=null)
+						subContainers[nextSlotID] = new ContainerCustomization(IntHelper.concat(nextContID, nextSlotID), player, is, this.slots.get(nextSlotID).xDisplayPosition, this.slots.get(nextSlotID).yDisplayPosition);
+					else
+						subContainers[nextSlotID] = null;
 				}
 				else {
 					
@@ -294,7 +295,7 @@ public class ContainerCustomization extends Container{
 		for (ItemStack is: this.customizationInventory.inventory) {
 			if (is==null || !(is.getItem() instanceof Item3D)) continue;
 			Item3D item3D= (Item3D) is.getItem();
-			weight+=item3D.weight;
+			weight+=item3D.getWeight();
 		}
 		return weight;
 			

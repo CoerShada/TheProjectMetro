@@ -30,11 +30,13 @@ public class CustomizationSlotsReader extends Reader{
 		if (!(getItems(splitParameters, getString(splitParameters, "parentItems"))[0] instanceof ICustomizable)) return;
 		
 		ICustomizable item = (ICustomizable) getItems(splitParameters, getString(splitParameters, "parentItems"))[0];
+		item.clearSlots();
 		Item item_test = (Item) item;
 		item.addSlot(new AbstractCustomizableSlot(	item.getIndexNewSlot(), 
 													getInt(splitParameters, "x"), 
 													getInt(splitParameters, "y"), 
 													getFloatsArray(splitParameters, "pos"),
+													getFloatsArray(splitParameters, "rotation"),
 													getItems(splitParameters, getString(splitParameters, "subItems")
 													)));
 		

@@ -151,7 +151,7 @@ public class WeaponSystem implements IExtendedEntityProperties {
 				type = Type.OTHER;
 			}
 			slotId=inv.currentItem;
-			DebugMessage.printMessage("Item has been changed!", this);
+			DebugMessage.printMessage("Item has been changed!");
 			changed = true;
 		}
 		if (this.forcibly) {

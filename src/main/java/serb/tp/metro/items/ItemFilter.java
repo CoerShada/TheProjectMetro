@@ -31,9 +31,6 @@ public class ItemFilter extends Item3D {
         list.add(Type.getTranslate("characteristic.all.weight") + ": " + String.format("%.2f", weight/1000) + Type.getTranslate("characteristic.all.weight.kg"));
     }
     
-    public float getWeight() {
-    	return weight;
-    }
     
     @Override
     public void getSubItems(Item item, CreativeTabs ct, List list)

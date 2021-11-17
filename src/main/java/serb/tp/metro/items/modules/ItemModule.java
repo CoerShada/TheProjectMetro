@@ -12,7 +12,9 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.customization.AbstractCustomizableSlot;
 import serb.tp.metro.customization.ICustomizable;
+import serb.tp.metro.database.CustomizationSlotsReader;
 import serb.tp.metro.items.Item3D;
+import serb.tp.metro.utils.DefenceVariables;
 
 public abstract class ItemModule extends Item3D implements ICustomizable{
 
@@ -67,6 +69,13 @@ public abstract class ItemModule extends Item3D implements ICustomizable{
 			default:
 				return new float[] {0, 0, 0};
 		
+		}
+	}
+	
+	@Override
+	public final void clearSlots() {
+		if (DefenceVariables.authorizedAccess(CustomizationSlotsReader.class)) {
+			slotsCustomization = new ArrayList<AbstractCustomizableSlot>();
 		}
 	}
 }

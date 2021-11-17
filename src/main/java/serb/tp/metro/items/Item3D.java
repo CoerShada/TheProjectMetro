@@ -16,23 +16,25 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
+import serb.tp.metro.database.Reader;
+import serb.tp.metro.utils.DefenceVariables;
 
 public abstract class Item3D extends Item{
-	public final String[] description;
-	public final float weight;
-	public final ResourceLocation model;
-	public final float[] sizeModel;
-	public final float[] pos;
-	public final float[] rotation;
-	public final float[] onInventoryPos;
-    public final float[] rightHandPos;
-    public final float[] rightHandRotation;
-    protected ItemStack baseItemStack;
+	public String[] description;
+	protected float weight;
+	public ResourceLocation model;
+	public float[] sizeModel;
+	public float[] pos;
+	public float[] rotation;
+	public float[] onInventoryPos;
+	public float[] rightHandPos;
+	public float[] rightHandRotation;
+	protected ItemStack baseItemStack;
 	
 
 	public Item3D(String name, String description, float weight, String model, float[] sizeModel, float[] pos, float[] rotation, float[] onInventoryPos,float[] rightHandPos, float[] rightHandRotation) {
 		this.setUnlocalizedName(name);
-		
+	
 		int beginIndex = 0;
 		int lastIndex = 0;
 		int index = 0;
@@ -74,14 +76,11 @@ public abstract class Item3D extends Item{
 	    this.rightHandRotation = rightHandRotation;
 		GameRegistry.registerItem(this, this.getUnlocalizedName());
 		this.baseItemStack = new ItemStack(this);
+		
 	}
 	
-	
-	/*public Item3D(String name, float weight) {
-		this(name, weight, 1, 0, 0, 0);
-	}*/
-	
-    @SideOnly(Side.CLIENT)
+
+	@SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean isAdv) {
         if (!itemStack.hasTagCompound()) return;
@@ -115,4 +114,18 @@ public abstract class Item3D extends Item{
     public ItemStack onItemLeftClick(ItemStack hold, World world, EntityPlayer player) {
     	return hold;
     }
+    
+
+	public final float getWeight() {
+		return weight;
+	}
+
+
+	public final void setWeight(float weight) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.weight = weight;
+		}
+		
+	}
+    
 }

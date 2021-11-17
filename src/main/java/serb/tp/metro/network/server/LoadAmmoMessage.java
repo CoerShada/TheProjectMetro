@@ -59,7 +59,7 @@ public class LoadAmmoMessage extends AbstractServerMessage<LoadAmmoMessage> {
 			InventoryItemStorage inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
 			bullet=(ItemBullet) inv.getStackInSlot(index).getItem();
 			ItemStack rig = player.inventory.getStackInSlot(19);
-			rig.getTagCompound().setFloat("weight", rig.getTagCompound().getFloat("weight")-bullet.weight);
+			rig.getTagCompound().setFloat("weight", rig.getTagCompound().getFloat("weight")-bullet.getWeight());
 			inv.decrStackSize(index, 1);		
 			inv.save();
 			inv.closeInventory();
@@ -74,7 +74,7 @@ public class LoadAmmoMessage extends AbstractServerMessage<LoadAmmoMessage> {
 			bulletsNew[i+1] = bullets[i];
 		}
 		bulletsNew[0] =  bullet.getIdFromItem(bullet);
-		hold.stackTagCompound.setFloat("weight", hold.stackTagCompound.getFloat("weight")+bullet.weight);
+		hold.stackTagCompound.setFloat("weight", hold.stackTagCompound.getFloat("weight")+bullet.getWeight());
 		hold.stackTagCompound.setIntArray("bullets", bulletsNew);
 		hold.stackTagCompound.setLong("counter", new Date().getTime());
 		player.inventoryContainer.detectAndSendChanges();

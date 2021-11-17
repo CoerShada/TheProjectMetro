@@ -27,33 +27,35 @@ import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.customization.AbstractCustomizableSlot;
 import serb.tp.metro.customization.ICustomizable;
+import serb.tp.metro.database.CustomizationSlotsReader;
 import serb.tp.metro.entities.Bullet;
 import serb.tp.metro.items.Item3D;
 import serb.tp.metro.network.PacketDispatcher;
 import serb.tp.metro.network.client.SoundsToPlayersMessage;
+import serb.tp.metro.utils.DefenceVariables;
 
 public abstract class ItemWeapon extends Item3D implements ICustomizable {
 	
 	Random rnd = new Random();
-    protected final float penetrationMod;
-    protected final float jummingChance;
-    protected final int rateOfFire;
-    protected final int reloadTime;
-    protected final FireMod[] fireMods;
-    protected final float recoilVert;
-    protected final float recoilHoriz;
-    protected final float accuracy;
-    protected final int soundRadius;
-    protected final float convenience;
+    protected float penetrationMod;
+    protected float jummingChance;
+    protected int rateOfFire;
+    protected int reloadTime;
+    protected FireMod[] fireMods;
+    protected float recoilVert;
+    protected float recoilHoriz;
+    protected float accuracy;
+    protected int soundRadius;
+    protected float convenience;
      
-    public final float[] leftHandPos;
-    public final float[] leftHandRotation; 
-    public final float[] onAimingPos;
-    public final float[] onAimingRotation;
-    public final float[] onAimingLeftHandPos;
-    public final float[] onAimingLeftHandRotation; 
-    public final float[] onAimingRightHandPos;
-    public final float[] onAimingRightHandRotation;
+    public float[] leftHandPos;
+    public float[] leftHandRotation; 
+    public float[] onAimingPos;
+    public float[] onAimingRotation;
+    public float[] onAimingLeftHandPos;
+    public float[] onAimingLeftHandRotation; 
+    public float[] onAimingRightHandPos;
+    public float[] onAimingRightHandRotation;
 	ArrayList<AbstractCustomizableSlot> slotsCustomization = new ArrayList<AbstractCustomizableSlot>();
 	
 
@@ -229,7 +231,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
     				
     				PacketDispatcher.sendToAllAround(new SoundsToPlayersMessage(player.getEntityId(), Item.getIdFromItem(holdItem)), player, holdItem.getSoundRadius(itemStack)*2);
     				world.spawnEntityInWorld(new Bullet(world, player, itemStack.getTagCompound().getDouble("accuracy"), bullet.damage, bullet.penetration));
-    				itemStack.getTagCompound().setFloat("weight", itemStack.getTagCompound().getFloat("weight")- bullet.weight);
+    				itemStack.getTagCompound().setFloat("weight", itemStack.getTagCompound().getFloat("weight")- bullet.getWeight());
     				itemStack.getTagCompound().setIntArray("bullets", bulletsNew);
     				player.inventoryContainer.detectAndSendChanges();
     				
@@ -301,13 +303,6 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
 			tag.setFloat("jumming", tag.getFloat("jumming") * tempTag.getFloat("jummingMod"));
 		}
 		
-		/*tag.setFloat("verticalRecoil", recoilVert - tag.getFloat("verticalRecoil"));
-		tag.setFloat("horizontalRecoil", recoilHoriz - tag.getFloat("horizontalRecoil"));
-		tag.setFloat("convenience", convenience - tag.getFloat("convenience"));
-		tag.setFloat("accuracy", accuracy + (tag.getFloat("accuracy")-1));
-		
-		tag.setFloat("penetrationMod", penetrationMod - tag.getFloat("penetrationMod"));
-		tag.setFloat("jumming", jummingChance - tag.getFloat("jumming"));*/
 		
 		return tag;
 		
@@ -317,5 +312,12 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
 	public float[] getModsCoordsForRendere(ItemRenderType type) {
 		return new float[] {0, 0, 0};
 
+	}
+	
+	@Override
+	public final void clearSlots() {
+		if (DefenceVariables.authorizedAccess(CustomizationSlotsReader.class)) {
+			slotsCustomization = new ArrayList<AbstractCustomizableSlot>();
+		}
 	}
 }

@@ -23,4 +23,6 @@ public interface ICustomizable {
 	
 	@SideOnly(Side.CLIENT)
 	public float[] getModsCoordsForRendere(ItemRenderType type);
+	
+	public void clearSlots();
 }

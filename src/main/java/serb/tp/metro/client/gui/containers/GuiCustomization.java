@@ -172,7 +172,7 @@ public class GuiCustomization extends GuiContainer {
 		
 		ArrayList<int[]> coords = cont.getSlotsCoords();
 		
-		
+	
 		for (int i = 0; i<coords.size(); i++) {
 			drawTexturedModalRect(guiLeft + coords.get(i)[0]-1, guiTop + coords.get(i)[1]-1, xSize+1, 0, 18, 18);
 		}
@@ -294,23 +294,28 @@ public class GuiCustomization extends GuiContainer {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		
 		RenderHelper.enableStandardItemLighting();
-		IItemRenderer render = MinecraftForgeClient.getItemRenderer(player.inventory.getCurrentItem(), ItemRenderType.EQUIPPED_FIRST_PERSON);
+		IItemRenderer render = MinecraftForgeClient.getItemRenderer(player.inventory.getCurrentItem(), ItemRenderType.INVENTORY);
 		
 		
 		GL11.glPushMatrix();
 		GL11.glShadeModel(GL11.GL_SMOOTH);
+
+		//GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		int size = 70;
-		GL11.glTranslated(this.guiLeft+this.xSize/2, this.guiTop + this.ySize/2, 0);
+		int size = 40;
+		GL11.glTranslated(this.guiLeft+this.xSize/2, this.guiTop + this.ySize/2+20, 400);
 		GL11.glScalef(size, size, size);
-		GL11.glRotated(-45, 0, 1, 0);
+		//
 		GL11.glRotated(-90, 1, 0, 0);
 		GL11.glRotated(90, 0, 1, 0);
 		GL11.glRotated(-90, 0, 0, 1);
-		render.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, player.inventory.getCurrentItem(), this);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glPopMatrix();
+		GL11.glRotated(90, 1, 0, 0);
+		GL11.glRotated(-45, 0, 1, 0);
+		render.renderItem(ItemRenderType.EQUIPPED, player.inventory.getCurrentItem(), this);
 		
+
+		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_CULL_FACE);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glShadeModel(GL11.GL_FLAT);
 

@@ -43,7 +43,7 @@ public class ChangeItemWeight extends AbstractServerMessage<ChangeItemWeight> {
 		{
 			
 			Item3D item3D = (Item3D) itemStack.getItem();
-			itemStack.getTagCompound().setFloat("weight", item3D.weight+weight);
+			itemStack.getTagCompound().setFloat("weight", item3D.getWeight()+weight);
 	    	WeaponSystem ws = Main.proxy.ws.get(player);
 	    	ws.updateCurrentItem();
 		}

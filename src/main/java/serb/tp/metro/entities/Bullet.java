@@ -33,7 +33,7 @@ public class Bullet extends EntityThrowable
         this.damage = damage;
         this.penetration = penetration;
         this.setSize(0.1F, 0.1F);
-        DebugMessage.printMessage("bullet has been spawned " + penetration, this);
+        DebugMessage.printMessage("bullet has been spawned " + penetration);
     }
     
     // Перезаписываем то, что происходит при попадании
@@ -112,7 +112,7 @@ public class Bullet extends EntityThrowable
     	        {
     	        	this.worldObj.playSoundEffect(par1MovingObjectPosition.blockX, par1MovingObjectPosition.blockY, par1MovingObjectPosition.blockZ, Main.modid +":hit_glass", 15F, 1.5F);
     	        }
-    	        DebugMessage.printMessage(penetration, this);
+    	        DebugMessage.printMessage(penetration);
 
 
     	        
@@ -132,7 +132,7 @@ public class Bullet extends EntityThrowable
             if (penetration<=0) 
             {
             	setDead();
-            	DebugMessage.printMessage("bullet has been destroyed", this);
+            	DebugMessage.printMessage("bullet has been destroyed");
             }
         }
     }

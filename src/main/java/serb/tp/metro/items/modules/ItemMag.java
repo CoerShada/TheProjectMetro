@@ -141,7 +141,7 @@ public class ItemMag extends ItemWeaponModule
     
     public ItemStack loadAmmo(ItemStack hold, EntityPlayer player)
     {
-    	DebugMessage.printMessage("Load ammo", this);
+    	DebugMessage.printMessage("Load ammo");
     	if(hold.hasTagCompound() && hold.stackTagCompound.getLong("counter")+cooldownLoading <= new Date().getTime() && hold.getTagCompound().getIntArray("bullets").length<maxAmmo) 
     	{
     		if (player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(19).hasTagCompound() ) 
@@ -172,7 +172,7 @@ public class ItemMag extends ItemWeaponModule
     					bulletsNew[j+1] = bullets[j];
     				}
     				bulletsNew[0] =  bullet.getIdFromItem(bullet);
-    				hold.stackTagCompound.setFloat("weight", hold.stackTagCompound.getFloat("weight")+bullet.weight);
+    				hold.stackTagCompound.setFloat("weight", hold.stackTagCompound.getFloat("weight")+bullet.getWeight());
     				hold.stackTagCompound.setIntArray("bullets", bulletsNew);
     				//hold.stackTagCompound.setLong("counter", new Date().getTime());
     				player.inventoryContainer.detectAndSendChanges();
@@ -208,10 +208,10 @@ public class ItemMag extends ItemWeaponModule
 			bulletsNew[j] = bullets[j+1];
 		}
 		hold.getTagCompound().setIntArray("bullets", bulletsNew);
-		hold.getTagCompound().setDouble("weight", hold.getTagCompound().getDouble("weight") - bullet.weight);
+		hold.getTagCompound().setDouble("weight", hold.getTagCompound().getDouble("weight") - bullet.getWeight());
 		hold.stackTagCompound.setLong("counter", world.getTotalWorldTime());
 		bulletStack.setTagCompound(new NBTTagCompound());
-		bulletStack.getTagCompound().setFloat("weight", bullet.weight);
+		bulletStack.getTagCompound().setFloat("weight", bullet.getWeight());
 		//player.inventoryContainer.detectAndSendChanges();
 		return bulletStack;
     }

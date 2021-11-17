@@ -13,6 +13,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import serb.tp.metro.Main;
+import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.items.modules.ItemMag;
 import serb.tp.metro.items.weapons.ItemBullet;
@@ -56,9 +57,9 @@ public class UnloadGunMagMessage extends AbstractServerMessage<UnloadGunMagMessa
 		float weight = 0;
 		for (int i = 1; i<hold.stackTagCompound.getIntArray("bullets").length; i++) {
 			ItemBullet bullet = (ItemBullet) Item.getItemById(hold.stackTagCompound.getIntArray("bullets")[i]);
-			weight+= bullet.weight;
+			weight+= bullet.getWeight();
 		}
-		weight += itemMag.weight;
+		weight += itemMag.getWeight();
 		mag.setTagCompound((NBTTagCompound) magTag.getTag("nbt"));
         hold.stackTagCompound.setFloat("weight", hold.stackTagCompound.getFloat("weight")-weight);
         mag.stackTagCompound.setFloat("weight", weight);
@@ -77,7 +78,7 @@ public class UnloadGunMagMessage extends AbstractServerMessage<UnloadGunMagMessa
 		{
 			ItemStack rig = player.inventory.getStackInSlot(19);
 			rig.getTagCompound().setFloat("weight", rig.getTagCompound().getFloat("weight") + weight );
-			InventoryItemStorage inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
+			InventoryItemStorage inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));
 			inv.openInventory();
 			inv.inventory[index] = mag;
 			inv.save();
