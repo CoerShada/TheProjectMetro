@@ -26,26 +26,48 @@ public class ModulesReader extends Reader{
 	private static void addOrUpdateItemWeaponModule(String parameters) {
 		String[] splitParameters = parameters.split(";");
 		ItemWeaponModule module = (ItemWeaponModule) GameRegistry.findItem(Main.modid, "item." + getString(splitParameters, "name"));
-		if (module != null) {
-			module.setWeight(getFloat(splitParameters, "weight"));
+		
+		String description = getString(splitParameters, "description");
+		float weight = getFloat(splitParameters, "weight");
+		String model = "models/modules/weapon/"+getString(splitParameters, "model");
+		float[] sizeModel = getFloatsArray(splitParameters, "sizeModel");
+		float[] pos = getFloatsArray(splitParameters, "pos");
+		float[] rotation = getFloatsArray(splitParameters, "rotation");
+		float[] onInventoryPos = getFloatsArray(splitParameters, "onInventoryPos");
+		float[] rightHandPos = getFloatsArray(splitParameters, "rightHandPos");
+		float[] rightHandRotation = getFloatsArray(splitParameters, "rightHandRotation");
+		
+		float verticalRecoilMod = getFloat(splitParameters, "verticalRecoilMod");
+		float horizontalRecoilMod =getFloat(splitParameters, "horizontalRecoilMod");
+		float convenienceMod = getFloat(splitParameters, "convenienceMod");
+		float accuracyMod = getFloat(splitParameters, "accuracyMod");
+		float penetrationMod = getFloat(splitParameters, "penetrationMod");
+		float jammingMod = getFloat(splitParameters, "jammingMod");
+		
+		if (module != null) {	
+			module.setDescription(description);
+			module.setWeight(weight);
+			module.setModel(model);
+			module.sizeModel = sizeModel;
+			module.pos = pos;
+			module.rotation = rotation;
+			module.onInventoryPos = onInventoryPos;
+			module.rightHandPos = rightHandPos;
+			module.rightHandRotation = rightHandRotation;
+			module.setVerticalRecoilMod(verticalRecoilMod);
+			module.setHorizontalRecoilMod(horizontalRecoilMod);
+			module.setConvenienceMod(convenienceMod);
+			module.setAccuracyMod(accuracyMod);
+			module.setPenetrationMod(penetrationMod);
+			module.setJammingMod(jammingMod);
+			
 		}
 		else {
 			items.add(new ItemWeaponModule(getString(splitParameters, "name"),
-					getString(splitParameters, "description"),
-					getFloat(splitParameters, "weight"),
-					"models/modules/weapon/"+getString(splitParameters, "model"), 
-					getFloatsArray(splitParameters, "sizeModel"), 
-					getFloatsArray(splitParameters, "pos"), 
-					getFloatsArray(splitParameters, "rotation"),
-					getFloatsArray(splitParameters, "onInventoryPos"), 
-					getFloatsArray(splitParameters, "rightHandPos"), 
-					getFloatsArray(splitParameters, "rightHandRotation"), 
-					getFloat(splitParameters, "verticalRecoilMod"), 
-					getFloat(splitParameters, "horizontalRecoilMod"),
-					getFloat(splitParameters, "convenienceMod"),
-					getFloat(splitParameters, "accuracyMod"),
-					getFloat(splitParameters, "penetrationMod"),
-					getFloat(splitParameters, "jummingMod")));
+					description, weight, model, sizeModel, pos, rotation,
+					onInventoryPos, rightHandPos, rightHandRotation, 
+					verticalRecoilMod, horizontalRecoilMod, convenienceMod,
+					accuracyMod, penetrationMod, jammingMod ));
 		}
 
 	}
@@ -53,30 +75,59 @@ public class ModulesReader extends Reader{
 	private static void addItemMag(String parameters) {
 		String[] splitParameters = parameters.split(";");
 		ItemMag mag = (ItemMag) GameRegistry.findItem(Main.modid, "item." + getString(splitParameters, "name"));
+		
+		String description = getString(splitParameters, "description");
+		float weight = getFloat(splitParameters, "weight");
+		String model = "models/modules/weapon/"+getString(splitParameters, "model");
+		float[] sizeModel = getFloatsArray(splitParameters, "sizeModel");
+		float[] pos = getFloatsArray(splitParameters, "pos");
+		float[] rotation = getFloatsArray(splitParameters, "rotation");
+		float[] onInventoryPos = getFloatsArray(splitParameters, "onInventoryPos");
+		float[] rightHandPos = getFloatsArray(splitParameters, "rightHandPos");
+		float[] rightHandRotation = getFloatsArray(splitParameters, "rightHandRotation");
+		
+		float verticalRecoilMod = getFloat(splitParameters, "verticalRecoilMod");
+		float horizontalRecoilMod =getFloat(splitParameters, "horizontalRecoilMod");
+		float convenienceMod = getFloat(splitParameters, "convenienceMod");
+		float accuracyMod = getFloat(splitParameters, "accuracyMod");
+		float penetrationMod = getFloat(splitParameters, "penetrationMod");
+		float jammingMod = getFloat(splitParameters, "jammingMod");
+		String[] bullets = getStringArray(splitParameters, "bullets", ",");
+		int cooldownLoading = getInt(splitParameters, "cooldownLoading");
+		int cooldownUnloading = getInt(splitParameters, "cooldownUnloading");
+		
+		int maxAmmo = getInt(splitParameters, "maxAmmo");
+		
 		if (mag != null) {
-			mag.setWeight(getFloat(splitParameters, "weight"));
+			mag.setDescription(description);
+			mag.setWeight(weight);
+			mag.setModel(model);
+			mag.sizeModel = sizeModel;
+			mag.pos = pos;
+			mag.rotation = rotation;
+			mag.onInventoryPos = onInventoryPos;
+			mag.rightHandPos = rightHandPos;
+			mag.rightHandRotation = rightHandRotation;
+			mag.setVerticalRecoilMod(verticalRecoilMod);
+			mag.setHorizontalRecoilMod(horizontalRecoilMod);
+			mag.setConvenienceMod(convenienceMod);
+			mag.setAccuracyMod(accuracyMod);
+			mag.setPenetrationMod(penetrationMod);
+			mag.setJammingMod(jammingMod);
+			mag.setMaxAmmo(maxAmmo);
+			mag.setBullets(bullets);
+			mag.setCooldownLoading(cooldownLoading);
+			mag.setCooldownUnloading(cooldownUnloading);
 		}
 		else {
 			items.add(new ItemMag(getString(splitParameters, "name"),
-								getString(splitParameters, "description"),
-								getFloat(splitParameters, "weight"),
-								"models/modules/weapon/"+getString(splitParameters, "model"), 
-								getFloatsArray(splitParameters, "sizeModel"), 
-								getFloatsArray(splitParameters, "pos"), 
-								getFloatsArray(splitParameters, "onInventoryPos"),
-								getFloatsArray(splitParameters, "rotation"), 
-								getFloatsArray(splitParameters, "rightHandPos"), 
-								getFloatsArray(splitParameters, "rightHandRotation"), 
-								getFloat(splitParameters, "verticalRecoil"), 
-								getFloat(splitParameters, "horizontalRecoil"),
-								getFloat(splitParameters, "convenience"),
-								getFloat(splitParameters, "accuracy"),
-								getFloat(splitParameters, "powerMod"),
-								getFloat(splitParameters, "jummingMod"),
-								getInt(splitParameters, "maxAmmo"),
-								getStringArray(splitParameters, "bullets", ","),
-								getInt(splitParameters, "cooldownLoading"),
-								getInt(splitParameters, "cooldownLoading")
+								description, weight, model, sizeModel, 
+								pos, rotation, onInventoryPos, rightHandPos, 
+								rightHandRotation, verticalRecoilMod, 
+								horizontalRecoilMod, convenienceMod,
+								accuracyMod, penetrationMod, jammingMod,
+								maxAmmo, bullets, cooldownLoading,
+								cooldownUnloading
 								));
 		}
 	}

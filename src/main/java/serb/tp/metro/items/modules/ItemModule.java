@@ -73,9 +73,20 @@ public abstract class ItemModule extends Item3D implements ICustomizable{
 	}
 	
 	@Override
-	public final void clearSlots() {
-		if (DefenceVariables.authorizedAccess(CustomizationSlotsReader.class)) {
-			slotsCustomization = new ArrayList<AbstractCustomizableSlot>();
+	public final AbstractCustomizableSlot getSlotFromIndex(int index) {
+		AbstractCustomizableSlot slot = null;
+		for (AbstractCustomizableSlot tempslot: slotsCustomization) {
+			if (index==tempslot.indexSlot) {
+				slot = tempslot;
+				break;
+			}
 		}
+		return slot;
+	}
+	
+	@Override
+	public void replaceSlotFromIndex(int index, AbstractCustomizableSlot slot) {
+		AbstractCustomizableSlot preSlot = this.getSlotFromIndex(index);
+		slotsCustomization.set(slotsCustomization.indexOf(preSlot), slot);
 	}
 }

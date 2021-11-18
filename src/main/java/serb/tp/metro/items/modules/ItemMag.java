@@ -17,6 +17,7 @@ import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.creativetabs.LoadTabs;
+import serb.tp.metro.database.Reader;
 import serb.tp.metro.items.Item3D;
 import serb.tp.metro.items.ItemChestrig;
 import serb.tp.metro.items.weapons.ItemBullet;
@@ -24,14 +25,15 @@ import serb.tp.metro.network.PacketDispatcher;
 import serb.tp.metro.network.server.ChangeAmmoMessage;
 import serb.tp.metro.network.server.LoadAmmoMessage;
 import serb.tp.metro.network.server.UnloadAmmoMessage;
+import serb.tp.metro.utils.DefenceVariables;
 
 public class ItemMag extends ItemWeaponModule
 {
 
-	public final int maxAmmo;
-    public final int cooldownLoading;
-    public final int cooldownUnloading;
-    private final ItemBullet[] bullets;
+	private int maxAmmo;
+	private int cooldownLoading;
+	private int cooldownUnloading;
+    private ItemBullet[] bullets;
     
 
     public ItemMag(String name, String description, float weight, String model, float[] sizeModel, float[] pos,
@@ -215,4 +217,46 @@ public class ItemMag extends ItemWeaponModule
 		//player.inventoryContainer.detectAndSendChanges();
 		return bulletStack;
     }
+
+	public final int getMaxAmmo() {
+		return maxAmmo;
+	}
+
+	public final void setMaxAmmo(int maxAmmo) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.maxAmmo = maxAmmo;
+		}
+	}
+
+	public final int getCooldownLoading() {
+		return cooldownLoading;
+	}
+
+	public final void setCooldownLoading(int cooldownLoading) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.cooldownLoading = cooldownLoading;
+		}
+	}
+
+	public final int getCooldownUnloading() {
+		return cooldownUnloading;
+	}
+
+	public final void setCooldownUnloading(int cooldownUnloading) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.cooldownUnloading = cooldownUnloading;
+		}
+	}
+
+	public final ItemBullet[] getBullets() {
+		return bullets;
+	}
+
+	public final void setBullets(String[] bullets) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+	        this.bullets = new ItemBullet[bullets.length];
+	        for (int i = 0; i<bullets.length; i++)
+	        	this.bullets[i] = (ItemBullet) GameRegistry.findItem(Main.modid, "item." + bullets[i].trim());
+		}
+	}
 }

@@ -27,20 +27,28 @@ public class CustomizationSlotsReader extends Reader{
 	
 	private static void addSlot(String parameters) {
 		String[] splitParameters = parameters.split(";");
-		if (!(getItems(splitParameters, getString(splitParameters, "parentItems"))[0] instanceof ICustomizable)) return;
+		if (!(getItems(splitParameters, "parentItems")[0] instanceof ICustomizable)) return;
 		
-		ICustomizable item = (ICustomizable) getItems(splitParameters, getString(splitParameters, "parentItems"))[0];
-		item.clearSlots();
-		Item item_test = (Item) item;
-		item.addSlot(new AbstractCustomizableSlot(	item.getIndexNewSlot(), 
-													getInt(splitParameters, "x"), 
-													getInt(splitParameters, "y"), 
-													getFloatsArray(splitParameters, "pos"),
-													getFloatsArray(splitParameters, "rotation"),
-													getItems(splitParameters, getString(splitParameters, "subItems")
-													)));
+		ICustomizable item = (ICustomizable) getItems(splitParameters, "parentItems")[0];
+		AbstractCustomizableSlot slot = item.getSlotFromIndex(getInt(splitParameters, "indexSlot"));
+		if (slot!=null) {
+			slot.setX(getInt(splitParameters, "x"));
+			slot.setY(getInt(splitParameters, "y"));
+			slot.setPos(getFloatsArray(splitParameters, "pos"));
+			slot.setRotation(getFloatsArray(splitParameters, "rotation"));
+			slot.setSubItems(getItems(splitParameters, "subItems"));
+			item.replaceSlotFromIndex(getInt(splitParameters, "indexSlot"), slot);
+		}
+		else {
+			item.addSlot(new AbstractCustomizableSlot(	getInt(splitParameters, "indexSlot"), 
+														getInt(splitParameters, "x"), 
+														getInt(splitParameters, "y"), 
+														getFloatsArray(splitParameters, "pos"),
+														getFloatsArray(splitParameters, "rotation"),
+														getItems(splitParameters, "subItems")
+														));
 		
-		
+		}
 	}
 	
 	

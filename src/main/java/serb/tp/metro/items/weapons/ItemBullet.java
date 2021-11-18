@@ -11,20 +11,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.creativetabs.LoadTabs;
+import serb.tp.metro.database.Reader;
 import serb.tp.metro.items.Item3D;
+import serb.tp.metro.utils.DefenceVariables;
 
 public class ItemBullet extends Item3D {
-	private final String name;
-	public final int damage;
-	public final int penetration;
-	public final float jamming;
-	public final int parts;
-	public final float armorDamage;
-	public final float fragmentationChance;
+;
+	protected int damage;
+	protected int penetration;
+	protected float jamming;
+	protected int parts;
+	protected float armorDamage;
+	protected float fragmentationChance;
 	
 	public ItemBullet(String name, String description, float weight, String model, float[] sizeModel, float[] pos, float[] rotation, float[] onInventoryPos,float[] rightHandPos, float[] rightHandRotation, int damage, int penetration, float jamming, float armorDamage, float fragmentationChance, int parts){
 		super(name, description, weight, model, sizeModel, pos, rotation, onInventoryPos, rightHandPos, rightHandRotation);
-		this.name = name;
 		this.damage = damage;
 		this.penetration = penetration;
 		this.jamming = jamming;
@@ -50,5 +51,77 @@ public class ItemBullet extends Item3D {
         hold.getTagCompound().setFloat("weight", weight);
         par3List.add(hold);
     }
+
+
+	public final int getDamage() {
+		return damage;
+	}
+
+
+	public final void setDamage(int damage) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.damage = damage;
+		}
+	}
+
+
+	public final int getPenetration() {
+		return penetration;
+	}
+
+
+	public final void setPenetration(int penetration) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.penetration = penetration;
+		}
+	}
+
+
+	public final float getJamming() {
+		return jamming;
+	}
+
+
+	public final void setJamming(float jamming) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.jamming = jamming;
+		}
+	}
+
+
+	public final int getParts() {
+		return parts;
+	}
+
+
+	public final void setParts(int parts) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.parts = parts;
+		}
+	}
+
+
+	public final float getArmorDamage() {
+		return armorDamage;
+	}
+
+
+	public final void setArmorDamage(float armorDamage) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.armorDamage = armorDamage;
+		}
+	}
+
+
+	public final float getFragmentationChance() {
+		return fragmentationChance;
+	}
+
+
+	public final void setFragmentationChance(float fragmentationChance) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.fragmentationChance = fragmentationChance;
+		}
+	}
    
 }

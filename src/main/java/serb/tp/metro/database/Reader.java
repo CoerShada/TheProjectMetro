@@ -7,6 +7,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.client.MinecraftForgeClient;
+import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.render.items.RenderItem3D;
 import serb.tp.metro.items.Item3D;
@@ -18,7 +19,11 @@ public class Reader {
 	protected static String getString(String[] currentString, String name) {
 		try {
 			for (String item: currentString) {
-				if (item.contains(name)) {
+				String equalsStr = item.substring(0, item.indexOf("=")).trim();
+				DebugMessage.printMessage("name+ " + name + " " + equalsStr);
+
+				if (equalsStr.equals(name)) {
+					
 					return item.substring(item.indexOf("=")+1).trim();
 					 
 				}
@@ -36,7 +41,7 @@ public class Reader {
 		}
 		catch(Exception e){
 			System.err.println(e);
-			
+			DebugMessage.printMessage(name);
 		}
 		return 0;
 	}
@@ -47,7 +52,6 @@ public class Reader {
 			return Float.parseFloat(getString(currentString, name));
 		}
 		catch(Exception e){
-			System.out.println(name);
 			System.err.println(e);
 		}
 		return 0;
@@ -75,7 +79,12 @@ public class Reader {
 	
 	protected static String[] getStringArray(String[] currentString, String name, String splitChar) {
 		try {
-			return getString(currentString, name).split(splitChar);
+			
+			String[] strings = getString(currentString, name).split(splitChar);
+			for (String str: strings) {
+				str = str.trim();
+			}
+			return strings;
 		}
 		catch(Exception e){
 			System.err.println(e);
@@ -84,12 +93,12 @@ public class Reader {
 	}
 	
 	protected static int[] getIntsArray(String[] currentString, String name) {
-		String[] strings = getStringArray(currentString, name, ", ");
+		String[] strings = getStringArray(currentString, name, ",");
 		return Arrays.stream(strings).mapToInt(Integer::parseInt).toArray();
 	}
 	
 	protected static float[] getFloatsArray(String[] currentString, String name) {
-		String[] strings = getStringArray(currentString, name, ", ");
+		String[] strings = getStringArray(currentString, name, ",");
 		float[] floats = new float[strings.length];
 		for (int i = 0; i<strings.length; i++)
 			floats[i] = Float.valueOf(strings[i]);
@@ -97,7 +106,10 @@ public class Reader {
 	}
 	
 	protected static Item3D[] getItems(String[] currentString, String name) {
-		String[] itemNames = getStringArray(currentString, name, ", ");
+		
+		
+		String[] itemNames = getStringArray(currentString, name, ",");
+		
 		Item3D[] items = new Item3D[itemNames.length];
 		for(int i = 0; i<itemNames.length; i++) {
 			items[i] = (Item3D) GameRegistry.findItem(Main.modid, "item."+itemNames[i]);

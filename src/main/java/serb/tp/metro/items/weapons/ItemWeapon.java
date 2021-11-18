@@ -28,6 +28,7 @@ import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.customization.AbstractCustomizableSlot;
 import serb.tp.metro.customization.ICustomizable;
 import serb.tp.metro.database.CustomizationSlotsReader;
+import serb.tp.metro.database.Reader;
 import serb.tp.metro.entities.Bullet;
 import serb.tp.metro.items.Item3D;
 import serb.tp.metro.network.PacketDispatcher;
@@ -38,7 +39,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
 	
 	Random rnd = new Random();
     protected float penetrationMod;
-    protected float jummingChance;
+    protected float jammingChance;
     protected int rateOfFire;
     protected int reloadTime;
     protected FireMod[] fireMods;
@@ -61,7 +62,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
 
     public ItemWeapon(String name, String description, float weight, String model, float[] sizeModel, float[] pos, float[] rotation, float[] onInventoryPos,float[] rightHandPos, float[] rightHandRotation, 
     		float[] leftHandPos, float[] leftHandRotation, float[] onAimingPos, float[] onAimingRotation, float[] onAimingLeftHandPos, float[] onAimingLeftHandRotation, float[] onAimingRightHandPos, float[] onAimingRightHandRotation,
-    		int soundRadius, int rateOfFire, float penetrationMod, float jummingChance, int reloadTime, float recoilVert, float recoilHoriz, float accuracy, float convenience, FireMod[] fireMods) 
+    		int soundRadius, int rateOfFire, float penetrationMod, float jammingChance, int reloadTime, float recoilVert, float recoilHoriz, float accuracy, float convenience, FireMod[] fireMods) 
     {
 		super(name, description, weight, model, sizeModel, pos ,rotation, onInventoryPos, rightHandPos, rightHandRotation);
     	
@@ -76,7 +77,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
     	
     	
     	this.penetrationMod = penetrationMod;
-    	this.jummingChance = jummingChance;
+    	this.jammingChance = jammingChance;
     	this.reloadTime = reloadTime;
     	this.rateOfFire = rateOfFire;
     	this.recoilVert = recoilVert;
@@ -106,7 +107,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
     	this.baseItemStack.getTagCompound().setFloat("convenience", convenience);
 	    
     	this.baseItemStack.getTagCompound().setFloat("penetrationMod", penetrationMod);
-    	this.baseItemStack.getTagCompound().setFloat("jummingMod", jummingChance);
+    	this.baseItemStack.getTagCompound().setFloat("jummingMod", jammingChance);
     	this.baseItemStack.getTagCompound().setFloat("accuracy", accuracy);
     	this.baseItemStack.getTagCompound().setFloat("rateOfFire", rateOfFire);
     	this.baseItemStack.getTagCompound().setBoolean("safetyMod", true);
@@ -118,9 +119,6 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
     	this.baseItemStack.getTagCompound().setIntArray("bullets", new int[]{});
     }
 
-    public float getJummingChance() {
-    	return this.jummingChance;
-    }
     
     public void onUpdate(ItemStack hold, World world, Entity entity, int integer, boolean isHold) {
     	if (!isHold) return;
@@ -221,7 +219,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
     		if (bullets.length>0) {
     			int[] bulletsNew = new int[bullets.length-1];
     			ItemBullet bullet = (ItemBullet) Item.getItemById(bullets[0]);
-    			if (!itemStack.getTagCompound().getBoolean("jumming") && holdItem.getJummingChance()*bullet.jamming<rnd.nextInt(101)) 
+    			if (!itemStack.getTagCompound().getBoolean("jumming") && holdItem.getJammingChance()*bullet.jamming<rnd.nextInt(101)) 
     			{
     				
     				for (int i = 0; i<bullets.length - 1; i++) 
@@ -286,7 +284,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
 		tag.setFloat("convenience", convenience);
 		tag.setFloat("accuracy", accuracy);
 		tag.setFloat("penetrationMod", penetrationMod);
-		tag.setFloat("jumming", jummingChance);
+		tag.setFloat("jumming", jammingChance);
 
 		for (int i = 0; i<inv.getSizeInventory(); i++) {
 			
@@ -315,9 +313,119 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
 	}
 	
 	@Override
-	public final void clearSlots() {
-		if (DefenceVariables.authorizedAccess(CustomizationSlotsReader.class)) {
-			slotsCustomization = new ArrayList<AbstractCustomizableSlot>();
+	public final AbstractCustomizableSlot getSlotFromIndex(int index) {
+		AbstractCustomizableSlot slot = null;
+		for (AbstractCustomizableSlot tempslot: slotsCustomization) {
+			if (index==tempslot.indexSlot) {
+				slot = tempslot;
+				break;
+			}
+		}
+		return slot;
+	}
+	
+	@Override
+	public void replaceSlotFromIndex(int index, AbstractCustomizableSlot slot) {
+		slotsCustomization.set(index, slot);
+	}
+
+	public final float getPenetrationMod() {
+		return penetrationMod;
+	}
+
+	public final void setPenetrationMod(float penetrationMod) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.penetrationMod = penetrationMod;
 		}
 	}
+
+	public final int getRateOfFire() {
+		return rateOfFire;
+	}
+
+	public final void setRateOfFire(int rateOfFire) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.rateOfFire = rateOfFire;
+		}
+	}
+
+	public final int getReloadTime() {
+		return reloadTime;
+	}
+
+	public final void setReloadTime(int reloadTime) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.reloadTime = reloadTime;
+		}
+	}
+
+	public final FireMod[] getFireMods() {
+		return fireMods;
+	}
+
+	public final void setFireMods(FireMod[] fireMods) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.fireMods = fireMods;
+		}
+	}
+
+	public final float getRecoilVert() {
+		return recoilVert;
+	}
+
+	public final void setRecoilVert(float recoilVert) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.recoilVert = recoilVert;
+		}
+	}
+
+	public final float getRecoilHoriz() {
+		return recoilHoriz;
+	}
+
+	public final void setRecoilHoriz(float recoilHoriz) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.recoilHoriz = recoilHoriz;
+		}
+	}
+
+	public final float getAccuracy() {
+		return accuracy;
+	}
+
+	public final void setAccuracy(float accuracy) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.accuracy = accuracy;
+		}
+	}
+
+	public final int getSoundRadius() {
+		return soundRadius;
+	}
+
+	public final void setSoundRadius(int soundRadius) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.soundRadius = soundRadius;
+		}
+	}
+
+	public final float getConvenience() {
+		return convenience;
+	}
+
+	public final void setConvenience(float convenience) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.convenience = convenience;
+		}
+	}
+
+	public final void setJammingChance(float jammingChance) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.jammingChance = jammingChance;
+		}
+	}
+	
+    public float getJammingChance() {
+    	return this.jammingChance;
+    }
 }

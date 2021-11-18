@@ -38,7 +38,6 @@ import serb.tp.metro.blocks.tiles.storages.spawners.TileEntitySpawnerGunSafeVert
 import serb.tp.metro.client.gui.GuiAdtibuteHandler;
 import serb.tp.metro.client.gui.menu.ModifiedMenuHandler;
 import serb.tp.metro.client.handlers.KeyBindingHandler;
-import serb.tp.metro.client.handlers.MouseHandler;
 import serb.tp.metro.client.handlers.OpenInventory;
 import serb.tp.metro.client.handlers.PlayerRenderHandler;
 import serb.tp.metro.client.render.entity.player.CustomRenderPlayer;
@@ -94,7 +93,6 @@ public class ClientProxy extends CommonProxy {
 		BulletsReader.setRender();
 		ModulesReader.setRender();
 		FMLCommonHandler.instance().bus().register(new KeyBindingHandler(Minecraft.getMinecraft()));
-		FMLCommonHandler.instance().bus().register(new MouseHandler(Minecraft.getMinecraft()));
 	}
 
 	@Override

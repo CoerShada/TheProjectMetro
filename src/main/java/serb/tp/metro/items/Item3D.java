@@ -20,9 +20,9 @@ import serb.tp.metro.database.Reader;
 import serb.tp.metro.utils.DefenceVariables;
 
 public abstract class Item3D extends Item{
-	public String[] description;
+	protected String[] description;
 	protected float weight;
-	public ResourceLocation model;
+	protected ResourceLocation model;
 	public float[] sizeModel;
 	public float[] pos;
 	public float[] rotation;
@@ -34,7 +34,46 @@ public abstract class Item3D extends Item{
 
 	public Item3D(String name, String description, float weight, String model, float[] sizeModel, float[] pos, float[] rotation, float[] onInventoryPos,float[] rightHandPos, float[] rightHandRotation) {
 		this.setUnlocalizedName(name);
+		this.setDescription(description);
+
+		this.weight = weight;
+		this.sizeModel = sizeModel;
+		this.pos = pos;
+		this.rotation = rotation;
+		this.onInventoryPos = onInventoryPos;
+		this.setModel(model);
+	    this.rightHandPos = rightHandPos;
+	    this.rightHandRotation = rightHandRotation;
+		GameRegistry.registerItem(this, this.getUnlocalizedName());
+		this.baseItemStack = new ItemStack(this);
+		this.setFull3D();
+		
+	}
 	
+	public final void setModel(String model) {
+		this.model = new ResourceLocation(Main.modid, model);
+	}
+
+	public final ResourceLocation getModel() {
+		return this.model;
+	}
+	
+	@SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean isAdv) {
+        if (!itemStack.hasTagCompound()) return;
+        list.add(Type.getTranslate("characteristic.all.weight")+": " + String.format("%.2f", itemStack.getTagCompound().getFloat("weight")/1000) + Type.getTranslate("characteristic.all.weight.kg"));
+
+        list.add(" ");
+        
+        
+        for (String str : description)
+        	list.add(str);
+        
+
+    }
+	
+	public final void setDescription(String description) {
 		int beginIndex = 0;
 		int lastIndex = 0;
 		int index = 0;
@@ -66,34 +105,7 @@ public abstract class Item3D extends Item{
 		}
 		
 		this.description = description.split("@");
-		this.weight = weight;
-		this.sizeModel = sizeModel;
-		this.pos = pos;
-		this.rotation = rotation;
-		this.onInventoryPos = onInventoryPos;
-		this.model = new ResourceLocation(Main.modid, model);
-	    this.rightHandPos = rightHandPos;
-	    this.rightHandRotation = rightHandRotation;
-		GameRegistry.registerItem(this, this.getUnlocalizedName());
-		this.baseItemStack = new ItemStack(this);
-		
 	}
-	
-
-	@SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean isAdv) {
-        if (!itemStack.hasTagCompound()) return;
-        list.add(Type.getTranslate("characteristic.all.weight")+": " + String.format("%.2f", itemStack.getTagCompound().getFloat("weight")/1000) + Type.getTranslate("characteristic.all.weight.kg"));
-
-        list.add(" ");
-        
-        
-        for (String str : description)
-        	list.add(str);
-        
-
-    }
     
     @Override
     public void getSubItems(Item item, CreativeTabs ct, List list)

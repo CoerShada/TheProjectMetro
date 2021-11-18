@@ -45,7 +45,7 @@ public class ContainerCustomization extends Container{
 		
 		for (AbstractCustomizableSlot slot: parentSlots) {
 			
-			SlotCustomization slotBuf = (SlotCustomization) addSlotToContainer(new SlotCustomization(customizationInventory, slot.indexSlot , this.x + slot.x, this.y + slot.y, slot.subItems));
+			SlotCustomization slotBuf = (SlotCustomization) addSlotToContainer(new SlotCustomization(customizationInventory, slot.indexSlot , this.x + slot.getX(), this.y + slot.getY(), slot.getSubItems()));
 			slots.add(slotBuf);
 
 			counter++;

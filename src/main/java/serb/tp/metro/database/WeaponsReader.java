@@ -23,40 +23,98 @@ public class WeaponsReader extends Reader{
 	private static void addItemFirearmMagWeapon(String parameters) {
 		String[] splitParameters = parameters.split(";");
 		ItemFirearmMagWeapon weapon = (ItemFirearmMagWeapon) GameRegistry.findItem(Main.modid, "item." + getString(splitParameters, "name"));
+		
+		String description = getString(splitParameters, "description");
+		float weight = getFloat(splitParameters, "weight");
+		String model = "models/weapons/automatic/"+getString(splitParameters, "model");
+		float[] sizeModel = getFloatsArray(splitParameters, "sizeModel");
+		float[] pos = getFloatsArray(splitParameters, "pos");
+		float[] rotation = getFloatsArray(splitParameters, "rotation");
+		float[] onInventoryPos = getFloatsArray(splitParameters, "onInventoryPos");
+		float[] rightHandPos = getFloatsArray(splitParameters, "rightHandPos");
+		float[] rightHandRotation = getFloatsArray(splitParameters, "rightHandRotation");
+		
+		float[] leftHandPos = getFloatsArray(splitParameters, "leftHandPos");
+		float[] leftHandRotation = getFloatsArray(splitParameters, "leftHandRotation");
+		
+		float[] onAimingPos = getFloatsArray(splitParameters, "onAimingPos");
+		float[] onAimingRotation = getFloatsArray(splitParameters, "onAimingRotation");
+		
+		float[] onAimingLeftHandPos = getFloatsArray(splitParameters, "onAimingLeftHandPos");
+		float[] onAimingLeftHandRotation = getFloatsArray(splitParameters, "onAimingLeftHandRotation");
+		
+		float[] onAimingRightHandPos = getFloatsArray(splitParameters, "onAimingRightHandPos");
+		float[] onAimingRightHandRotation = getFloatsArray(splitParameters, "onAimingRightHandRotation");
+		
+		int soundRadius = getInt(splitParameters, "soundRadius");
+		int rateOfFire = getInt(splitParameters, "rateOfFire");
+		int loadTime = getInt(splitParameters, "loadTime");
+		int unloadTime = getInt(splitParameters, "unloadTime");
+		float jammingChance = getFloat(splitParameters, "jammingChance");
+		float penetrationMod = getFloat(splitParameters, "penetrationMod");
+		float accuracy = getFloat(splitParameters, "accuracy");
+		float recoilVert = getFloat(splitParameters, "recoilVert");
+		float recoilHoriz =getFloat(splitParameters, "recoilHoriz");
+		float convenience = getFloat(splitParameters, "convenience");
+		FireMod[] fireMods = getFireMods(splitParameters, "fireMods");
+		String[] mags = getStringArray(splitParameters, "mags", ", ");
+		
+		
+		
 		if (weapon != null) {
-			weapon.setWeight(getFloat(splitParameters, "weight"));
+			weapon.setDescription(description);
+			weapon.setWeight(weight);
+			weapon.setModel(model);
+			weapon.sizeModel = sizeModel;
+			weapon.pos = pos;
+			weapon.rotation = rotation;
+			weapon.onInventoryPos = onInventoryPos;
+			weapon.rightHandPos = rightHandPos;
+			weapon.rightHandRotation = rightHandRotation;
+			weapon.leftHandPos = leftHandPos;
+			weapon.leftHandRotation = leftHandRotation;
+			weapon.onAimingRightHandPos = onAimingRightHandPos;
+			weapon.onAimingRightHandRotation = onAimingRightHandRotation;
+			weapon.onAimingLeftHandPos = onAimingLeftHandPos;
+			weapon.onAimingLeftHandRotation = onAimingLeftHandRotation;
+			weapon.onAimingPos = onAimingPos;
+			weapon.onAimingRotation = onAimingRotation;
+			weapon.setSoundRadius(soundRadius);
+			weapon.setRateOfFire(rateOfFire);
+			weapon.setLoadTime(unloadTime);
+			weapon.setUnloadTime(unloadTime);
+			weapon.setJammingChance(jammingChance);
+			weapon.setPenetrationMod(penetrationMod);
+			weapon.setAccuracy(accuracy);
+			weapon.setRecoilVert(recoilVert);
+			weapon.setRecoilHoriz(recoilHoriz);
+			weapon.setConvenience(convenience);
+			weapon.setMags(mags);
+			
 		}
 		else {
 			items.add(new ItemFirearmMagWeapon(getString(splitParameters, "name"), 
-							getString(splitParameters, "description"),
-							"models/weapons/automatic/"+getString(splitParameters, "model"), 
-							getFloat(splitParameters, "weight"), 
-							getFloatsArray(splitParameters, "sizeModel"), 
-							getFloatsArray(splitParameters, "pos"), 
-							getFloatsArray(splitParameters, "rotation"),
-							getFloatsArray(splitParameters, "onInventoryPos"),
-							getFloatsArray(splitParameters, "rightHandPos"), 
-							getFloatsArray(splitParameters, "rightHandRotation"), 
-							getFloatsArray(splitParameters, "leftHandPos"), 
-							getFloatsArray(splitParameters, "leftHandRotation"), 
-							getFloatsArray(splitParameters, "onAimingPos"), 
-							getFloatsArray(splitParameters, "onAimingRotation"), 
-							getFloatsArray(splitParameters, "onAimingLeftHandPos"), 
-							getFloatsArray(splitParameters, "onAimingLeftHandRotation"), 
-							getFloatsArray(splitParameters, "onAimingRightHandPos"), 
-							getFloatsArray(splitParameters, "onAimingRightHandRotation"), 
-							getInt(splitParameters, "soundRadius"),
-							getInt(splitParameters, "rateOfFire"),
-							getFloat(splitParameters, "penetrationMod"),
-							getFloat(splitParameters, "jummingChance"),
-							getInt(splitParameters, "loadTime"),
-							getInt(splitParameters, "unloadTime"),
-							getFloat(splitParameters, "recoilVert"),
-							getFloat(splitParameters, "recoilHoriz"),
-							getFloat(splitParameters, "accuracy"),
-							getFloat(splitParameters, "convenience"),
-							getFireMods(splitParameters, "fireMods"),
-							getStringArray(splitParameters, "mags", ", ")));
+							description, model, weight, sizeModel, 
+							pos, rotation, onInventoryPos,
+							rightHandPos, rightHandRotation, 
+							leftHandPos, leftHandRotation, 
+							onAimingPos, onAimingRotation, 
+							onAimingLeftHandPos, 
+							onAimingLeftHandRotation, 
+							onAimingRightHandPos, 
+							onAimingRightHandRotation, 
+							soundRadius,
+							rateOfFire,
+							penetrationMod,
+							jammingChance,
+							loadTime,
+							unloadTime,
+							recoilVert,
+							recoilHoriz,
+							accuracy,
+							convenience,
+							fireMods,
+							mags));
 		}
 		
 	}

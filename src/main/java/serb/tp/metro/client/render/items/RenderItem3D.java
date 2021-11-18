@@ -3,6 +3,9 @@ package serb.tp.metro.client.render.items;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -14,7 +17,6 @@ import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.customization.AbstractCustomizableSlot;
 import serb.tp.metro.customization.ICustomizable;
 import serb.tp.metro.items.Item3D;
-import serb.tp.metro.items.weapons.ItemWeapon;
 
 public class RenderItem3D implements IItemRenderer{
 	ResourceLocation texture =  new ResourceLocation(Main.modid, "textures/models/items/armor/backpack_gekkon.png");
@@ -24,7 +26,7 @@ public class RenderItem3D implements IItemRenderer{
 	public RenderItem3D(Item3D item) {
 		this.item = item;
 		
-		Obj model = ClientProxy.loader.loadModel(item.model);
+		Obj model = ClientProxy.loader.loadModel(item.getModel());
 	    list = ClientProxy.loader.createDisplayList(model);
 	    GL11.glNewList(list, GL11.GL_COMPILE);
 	    ClientProxy.loader.render(model);
@@ -92,20 +94,31 @@ public class RenderItem3D implements IItemRenderer{
 		GL11.glRotated(mods[5], 0, 0, 1);
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		//System.out.println(item.getDisplayName().toString() + " " + this.item.rotation[1]);
 
-		
-		
 		GL11.glRotated(this.item.rotation[0], 1, 0, 0);
 		GL11.glRotated(this.item.rotation[1], 0, 1, 0);
 		GL11.glRotated(this.item.rotation[2], 0, 0, 1);
-
+		
 		if(firstRender && type==ItemRenderType.EQUIPPED) {
-			GL11.glRotated(-45, 0, 1, 0);
+
+			GL11.glTranslated(1.0, 0.0, 1.0); 
+			GL11.glRotated(45.0, 0.0, 1.0, 0.0); 
+			GL11.glTranslated(0, -2, 2); 
+			GL11.glRotated(-90.0, 1.0, 0.0, 0.0); 
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			//for (StackTraceElement ste: stackTraceElements) {
+				//System.out.println(ste);
+			//}
+			GL11.glTranslated(0, 1, 1); 
+			GL11.glRotated(15.0, 1.0, 0.0, 0.0); 
 			
 		}
 		if(firstRender && type==ItemRenderType.EQUIPPED_FIRST_PERSON) {
+			GL11.glTranslated(1.0, 0.0, -1.0); //translate 1 to the right, and up
 			GL11.glRotated(-45, 0, 1, 0);
+			
+			
+			
 		}
 		GL11.glTranslatef(mods[0], mods[1], mods[2]);
 		
@@ -119,9 +132,9 @@ public class RenderItem3D implements IItemRenderer{
 				try {
 					AbstractCustomizableSlot slot = customizable.getSlotsCustomization().get(i);
 					RenderItem3D render = (RenderItem3D) MinecraftForgeClient.getItemRenderer(is, type);
-					//coef = render.item.sizeModel[index]/render.item.sizeModel[1];
-					//coef = 1;
-					render.renderItem(type, is, data, new float[] {slot.pos[0],  slot.pos[1],  slot.pos[2], slot.rotation[0], slot.rotation[1], slot.rotation[2], coef}, false);			
+					float[] pos = slot.getPos();
+					float[] rotation = slot.getRotation();
+					render.renderItem(type, is, data, new float[] {pos[0],  pos[1],  pos[2], rotation[0], rotation[1], rotation[2], coef}, false);			
 				}
 				catch(Exception e) {
 					
@@ -129,14 +142,7 @@ public class RenderItem3D implements IItemRenderer{
 			}
 			
 		}
-		
-
 		GL11.glScalef(this.item.sizeModel[index], this.item.sizeModel[index], this.item.sizeModel[index]);
-
-
-
-
-		
 		GL11.glCallList(list);
 
 		GL11.glPopMatrix();

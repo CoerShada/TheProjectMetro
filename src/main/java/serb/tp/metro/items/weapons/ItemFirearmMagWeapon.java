@@ -16,37 +16,37 @@ import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.containers.InventoryItemStorage;
+import serb.tp.metro.database.Reader;
 import serb.tp.metro.items.ItemChestrig;
 import serb.tp.metro.items.modules.ItemMag;
 import serb.tp.metro.network.PacketDispatcher;
 import serb.tp.metro.network.server.LoadAmmoMessage;
 import serb.tp.metro.network.server.LoadGunMagMessage;
 import serb.tp.metro.network.server.UnloadGunMagMessage;
+import serb.tp.metro.utils.DefenceVariables;
 
 
 public class ItemFirearmMagWeapon extends ItemWeapon{
 	
-	protected final ItemMag[] mags;
-	protected final int loadTime;
-	protected final int unloadTime;
+	protected ItemMag[] mags;
+	protected int loadTime;
+	protected int unloadTime;
 	
 	public ItemFirearmMagWeapon(String name, String description, String model, float weight, float[] sizeModel, float[] pos, 
     		float[] rotation, float[] onInventoryPos, float[] rightHandPos, float[] rightHandRotation, float[] leftHandPos, float[] leftHandRotation, 
     		float[] onAimingPos, float[] onAimingRotation,  float[] onAimingLeftHandPos, float[] onAimingLeftHandRotation, 
     		float[] onAimingRightHandPos, float[] onAimingRightHandRotation, int soundRadius, int rateOfFire, float penetrationMod, 
-    		float jummingChance, int loadTime, int unloadTime, 
-    		float recoilVert, float recoilHoriz, float accuracy, float convenience ,FireMod[] fireMods, 
+    		float jammingChance, int loadTime, int unloadTime, 
+    		float recoilVert, float recoilHoriz, float accuracy, float convenience, FireMod[] fireMods, 
     		String[] mags) {
 		super(name, description, weight, model, sizeModel, pos, rotation, onInventoryPos, rightHandPos, rightHandRotation,
 				leftHandPos, leftHandRotation, onAimingPos, onAimingRotation, onAimingLeftHandPos, onAimingLeftHandRotation,
-				onAimingRightHandPos, onAimingRightHandRotation, soundRadius, rateOfFire, penetrationMod, jummingChance,
+				onAimingRightHandPos, onAimingRightHandRotation, soundRadius, rateOfFire, penetrationMod, jammingChance,
 				loadTime+unloadTime, recoilVert, recoilHoriz, accuracy, convenience, fireMods);
 		this.loadTime = loadTime;
 		this.unloadTime = unloadTime;
-		this.mags = new ItemMag[mags.length];
-		for (int i = 0; i< mags.length; i++) {
-			this.mags[i] = (ItemMag) GameRegistry.findItem(Main.modid, "item."+ mags[i]);
-		}
+		this.setMags(mags);
+		
 
 	}
 	
@@ -140,4 +140,43 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
 		}
 		PacketDispatcher.sendToServer(new UnloadGunMagMessage(-1, -1));
     }
+
+
+	public final ItemMag[] getMags() {
+		return mags;
+	}
+
+
+	public final void setMags(String[] mags) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.mags = new ItemMag[mags.length];
+			for (int i = 0; i< mags.length; i++) {
+				this.mags[i] = (ItemMag) GameRegistry.findItem(Main.modid, "item."+ mags[i]);
+			}
+		}
+	}
+
+
+	public final int getLoadTime() {
+		return loadTime;
+	}
+
+
+	public final void setLoadTime(int loadTime) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.loadTime = loadTime;
+		}
+	}
+
+
+	public final int getUnloadTime() {
+		return unloadTime;
+	}
+
+
+	public final void setUnloadTime(int unloadTime) {
+		if (DefenceVariables.authorizedAccess(Reader.class)) {
+			this.unloadTime = unloadTime;
+		}
+	}
 }

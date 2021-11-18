@@ -57,11 +57,6 @@ public class GuiCustomization extends GuiContainer {
 		this.player = player;
 		this.item = (Item3D) is.getItem();
 		
-		Obj model = ClientProxy.loader.loadModel(item.model);
-	    list = ClientProxy.loader.createDisplayList(model);
-	    GL11.glNewList(list, GL11.GL_COMPILE);
-	    ClientProxy.loader.render(model);
-	    GL11.glEndList();
 		
 	}
 
@@ -303,12 +298,11 @@ public class GuiCustomization extends GuiContainer {
 		//GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		int size = 40;
-		GL11.glTranslated(this.guiLeft+this.xSize/2, this.guiTop + this.ySize/2+20, 400);
+		GL11.glTranslated(this.guiLeft+this.xSize/2, this.guiTop + this.ySize/2-10, 400);
 		GL11.glScalef(size, size, size);
 		//
-		GL11.glRotated(-90, 1, 0, 0);
-		GL11.glRotated(90, 0, 1, 0);
-		GL11.glRotated(-90, 0, 0, 1);
+		GL11.glRotated(90, 1, 0, 0);
+		GL11.glRotated(180, 0, 0, 1);
 		GL11.glRotated(90, 1, 0, 0);
 		GL11.glRotated(-45, 0, 1, 0);
 		render.renderItem(ItemRenderType.EQUIPPED, player.inventory.getCurrentItem(), this);
