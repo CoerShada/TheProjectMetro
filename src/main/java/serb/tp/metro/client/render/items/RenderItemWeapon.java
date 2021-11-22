@@ -18,13 +18,13 @@ import serb.tp.metro.customization.AbstractCustomizableSlot;
 import serb.tp.metro.customization.ICustomizable;
 import serb.tp.metro.items.Item3D;
 
-public class RenderItem3D implements IItemRenderer{
+public class RenderItemWeapon implements IItemRenderer{
 	ResourceLocation texture =  new ResourceLocation(Main.modid, "textures/models/items/armor/backpack_gekkon.png");
 	Item3D item;
 	private int list;
 	private int counter;
 	
-	public RenderItem3D(Item3D item) {
+	public RenderItemWeapon(Item3D item) {
 		this.item = item;
 		
 		Obj model = ClientProxy.loader.loadModel(item.getModel());
@@ -164,7 +164,7 @@ public class RenderItem3D implements IItemRenderer{
 				
 				try {
 					AbstractCustomizableSlot slot = customizable.getSlotsCustomization().get(i);
-					RenderItem3D render = (RenderItem3D) MinecraftForgeClient.getItemRenderer(is, type);
+					RenderItemWeapon render = (RenderItemWeapon) MinecraftForgeClient.getItemRenderer(is, type);
 					float[] pos = slot.getPos();
 					float[] rotation = slot.getRotation();
 					render.renderItem(type, is, data, new float[] {pos[0],  pos[1],  pos[2], rotation[0], rotation[1], rotation[2], coef}, false);			

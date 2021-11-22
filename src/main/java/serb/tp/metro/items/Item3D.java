@@ -116,6 +116,8 @@ public abstract class Item3D extends Item{
     	}
     	list.add(this.baseItemStack);
     	this.baseItemStack.getTagCompound().setFloat("weight", weight);
+    	
+
     }
 	
     

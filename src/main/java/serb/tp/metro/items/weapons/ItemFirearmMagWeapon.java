@@ -54,7 +54,6 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean isAdv) {
-    	
         if (!itemStack.hasTagCompound()) return;
         NBTTagCompound nbt = itemStack.getTagCompound();
     	if (nbt.getTag("mag")!=null)
@@ -78,11 +77,12 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
     	int type = 0;
     	int ammo = -1;
     	int index = -1;
-    	if (player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(19).hasTagCompound()) 
+    	int rigIndex = CustomSlots.CHESTRIG.getIndex();
+    	if (player.inventory.getStackInSlot(rigIndex)!=null && player.inventory.getStackInSlot(rigIndex).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(rigIndex).hasTagCompound()) 
     	{
-    		inv = new InventoryItemStorage(player.inventory.getStackInSlot(19));
+    		inv = new InventoryItemStorage(player.inventory.getStackInSlot(rigIndex));
     		inv.openInventory();
-    		for (int i = 0; i < player.inventory.getStackInSlot(19).getTagCompound().getByte("size"); i++) 
+    		for (int i = 0; i < player.inventory.getStackInSlot(rigIndex).getTagCompound().getByte("size"); i++) 
     		{
     			if(inv.getStackInSlot(i)!=null && inv.getStackInSlot(i).getItem() instanceof ItemMag && Arrays.asList(mags).contains(inv.getStackInSlot(i).getItem()) && inv.getStackInSlot(i).hasTagCompound() && inv.getStackInSlot(i).getTagCompound().getIntArray("bullets").length>ammo) 
     			{
@@ -114,11 +114,12 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
     public void unload(ItemStack itemStack, EntityPlayer player) 
     {
     	InventoryItemStorage inv;
-    	if (player.inventory.getStackInSlot(19)!=null && player.inventory.getStackInSlot(19).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(19).hasTagCompound()) 
+    	int rigIndex = CustomSlots.CHESTRIG.getIndex();
+    	if (player.inventory.getStackInSlot(rigIndex)!=null && player.inventory.getStackInSlot(rigIndex).getItem() instanceof ItemChestrig && player.inventory.getStackInSlot(rigIndex).hasTagCompound()) 
     	{
-			inv = new InventoryItemStorage(player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()));
+			inv = new InventoryItemStorage(player.inventory.getStackInSlot(rigIndex));
 			inv.openInventory();
-			for (int i = 0; i < player.inventory.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getTagCompound().getByte("size"); i++) 
+			for (int i = 0; i < player.inventory.getStackInSlot(rigIndex).getTagCompound().getByte("size"); i++) 
 			{
 				if (inv.getStackInSlot(i)==null) {
 					PacketDispatcher.sendToServer(new UnloadGunMagMessage(1, i));
@@ -148,7 +149,7 @@ public class ItemFirearmMagWeapon extends ItemWeapon{
 
 
 	public final void setMags(String[] mags) {
-		if (DefenceVariables.authorizedAccess(Reader.class)) {
+		if (DefenceVariables.authorizedAccess(Reader.class, this.getClass())) {
 			this.mags = new ItemMag[mags.length];
 			for (int i = 0; i< mags.length; i++) {
 				this.mags[i] = (ItemMag) GameRegistry.findItem(Main.modid, "item."+ mags[i]);

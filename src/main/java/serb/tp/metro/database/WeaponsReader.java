@@ -27,7 +27,7 @@ public class WeaponsReader extends Reader{
 		String description = getString(splitParameters, "description");
 		float weight = getFloat(splitParameters, "weight");
 		String model = "models/weapons/automatic/"+getString(splitParameters, "model");
-		float[] sizeModel = getFloatsArray(splitParameters, "sizeModel");
+		float[] sizeModel = new float[] {getFloat(splitParameters, "sizeModel"), getFloat(splitParameters, "sizeModel")*0.75F, getFloat(splitParameters, "sizeModel")*0.75F, getFloat(splitParameters, "sizeModel")*0.5F};
 		float[] pos = getFloatsArray(splitParameters, "pos");
 		float[] rotation = getFloatsArray(splitParameters, "rotation");
 		float[] onInventoryPos = getFloatsArray(splitParameters, "onInventoryPos");

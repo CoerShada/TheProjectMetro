@@ -3,8 +3,6 @@ package serb.tp.metro.common.ws;
 
 import org.lwjgl.input.Mouse;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,16 +14,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
-import serb.tp.metro.common.ws.current_item.CurrentItem;
-import serb.tp.metro.common.ws.current_item.CurrentMag;
-import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.items.Item3D;
-import serb.tp.metro.items.ItemChestrig;
 import serb.tp.metro.items.modules.ItemMag;
 import serb.tp.metro.items.weapons.FireMod;
 import serb.tp.metro.items.weapons.ItemWeapon;
 import serb.tp.metro.network.PacketDispatcher;
-import serb.tp.metro.network.server.LoadAmmoMessage;
 import serb.tp.metro.network.server.OnItemLeftClickMessage;
 import serb.tp.metro.network.server.ShootMessage;
 
@@ -39,6 +32,7 @@ public class WeaponSystem implements IExtendedEntityProperties {
 	protected int nextRound = 0;
 	protected int slotId;
 	protected boolean canShoot = true;
+	protected boolean isAiming = false;
 	Item currentItem;
 	ItemStack is;
 	protected boolean[] buttons = {false, false, false};
@@ -72,10 +66,11 @@ public class WeaponSystem implements IExtendedEntityProperties {
 	}
 	
 	protected void onButtonsClick() {
+		boolean isAiming = false;
 		if(buttons[0] && buttons[1]) {
 					
 		}
-		else if (buttons[0]) {
+		if (buttons[0]) {
 			if (currentItem instanceof Item3D && !(currentItem instanceof ItemWeapon)) {
 				Item3D currentItem3D = (Item3D) currentItem;
 				currentItem3D.onItemLeftClick(is, player.worldObj, player);
@@ -104,14 +99,16 @@ public class WeaponSystem implements IExtendedEntityProperties {
 			    }	
 			}	
 		}
-		else if (buttons[1]) {
-			
+		if (buttons[1]) {
+			isAiming = true;
 		}
-		else {
+		if(!(buttons[0])) {
 			if (nextRound<=0) {
 				canShoot = true;
 			}
 		}
+		
+		this.isAiming = isAiming;
 	}
 	
 	public void onClientUpdate() {
@@ -125,6 +122,12 @@ public class WeaponSystem implements IExtendedEntityProperties {
 		}
 		else {
 			buttons[0] = false;
+		}
+		if (Mouse.isButtonDown(1)) {
+			buttons[1] = true;
+		}
+		else {
+			buttons[1] = false;
 		}
 		
 		

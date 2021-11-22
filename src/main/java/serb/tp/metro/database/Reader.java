@@ -20,8 +20,6 @@ public class Reader {
 		try {
 			for (String item: currentString) {
 				String equalsStr = item.substring(0, item.indexOf("=")).trim();
-				DebugMessage.printMessage("name+ " + name + " " + equalsStr);
-
 				if (equalsStr.equals(name)) {
 					
 					return item.substring(item.indexOf("=")+1).trim();

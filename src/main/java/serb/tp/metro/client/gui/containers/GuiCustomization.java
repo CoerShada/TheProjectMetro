@@ -46,6 +46,7 @@ public class GuiCustomization extends GuiContainer {
 	Item3D item;
 	ResourceLocation texture =  new ResourceLocation(Main.modid, "textures/models/items/armor/backpack_gekkon.png");
 	int buttonMoreOpened = -1;
+
 	
 	
 	public GuiCustomization(EntityPlayer player, ItemStack is) {
@@ -151,7 +152,7 @@ public class GuiCustomization extends GuiContainer {
 	public void drawGuiContainerBackgroundLayer(float i1, int i2, int i3) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(Resources.customizationTexture);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		//drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
 		ArrayList <ContainerCustomization>containers = this.cont.getSubContainers();
 
@@ -297,16 +298,22 @@ public class GuiCustomization extends GuiContainer {
 
 		//GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		int size = 40;
-		GL11.glTranslated(this.guiLeft+this.xSize/2, this.guiTop + this.ySize/2-10, 400);
-		GL11.glScalef(size, size, size);
-		//
-		GL11.glRotated(90, 1, 0, 0);
-		GL11.glRotated(180, 0, 0, 1);
-		GL11.glRotated(90, 1, 0, 0);
-		GL11.glRotated(-45, 0, 1, 0);
-		render.renderItem(ItemRenderType.EQUIPPED, player.inventory.getCurrentItem(), this);
+		float size = 60;
 		
+		GL11.glTranslated(this.guiLeft + this.xSize/2, this.guiTop + this.ySize/2, 10);
+		
+		GL11.glTranslated(1.0, 0.0, 0.0);
+		GL11.glRotated(180, 1, 0, 0);
+		GL11.glTranslated(-1.0, 0.0, 0.0);
+		
+		GL11.glTranslated(0.0, 1.0, 0.0);
+		GL11.glRotated(90, 0, 1, 0);
+		GL11.glTranslated(0.0, -1.0, 0.0);
+
+		
+
+		GL11.glScalef(size, size, size);
+		render.renderItem(ItemRenderType.INVENTORY, player.inventory.getCurrentItem(), this);
 
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_CULL_FACE);

@@ -1,7 +1,6 @@
 package serb.tp.metro.common;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,9 +12,9 @@ import serb.tp.metro.blocks.LoadTunnels;
 import serb.tp.metro.common.commands.CommandSyncDatabase;
 import serb.tp.metro.common.handlers.CustomArmorTick;
 import serb.tp.metro.common.handlers.DeathPlayerHandler;
-import serb.tp.metro.common.handlers.HandlerRegisterCommands;
 import serb.tp.metro.common.handlers.PickupHandler;
 import serb.tp.metro.common.handlers.WeaponSystemHandler;
+import serb.tp.metro.common.handlers.WorldHandler;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipBackpuck;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipGun;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipMask;
@@ -61,6 +60,7 @@ public class CommonProxy {
 		playerUpdateEquip();
 		MinecraftForge.EVENT_BUS.register(new WeaponSystemHandler());
 		//MinecraftForge.EVENT_BUS.register(new HandlerRegisterCommands());
+		worldHandlers();
 	}
 
 	public void postInit() {    
@@ -97,6 +97,10 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new CustomArmorTick());
 		//MinecraftForge.EVENT_BUS.register(new DeathPlayerHandler());
 
+	}
+	
+	public void worldHandlers() {
+		MinecraftForge.EVENT_BUS.register(new WorldHandler());
 	}
 
 	public void playerUpdateEquip() {

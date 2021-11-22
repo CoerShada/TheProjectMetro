@@ -33,6 +33,11 @@ public class TileEntityStorage extends TileEntity {
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+    	StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
+    	for (int i = 0; i < stackTraces.length; i++) {
+    	     System.out.println(stackTraces[i]);
+    	}
+    	System.out.println("unload");
 		nbt.setInteger("width", this.width);
 		nbt.setInteger("height", this.height);
 		if (inventory == null) return;
@@ -50,6 +55,11 @@ public class TileEntityStorage extends TileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
+    	StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
+    	for (int i = 0; i < stackTraces.length; i++) {
+    	     System.out.println(stackTraces[i]);
+    	}
+    	System.out.println("load");
 		this.width = nbt.getInteger("width");
 		this.height = nbt.getInteger("height");
 		inventory = new InventoryBasic("tileInventory", false, width * height);
