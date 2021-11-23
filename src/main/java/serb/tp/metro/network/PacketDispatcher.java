@@ -18,6 +18,7 @@ import serb.tp.metro.network.client.SyncEquipPantsMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerMaxQuantityLootMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerSpawnTimeMessage;
+import serb.tp.metro.network.server.AddClanMessage;
 import serb.tp.metro.network.server.ChangeAmmoMessage;
 import serb.tp.metro.network.server.ChangeFilterMessage;
 import serb.tp.metro.network.server.ChangeFireModMessage;
@@ -84,6 +85,7 @@ public class PacketDispatcher {
 		registerMessage(NewCraftMessage.class);
 		registerMessage(OnItemLeftClickMessage.class);
 		registerMessage(EditCustomizationMessage.class);
+		registerMessage(AddClanMessage.class);
 	}
 
 	private static final <T extends AbstractMessage<T> & IMessageHandler<T, IMessage>> void registerMessage(Class<T> clazz) {

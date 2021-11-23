@@ -21,7 +21,7 @@ public class KeybindingRegistry {
     	KEY_MODIFY = new KeyBinding(Type.getTranslate("key.modify"), Keyboard.KEY_X, catergory),
     	KEY_SAFETY = new KeyBinding(Type.getTranslate("key.safety"), Keyboard.KEY_P, catergory),
         KEY_VISOR   = new KeyBinding(Type.getTranslate("key.visor"), Keyboard.KEY_V, catergory),
-        KEY_FACTIONS = new KeyBinding(Type.getTranslate("key.factions"), Keyboard.KEY_G, catergory);
+        KEY_CLAN = new KeyBinding(Type.getTranslate("key.factions"), Keyboard.KEY_G, catergory);
     
     	
     		
@@ -36,7 +36,7 @@ public class KeybindingRegistry {
         setRegister(KEY_VISOR);
         setRegister(KEY_FMTSM);
         setRegister(KEY_SAFETY);
-        setRegister(KEY_FACTIONS);
+        setRegister(KEY_CLAN);
     }
 
     private static void setRegister(KeyBinding binding)

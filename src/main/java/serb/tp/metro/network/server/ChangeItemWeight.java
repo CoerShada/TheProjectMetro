@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import serb.tp.metro.Main;
-import serb.tp.metro.common.ws.WeaponSystem;
+import serb.tp.metro.common.ieep.WeaponSystem;
 import serb.tp.metro.items.Item3D;
 import serb.tp.metro.network.AbstractMessage.AbstractServerMessage;
 

@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import serb.tp.metro.Main;
-import serb.tp.metro.common.ws.WeaponSystem;
+import serb.tp.metro.common.ieep.WeaponSystem;
 import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.customization.ICustomizable;
 
@@ -20,10 +20,13 @@ public class WeaponSystemHandler {
 	@SubscribeEvent
 	public void addEntityConstructing(EntityEvent.EntityConstructing event) {
 		if (event.entity instanceof EntityPlayer) {
-			if (Main.proxy.ws.get((EntityPlayer)event.entity) == null) {
-				EntityPlayer player = (EntityPlayer)event.entity;
+			EntityPlayer player = (EntityPlayer)event.entity;
+			if (Main.proxy.ws.get(player) == null) {
 				Main.proxy.ws.reg(player);
 				
+			}
+			if (Main.proxy.clanIEEP.get(player)==null) {
+				Main.proxy.clanIEEP.reg(player);
 			}
 				
 		}

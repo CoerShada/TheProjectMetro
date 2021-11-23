@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import scala.swing.event.Key;
 
 public class Clan {
 	private int id = 0;
@@ -20,11 +19,32 @@ public class Clan {
 	private ClanStructure clanStructure = ClanStructure.Small;
 	
 	private ArrayList<Rank> ranks = new ArrayList<Rank>();
+	private int lastRankIndex = 0;
 	private ArrayList<Member> members = new ArrayList<Member>();
 	//private ArrayList<Land> lands = new ArrayList<Land>();
 	private ArrayList<Relation> relations = new ArrayList<Relation>();
 	
 	private int defaultRankIndex = 0;
+	
+	public Clan() {
+		Map<Permission, Boolean> permissionsMap = new HashMap<Permission, Boolean>();
+		Permission[] permissions = Permission.values();
+		for (Permission permission: permissions) {
+			permissionsMap.put(permission, true);
+		}
+		addRank("Лидер", new HashMap<Permission, Boolean>(permissionsMap));
+		
+		permissionsMap = new HashMap<Permission, Boolean>();
+		for (Permission permission: permissions) {
+			permissionsMap.put(permission, false);
+		}
+		addRank("Солдат", new HashMap<Permission, Boolean>(permissionsMap));
+	}
+	
+	public void addRank(String name, Map<Permission, Boolean> permissions) {
+		this.lastRankIndex++;
+		ranks.add(new Rank(this.lastRankIndex, name, permissions));
+	}
 	
 	public void setId(int id) {
 		this.id = id;
@@ -32,6 +52,13 @@ public class Clan {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public boolean isClanPlayer(String playerName) {
+		for (Member member: members) {
+			if (member.getPlayer().equals(playerName)) return true;
+		}
+		return false;
 	}
 	
 	public boolean setName(String name) {

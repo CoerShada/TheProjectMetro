@@ -25,9 +25,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import serb.tp.metro.KeybindingRegistry;
+import serb.tp.metro.Main;
+import serb.tp.metro.client.ClientProxy;
 import serb.tp.metro.client.render.RenderItemOnGround;
 import serb.tp.metro.common.CommonProxy;
 import serb.tp.metro.customization.ICustomizable;
+import serb.tp.metro.handlers.GuiHandler;
 import serb.tp.metro.items.ItemBackpack;
 import serb.tp.metro.items.ItemMask;
 import serb.tp.metro.items.armor.ItemHelmet;
@@ -115,9 +118,9 @@ public class KeyBindingHandler {
 			}
 		}
 		
-		if(KeybindingRegistry.KEY_FACTIONS.isPressed()) 
+		if(KeybindingRegistry.KEY_CLAN.isPressed()) 
 		{
-		    //GuiHandler.openGui(player, Main.GUI_FACTIONS);
+		    GuiHandler.openGui(player, ClientProxy.GUI_CLAN);
 		}
 		
 		if(KeybindingRegistry.KEY_FMTSM.isPressed()) 

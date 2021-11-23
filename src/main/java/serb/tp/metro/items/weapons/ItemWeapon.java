@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
-import serb.tp.metro.common.ws.WeaponSystem;
+import serb.tp.metro.common.ieep.WeaponSystem;
 import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.customization.AbstractCustomizableSlot;

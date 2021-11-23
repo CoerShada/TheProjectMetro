@@ -20,7 +20,8 @@ import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipGun;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipMask;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipOuterwear;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipPants;
-import serb.tp.metro.common.ws.WeaponSystem;
+import serb.tp.metro.common.ieep.ClanIEEP;
+import serb.tp.metro.common.ieep.WeaponSystem;
 import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.database.BulletsReader;
 import serb.tp.metro.database.CustomizationSlotsReader;
@@ -36,9 +37,10 @@ public class CommonProxy {
 	
 	private static int modGuiIndex = 0;
 	public WeaponSystem ws;
+	public ClanIEEP clanIEEP;
 	public static final int GUI_CUSTOM_INV = modGuiIndex++,
 			GUI_BACPACK= modGuiIndex++, 
-			GUI_FACTIONS = modGuiIndex++,
+			GUI_CLAN = modGuiIndex++,
 			GUI_STORAGE = modGuiIndex++,
 			GUI_STORAGE_SPAWNER = modGuiIndex++,
 			GUI_CREATOR = modGuiIndex++,
@@ -51,6 +53,7 @@ public class CommonProxy {
 		noPickup();
 		atribute();
 		ws = new WeaponSystem();
+		clanIEEP = new ClanIEEP();
 		//death();
 		loadOrUpdateContent();
 	}
