@@ -56,6 +56,7 @@ public class Clan {
 	
 	public boolean isClanPlayer(String playerName) {
 		for (Member member: members) {
+			
 			if (member.getPlayer().equals(playerName)) return true;
 		}
 		return false;
@@ -128,6 +129,7 @@ public class Clan {
 	public void addMember(EntityPlayer player) {
 		Member newMember = new Member(player.getDisplayName(), ranks.get(defaultRankIndex), new Date().getTime());
 		this.members.add(newMember);
+		System.out.println(this.members.size());
 	}
 	
 	
@@ -154,6 +156,7 @@ public class Clan {
 		nbt.setInteger("quantityRanks", ranks.size());
 		int counter = 0;
 		for (Rank rank: ranks) {
+			
 			NBTTagCompound tagRank = new NBTTagCompound();
 			tagRank.setInteger("index", rank.getIndex());
 			tagRank.setString("name", rank.getName());
@@ -174,6 +177,7 @@ public class Clan {
 		counter = 0;
 		nbt.setInteger("quantityMembers", members.size());
 		for (Member member: members) {
+			System.out.println(member.getRank().getIndex());
 			NBTTagCompound tagMember = new NBTTagCompound();
 			tagMember.setString("player", member.getPlayer());
 			tagMember.setInteger("rankIndex", member.getRank().getIndex());
@@ -198,6 +202,7 @@ public class Clan {
 		for (int i = 0; i<size; i++) {	
 			NBTTagCompound tagRank = nbt.getCompoundTag("rank:"+i);
 			int index = tagRank.getInteger("index");
+			System.out.println(index);
 			String name = tagRank.getString("name");
 			
 			//Выгрузка прав этого ранга
@@ -214,9 +219,9 @@ public class Clan {
 		for (int i = 0; i<size; i++) {
 			
 			NBTTagCompound tagMember = nbt.getCompoundTag("member:"+i);
-			String playerName = nbt.getString("player");
-			Rank rank = this.getRankFromIndex(nbt.getInteger("rankIndex"));
-			Long entryTime = nbt.getLong("entryTime");
+			String playerName = tagMember.getString("player");
+			Rank rank = this.getRankFromIndex(tagMember.getInteger("rankIndex"));
+			Long entryTime = tagMember.getLong("entryTime");
 			tempMembers.add(new Member(playerName, rank, entryTime));
 		}
 		this.members = tempMembers;

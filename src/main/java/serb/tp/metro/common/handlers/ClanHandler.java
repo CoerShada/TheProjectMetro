@@ -75,6 +75,7 @@ public class ClanHandler extends WorldSavedData{
 		tag.setInteger("lastId", lastId);
 		
 		tag.setInteger("clansSize", clans.size());
+		System.out.println("size clan" + clans.size());
 		for (int i = 0; i<clans.size(); i++) {
 			NBTTagCompound clanTag = new NBTTagCompound();
 			clans.get(i).writeToNBT(clanTag);

@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import serb.tp.metro.Main;
 import serb.tp.metro.common.handlers.ClanHandler;
 import serb.tp.metro.network.AbstractMessage.AbstractServerMessage;
 
@@ -43,9 +44,11 @@ public class AddClanMessage extends AbstractServerMessage<AddClanMessage> {
 	@Override
 	public void process(EntityPlayer player, Side side) 
 	{
+		
 		ClanHandler handler = ClanHandler.get(player.worldObj);
 		handler.createClan(name, player);
 		handler.markDirty();
+		Main.proxy.clanIEEP.get(player).setClan();
 		
 	}
 

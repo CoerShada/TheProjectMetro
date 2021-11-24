@@ -20,8 +20,13 @@ public class ClanIEEP implements IExtendedEntityProperties {
 		return clan;
 	}
 	
+	public void setClan() {
+		ClanHandler handler = ClanHandler.get(player.worldObj);
+		clan = handler.getAPlayersClan(player);
+	}
+	
 	public void reg(EntityPlayer player) {
-		player.registerExtendedProperties(TAG, new WeaponSystem());
+		player.registerExtendedProperties(TAG, new ClanIEEP());
 	}
 	
 	public ClanIEEP get(EntityPlayer player) {
@@ -29,14 +34,12 @@ public class ClanIEEP implements IExtendedEntityProperties {
 	}
 
 	@Override
-	public void saveNBTData(NBTTagCompound compound) {
-		compound.setInteger("clanId", clan.getId());
-		
+	public void saveNBTData(NBTTagCompound compound) {		
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-
+		setClan();
 		
 	}
 
@@ -44,8 +47,7 @@ public class ClanIEEP implements IExtendedEntityProperties {
 	public void init(Entity entity, World world) {
 		if (entity instanceof EntityPlayer) {
 			this.player = (EntityPlayer) entity;
-			ClanHandler handler = ClanHandler.get(player.worldObj);
-			clan = handler.getAPlayersClan(player);
+
 		}
 		
 	}

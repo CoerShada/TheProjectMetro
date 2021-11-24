@@ -75,6 +75,7 @@ public class GuiClanCreate extends GuiScreen
         if(button.id == 12) {
             
             PacketDispatcher.sendToServer(new AddClanMessage(nameFaction.getText()));
+            this.onGuiClosed();
         }
     }
     
