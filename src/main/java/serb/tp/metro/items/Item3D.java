@@ -18,8 +18,9 @@ import serb.tp.metro.Main;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.database.Reader;
 import serb.tp.metro.utils.DefenceVariables;
+import serb.tp.metro.utils.StringHelper;
 
-public abstract class Item3D extends Item{
+public abstract class Item3D extends Item implements IItemLeftClickable{
 	protected String[] description;
 	protected float weight;
 	protected ResourceLocation model;
@@ -74,37 +75,8 @@ public abstract class Item3D extends Item{
     }
 	
 	public final void setDescription(String description) {
-		int beginIndex = 0;
-		int lastIndex = 0;
-		int index = 0;
-		final int sizeString = 45;
-		description = Type.getTranslate("characteristic.all.description") + ": " + description;
-		while (index<description.length()) {
-			if (description.substring(index, index+1).equals("@")) {
-				beginIndex = index;
-				lastIndex = index;
-				
-				
-			}
-			else if (description.substring(index, index+1).equals(" ")) {
-				if (index-beginIndex<sizeString) {
-					lastIndex = index;
-				}
-				else if (index-beginIndex>sizeString) {
-					description = description.substring(0, lastIndex) + "@" + description.substring(lastIndex+1);
-					beginIndex = lastIndex;
-					lastIndex = index;
-				}
-				else {
-					description = description.substring(0, index) + "@" + description.substring(index+1);
-					beginIndex = index;
-					lastIndex = index;
-				}
-			}
-			index++;
-		}
-		
-		this.description = description.split("@");
+
+		this.description = StringHelper.floatSplit(Type.getTranslate("characteristic.all.description") + ": " + description, 45);
 	}
     
     @Override
@@ -125,8 +97,10 @@ public abstract class Item3D extends Item{
     	return hold;
     }
 	
-    public ItemStack onItemLeftClick(ItemStack hold, World world, EntityPlayer player) {
-    	return hold;
+
+    public ItemStack onItemLeftClick(ItemStack is, World world, EntityPlayer player) {
+		return is;
+    	
     }
     
 

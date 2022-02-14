@@ -50,7 +50,7 @@ public class OBJLoader extends Object {
      * @param model the <code>Obj</code> file to be rendered
      */
     public void render(Obj model) {
-    	
+    	Tessellator t = Tessellator.instance;
         GL11.glMaterialf(GL_FRONT, GL_SHININESS, 120);
         GL11.glBegin(GL_TRIANGLES);
         {
@@ -71,19 +71,32 @@ public class OBJLoader extends Object {
                     model.getVertices().get(face.getVertices()[2] - 1)
                 };
                 {
-                    GL11.glNormal3f(normals[0].getX(), normals[0].getY(), normals[0].getZ());
-                    GL11.glTexCoord2f(texCoords[0].getX(), texCoords[0].getY());
+                    //GL11.glNormal3f(normals[0].getX(), normals[0].getY(), normals[0].getZ());
+                	for (int i  = 0; i<3; i++) {
+                		GL11.glNormal3f(normals[i].getX(), normals[i].getY(), normals[i].getZ());
+                        GL11.glVertex3f(vertices[i].getX(), vertices[i].getY(), vertices[i].getZ());
+                        GL11.glTexCoord2f(texCoords[i].getX(), texCoords[i].getY());
+	                    //t.addVertexWithUV(vertices[i].getX(), vertices[i].getY(), vertices[i].getZ(), texCoords[i].getX(), texCoords[i].getY());
+                	}
+                    
+                   
+                    
+                    //GL11.glTexCoord2f(texCoords[0].getX(), texCoords[0].getY());
+                	/*GL11.glTexCoord2f(texCoords[1].getX(), texCoords[1].getY());
                     GL11.glVertex3f(vertices[0].getX(), vertices[0].getY(), vertices[0].getZ());
                     GL11.glNormal3f(normals[1].getX(), normals[1].getY(), normals[1].getZ());
-                    GL11.glTexCoord2f(texCoords[1].getX(), texCoords[1].getY());
+                    
+                    
                     GL11.glVertex3f(vertices[1].getX(), vertices[1].getY(), vertices[1].getZ());
                     GL11.glNormal3f(normals[2].getX(), normals[2].getY(), normals[2].getZ());
                     GL11.glTexCoord2f(texCoords[2].getX(), texCoords[2].getY());
-                    GL11.glVertex3f(vertices[2].getX(), vertices[2].getY(), vertices[2].getZ());
+                    GL11.glVertex3f(vertices[2].getX(), vertices[2].getY(), vertices[2].getZ());-*/
+                    
+                    
                 }
             }
         }
-        GL11.glEnd();
+        GL11.glEnd(); 
     }
     
     /**
@@ -127,8 +140,10 @@ public class OBJLoader extends Object {
             String ln = sc.nextLine();
             
             try {
-	            if (ln == null || ln.equals("") || ln.startsWith("#")) {
-	            } else {
+	            if (ln == null || ln.equals("") || ln.isEmpty()|| ln.startsWith("#")) {
+	            	continue;
+	            } 
+	            else {
 	                String[] split = ln.split(" ");
 	                
 	                switch (split[0]) {
@@ -181,7 +196,8 @@ public class OBJLoader extends Object {
             }
             catch (Exception e) {
             	
-            	System.out.println(e);
+            	System.out.println(e.getStackTrace());
+
             }
             
         }

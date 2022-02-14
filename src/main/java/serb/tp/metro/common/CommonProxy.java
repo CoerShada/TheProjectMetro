@@ -1,5 +1,6 @@
 package serb.tp.metro.common;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +10,7 @@ import serb.tp.metro.blocks.LoadBuildersBlocks;
 import serb.tp.metro.blocks.LoadFurniture;
 import serb.tp.metro.blocks.LoadFurnitureUnbreakable;
 import serb.tp.metro.blocks.LoadTunnels;
+import serb.tp.metro.common.commands.CommandCreateFrame;
 import serb.tp.metro.common.commands.CommandSyncDatabase;
 import serb.tp.metro.common.handlers.CustomArmorTick;
 import serb.tp.metro.common.handlers.DeathPlayerHandler;
@@ -20,7 +22,8 @@ import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipGun;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipMask;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipOuterwear;
 import serb.tp.metro.common.handlers.equip.PlayerUpdateEquipPants;
-import serb.tp.metro.common.ieep.ClanIEEP;
+import serb.tp.metro.common.ieep.BuildingSystem;
+import serb.tp.metro.common.ieep.ExtendedPlayer;
 import serb.tp.metro.common.ieep.WeaponSystem;
 import serb.tp.metro.creativetabs.LoadTabs;
 import serb.tp.metro.database.BulletsReader;
@@ -32,12 +35,15 @@ import serb.tp.metro.entities.player.handlers.RadiationHandler;
 import serb.tp.metro.entities.player.handlers.StaminaHandler;
 import serb.tp.metro.entities.player.handlers.ThirstyHandler;
 import serb.tp.metro.entities.player.handlers.WeightHandler;
+import serb.tp.metro.items.ItemSelector;
 
 public class CommonProxy {
 	
 	private static int modGuiIndex = 0;
 	public WeaponSystem ws;
-	public ClanIEEP clanIEEP;
+	public BuildingSystem bs;
+
+	public ExtendedPlayer clanIEEP;
 	public static final int GUI_CUSTOM_INV = modGuiIndex++,
 			GUI_BACPACK= modGuiIndex++, 
 			GUI_CLAN = modGuiIndex++,
@@ -53,7 +59,8 @@ public class CommonProxy {
 		noPickup();
 		atribute();
 		ws = new WeaponSystem();
-		clanIEEP = new ClanIEEP();
+		bs = new BuildingSystem();
+		clanIEEP = new ExtendedPlayer();
 		//death();
 		loadOrUpdateContent();
 	}
@@ -61,12 +68,16 @@ public class CommonProxy {
 	public void Init() {	
 		playerHandler();
 		playerUpdateEquip();
-		MinecraftForge.EVENT_BUS.register(new WeaponSystemHandler());
-		//MinecraftForge.EVENT_BUS.register(new HandlerRegisterCommands());
 		worldHandlers();
+		WeaponSystemHandler wsh = new WeaponSystemHandler();
+		MinecraftForge.EVENT_BUS.register(wsh);
+		FMLCommonHandler.instance().bus().register(wsh);
+		//MinecraftForge.EVENT_BUS.register(new HandlerRegisterCommands());
+		
 	}
 
-	public void postInit() {    
+	public void postInit() {
+
 	}
 
 	public void loadTabs() {
@@ -82,6 +93,7 @@ public class CommonProxy {
 		ModulesReader.LoadModules();
 		WeaponsReader.LoadWeapons();
 		CustomizationSlotsReader.LoadCustomizationSlots();
+		new ItemSelector("selector");
 	}
 	
 	
@@ -103,7 +115,9 @@ public class CommonProxy {
 	}
 	
 	public void worldHandlers() {
-		MinecraftForge.EVENT_BUS.register(new WorldHandler());
+		WorldHandler wh = new WorldHandler();
+		MinecraftForge.EVENT_BUS.register(wh);
+		
 	}
 
 	public void playerUpdateEquip() {
@@ -140,7 +154,7 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
     	
     	event.registerServerCommand(new CommandSyncDatabase());//Регистрация команд	
-
+    	event.registerServerCommand(new CommandCreateFrame());
     }
 
 	

@@ -1,15 +1,16 @@
 package serb.tp.metro.client.render.items;
 
+
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.IModelCustom;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.ClientProxy;
 import serb.tp.metro.client.render.loaders.obj.Obj;
@@ -19,19 +20,34 @@ import serb.tp.metro.customization.ICustomizable;
 import serb.tp.metro.items.Item3D;
 
 public class RenderItem3D implements IItemRenderer{
-	ResourceLocation texture =  new ResourceLocation(Main.modid, "textures/models/items/armor/backpack_gekkon.png");
+	ResourceLocation textureRL =  new ResourceLocation(Main.modid, "textures/models/items/armor/ksk.jpg");
 	Item3D item;
 	private int list;
 	private int counter;
-	
+	IModelCustom model;
+	SimpleTexture texture;
+	int textInt;
 	public RenderItem3D(Item3D item) {
 		this.item = item;
 		
 		Obj model = ClientProxy.loader.loadModel(item.getModel());
-	    list = ClientProxy.loader.createDisplayList(model);
-	    GL11.glNewList(list, GL11.GL_COMPILE);
+		
+		texture = new SimpleTexture(textureRL);
+	
+		list = GL11.glGenLists(1);
+        GL11.glNewList(list, GL11.GL_COMPILE);
+        {
+        	ClientProxy.loader.render(model);
+        }
+        GL11.glEndList();
+
+        
+	    //list = ClientProxy.loader.createDisplayList(model);
+	    /*GL11.glNewList(list, GL11.GL_COMPILE);
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+
 	    ClientProxy.loader.render(model);
-	    GL11.glEndList();
+	    GL11.glEndList();*/
 	}
 
 	@Override
@@ -62,7 +78,7 @@ public class RenderItem3D implements IItemRenderer{
 				index = 3;
 				break;
 		}
-
+		
 		float coef = this.item.sizeModel[index]/this.item.sizeModel[1];
 		float coefOld = 1;
 		//float coef = 1;
@@ -91,7 +107,7 @@ public class RenderItem3D implements IItemRenderer{
 		//System.out.println(this.item.rotation[1]);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
 		GL11.glPushMatrix();
 		
 		if(firstRender && type==ItemRenderType.EQUIPPED) {
@@ -123,7 +139,7 @@ public class RenderItem3D implements IItemRenderer{
 			GL11.glTranslated(0.0, 1.0, -0.5);
 			//GL11.glTranslated(0.0, 1.0, 0.0);
 		}
-		
+
 		GL11.glTranslated(0.0, 0.0, 1.0);
 		GL11.glRotated(mods[5], 0, 0, 1);
 		GL11.glTranslated(0.0, 0.0, -1.0);
@@ -137,7 +153,6 @@ public class RenderItem3D implements IItemRenderer{
 		GL11.glTranslated(0.0, -1.0, 0.0);
 		
 
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 
 		GL11.glTranslated(0.0, 0.0, 1.0);
 		GL11.glRotated(this.item.rotation[2], 0, 0, 1);
@@ -151,9 +166,11 @@ public class RenderItem3D implements IItemRenderer{
 		GL11.glRotated(this.item.rotation[1], 0, 1, 0);
 		GL11.glTranslated(0.0, -1.0, 0.0);
 		
-		
+
 
 		GL11.glTranslatef(mods[0], mods[1], mods[2]);
+		
+
 		
 		if (item.getItem() instanceof ICustomizable) {
 			ICustomizable customizable = (ICustomizable) item.getItem();
@@ -178,11 +195,11 @@ public class RenderItem3D implements IItemRenderer{
 		
 		GL11.glScalef(this.item.sizeModel[index], this.item.sizeModel[index], this.item.sizeModel[index]);
 		GL11.glCallList(list);
-
+		
 		GL11.glPopMatrix();
 		GL11.glShadeModel(GL11.GL_FLAT);
-	
 		
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 	
 }

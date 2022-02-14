@@ -120,7 +120,12 @@ public class KeyBindingHandler {
 		
 		if(KeybindingRegistry.KEY_CLAN.isPressed()) 
 		{
-		    GuiHandler.openGui(player, ClientProxy.GUI_CLAN);
+			if (mc.theWorld.isRemote) {
+				System.out.println("Нажата кнопка клана");
+				player.openGui(Main.mod, CommonProxy.GUI_CLAN, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
+    			//PacketDispatcher.sendToServer(new OpenGuiMessage(CommonProxy.GUI_CLAN));
+
+			}
 		}
 		
 		if(KeybindingRegistry.KEY_FMTSM.isPressed()) 

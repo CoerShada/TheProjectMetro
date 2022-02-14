@@ -1,20 +1,29 @@
 package serb.tp.metro.blocks;
 
+import java.io.FileNotFoundException;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import serb.tp.metro.blocks.frame.Frame;
+import serb.tp.metro.blocks.frame.FrameManager;
 import serb.tp.metro.blocks.tiles.TileEntityChair;
 import serb.tp.metro.creativetabs.LoadTabs;
 
 public class BlockModeled extends Block implements ITileEntityProvider{
 
 	Class<? extends TileEntity> te;
+	private Frame frame = null;
+	
 	
 	protected BlockModeled(Material material, String name, Class<? extends TileEntity> te) {
 		super(material);
@@ -23,6 +32,8 @@ public class BlockModeled extends Block implements ITileEntityProvider{
 		GameRegistry.registerBlock(this, name);
 		GameRegistry.registerTileEntity(te, name+":TileEntity");
 		this.te = te;
+		bindFrame(this.getUnlocalizedName());
+
 	}
 	
 	
@@ -61,33 +72,32 @@ public class BlockModeled extends Block implements ITileEntityProvider{
 		return tile;
 	}
 	
-	public void setFrameBlock(World world, int x, int y, int z, Block block) {
-		this.setFrameBlock(world, x, y, z, block, -1);
-	}
+	@Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack)
+    {
+		int rotation = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		world.setBlockMetadataWithNotify(x, y, z, rotation, 1);
+		if(this.frame==null) return;
+		this.frame.buildFrame(world, x, y, z, rotation, null);
+    }
 	
-	public void setFrameBlock(World world, int x, int y, int z, Block block, int metadata) {
-		if(world.getBlock(x, y, z).isAir(world, x, y, z)) {
-			world.setBlock(x, y, z, block);
-			
-			if (metadata>-1)
-				world.setBlockMetadataWithNotify(x, y, z, metadata, 1);
-			else
-				world.setBlockMetadataWithNotify(x, y, z, 2, 1);
-				
-		}
-	}
+    @Override
+	public void breakBlock(World world, int x, int y, int z, Block blockOld, int metadataOld) {
+    	if(this.frame==null) return;
+    	this.frame.removeFrame(world, x, y, z, metadataOld);
+    }
 	
-	public void removeFrameBlock(World world, int x, int y, int z, Block[] blocks) {
-		for (int i=0; i<blocks.length; i++)
-			if(world.getBlock(x, y, z) == blocks[i]) 
-				world.setBlock(x, y, z, Blocks.air);
-				
-	}
 	
-	public void removeFrameBlock(World world, int x, int y, int z, Block block) {
-		if(world.getBlock(x, y, z) == block) 
-			world.setBlock(x, y, z, Blocks.air);
-				
+
+
+	public void bindFrame(String name) {
+		name = name.substring(5);
+		try {
+			this.frame = FrameManager.INSTANCE.loadFrame(name);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 
 }

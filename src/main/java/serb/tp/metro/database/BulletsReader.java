@@ -17,11 +17,13 @@ public class BulletsReader extends Reader{
 	
 	
 	public static void LoadBullets() {
-		String[] modules;
+		String[] bullets;
 
-		modules = DBParser.readDB("bullets");
+		bullets = DBParser.readDB("bullets");
 		
-		for (String module: modules) {
+		if (bullets==null) return;
+		
+		for (String module: bullets) {
 			addItemBullet(module.substring(module.indexOf("{")+1));
 		}
 			

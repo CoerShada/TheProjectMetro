@@ -11,6 +11,9 @@ public class ModulesReader extends Reader{
 		
 		String[] modules;
 		modules = DBParser.readDB(new String[] {"weapon_modules", "weapon_modules_mags"});
+		
+		if (modules==null) return;
+		
 		for (String module: modules) {
 			
 			if (module.contains(ModuleType.ItemWeaponModule.toString())) {

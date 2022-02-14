@@ -34,29 +34,24 @@ public class RenderTileTunnelTurnLeft extends TileEntitySpecialRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		int meta = tileentity.getBlockMetadata()-2;
+		int meta = tileentity.getBlockMetadata();
 		if(meta==0) {
 			GL11.glTranslated(d0 + 7.2125, d1+4.835, d2 + 14.0);
-			//GL11.glTranslated(d0 + 0.405, d1+4.835, d2 + 4.596);
 			GL11.glRotated(180, 0, 1, 0);
 		}
 
 		else if(meta==1) {
 			GL11.glTranslated(d0 - 13.0, d1+4.835, d2 + 7.215);
-			//GL11.glTranslated(d0 - 3.6, d1+4.835, d2 + 0.4);
 			GL11.glRotated(90, 0, 1, 0);
 		}
 		else if(meta==2) {
 			GL11.glTranslated(d0 - 6.21, d1+4.835, d2 - 13.0);
-			//GL11.glTranslated(d0 + 0.6, d1+4.835, d2 - 3.6);
 			GL11.glRotated(0, 0, 1, 0);
 		}
 		else if(meta==3) {
 			GL11.glTranslated(d0 + 14.01, d1+4.835, d2 - 6.215);
-			//GL11.glTranslated(d0 + 4.605, d1+4.835, d2 + 0.6);
 			GL11.glRotated(270, 0, 1, 0);
 		}
 		

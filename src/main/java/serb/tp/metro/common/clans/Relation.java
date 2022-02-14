@@ -14,14 +14,14 @@ public class Relation {
 		if (!clan.equals(this.clanImprovingRelation)) {
 			RelationType type;
 			switch (relationType) {
-				case War:
-					type=RelationType.Neutral;
+				case WAR:
+					type=RelationType.NEUTRAL;
 					break;
-				case Neutral:
-					type = RelationType.Alliance;
+				case NEUTRAL:
+					type = RelationType.ALLIANCE;
 					break;
 				default:
-					type=RelationType.Neutral;
+					type=RelationType.NEUTRAL;
 					break;
 			}
 			toDeclare(type);
@@ -35,13 +35,18 @@ public class Relation {
 		relationType = type;
 	}
 
-
+	public RelationType getType() {
+		return relationType;
+	}
+	
+	public boolean isAThisClan(Clan clan) {
+		return (clans[0] == clan || clans[1]==clan);
+	}
+	
+	public Clan getImprooveRelations() {
+		return clanImprovingRelation;
+	}
 }
 
 
 
-enum RelationType{
-	War,
-	Neutral,
-	Alliance
-}

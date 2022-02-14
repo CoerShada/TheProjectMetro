@@ -1,7 +1,9 @@
 package serb.tp.metro.common.clans;
 
 public enum ClanStructure {
-	Small,
-	CityState,
-	Standart
+	SMALL,
+	CITY_STATE,
+	STANDART
+	
 }
+

@@ -13,6 +13,7 @@ public class WeaponsReader extends Reader{
 		String[] weapons;
 
 		weapons = DBParser.readDB("weapons");
+		if (weapons==null) return;
 		
 		for (String weapon: weapons) {
 			addItemFirearmMagWeapon(weapon.substring(weapon.indexOf("{")+1));

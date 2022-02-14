@@ -94,47 +94,19 @@ public class BlockInvisible extends Block{
     
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack is) {
-		if (!world.isRemote && Main.debug) {
-			File file = new File("E://adtime", "fileConstructor.txt");
-			if (!file.exists())
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-					return;
-				}
-			
-	        try(FileWriter writer = new FileWriter("E://adtime//fileConstructor.txt", true))
-	        {
-				String stringX = String.valueOf(0+x);
-				if (0+x>0)
-					stringX = "+" + stringX;
-				else if (x==0) 
-					stringX="";
-				
-				String stringY = String.valueOf(y-4);
-				if (0+y>4)
-					stringY = "+" + stringY;
-				else if (y==4) 
-					stringY="";
-				
-				String stringZ = String.valueOf(0+z);
-				if (0+z>0)
-					stringZ = "+" + stringZ;
-				else if (z==0) 
-					stringZ="";
-				
-	            String text = "setFrameBlock(world, x" + stringX + ", y"+stringY+", z" + stringZ + ", LoadBuildersBlocks."+this.getUnlocalizedName().substring(5) +");\n";
-	            writer.write(text);
-
-	            writer.flush();
-	        }
-	        catch(IOException ex){
-	             
-	            System.out.println(ex.getMessage());
-	        } 
-
-		}
+		int l = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		l*=2;
+		world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z)+l, 1);
 		
 	}
+	
+	@Override
+    public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta)
+    {	
+		if (side != 0 && (side == 1 || (double)hitY <= 0.5D)){
+			return 0;
+		}
+        return 1;
+        
+    }
 }

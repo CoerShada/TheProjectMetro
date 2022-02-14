@@ -50,10 +50,11 @@ public class RenderTileTunnelLine1 extends TileEntitySpecialRenderer {
 			GL11.glTranslated(d0 + 0.5, d1+4.5, d2 - 3.81);
 			GL11.glRotated(90, 0, 1, 0);
 		}
-		else if(meta==3) {
+		else {
 			GL11.glTranslated(d0 + 4.82, d1+4.5, d2 + 0.5);
 			GL11.glRotated(0, 0, 1, 0);
 		}
+		System.out.println(meta);
 		GL11.glScaled(4.85, 4.85, 4.85);
 		GL11.glCallList(list);
 		GL11.glEnable(GL11.GL_CULL_FACE);

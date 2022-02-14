@@ -32,12 +32,9 @@ public class RenderTileTunnelTurnRight extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		//GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.9f);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		int meta = tileentity.getBlockMetadata()-2;
-		
+		int meta = tileentity.getBlockMetadata();
 		if(meta==0) {
 			GL11.glTranslated(d0 - 6.21, d1+4.831, d2 + 14.0);
 			GL11.glRotated(180, 0, 1, 0);
@@ -51,7 +48,7 @@ public class RenderTileTunnelTurnRight extends TileEntitySpecialRenderer {
 			GL11.glTranslated(d0 + 7.215, d1+4.831, d2 - 13.0);
 			GL11.glRotated(0, 0, 1, 0);
 		}
-		else if(meta==3) {
+		else  {
 			GL11.glTranslated(d0 + 14.01, d1+4.831, d2 + 7.215);
 			GL11.glRotated(270, 0, 1, 0);
 		}

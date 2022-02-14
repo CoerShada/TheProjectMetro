@@ -64,7 +64,7 @@ public class RenderEquipArmor {
 		GL11.glRotatef(180.0f, 1F, 0F, 0F);
 		GL11.glRotatef(-90.0f, 0F, 1.05F, 0F);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glCallList(ClientProxy.getRenderAll(model));
+		//GL11.glCallList(ClientProxy.getRenderAll(model));
 		
 		
 		GL11.glShadeModel(GL11.GL_FLAT);
@@ -84,7 +84,7 @@ public class RenderEquipArmor {
 		GL11.glRotatef(-90.0f, 0F, 1F, 0F);
 		GL11.glScalef(0.255F, 0.255F, 0.255F);
 		GL11.glTranslatef(0F, 0.95F, 0.76F);
-		GL11.glCallList(ClientProxy.getRenderAll("armor/masks/" + equip.getUnlocalizedName().substring(5)));
+		//GL11.glCallList(ClientProxy.getRenderAll("armor/masks/" + equip.getUnlocalizedName().substring(5)));
 		GL11.glDisable(GL11.GL_NORMALIZE);
 		GL11.glPopMatrix();
 		if(item.hasTagCompound() && item.getTagCompound().getLong("filter")!=0) 
@@ -115,7 +115,7 @@ public class RenderEquipArmor {
 		GL11.glRotatef(90.0f, 0F, 1F, 0F);
 		GL11.glScalef(0.5F, 0.5F, 0.5F);
 		GL11.glTranslatef(0F, -5.35F, 0F);
-		GL11.glCallList(ClientProxy.getRenderAll(model));
+		//GL11.glCallList(ClientProxy.getRenderAll(model));
 		GL11.glPopMatrix();
 		/*if (item.hasTagCompound() && item.getTagCompound().getInteger("defanceArms")==2) 
 		{
@@ -206,7 +206,7 @@ public class RenderEquipArmor {
 		GL11.glRotatef(-90.0f, 0F, 1F, 0F);
 		GL11.glScalef(0.25F, 0.25F, 0.25F);
 		GL11.glTranslatef(-0.1F, -3.6F, 0F);
-		GL11.glCallList(ClientProxy.getRenderAll(model));
+		//GL11.glCallList(ClientProxy.getRenderAll(model));
 		GL11.glDisable(GL11.GL_NORMALIZE);
 		GL11.glPopMatrix();
 	}

@@ -17,23 +17,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import serb.tp.metro.Main;
 import serb.tp.metro.blocks.tiles.TileEntityPlayersBlock;
 import serb.tp.metro.creativetabs.LoadTabs;
 
-public class BlockInvisibleSlabHorizontal extends BlockSlab{
+public class BlockInvisibleSlabHorizontal extends BlockInvisible{
 
 
 	public BlockInvisibleSlabHorizontal(String name) {
-		super(false, Material.clay);
-		this.setBlockTextureName(Main.modid+":blocksInvisible/blockInvisible");
-		this.setCreativeTab(LoadTabs.blocksInvisible);
-		this.setBlockName(name);
-		this.setBlockUnbreakable();
-		this.setResistance(6000000.0F);
-		this.setLightOpacity(0);
-		GameRegistry.registerBlock(this, name);
+		super(name);
+
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -45,6 +40,19 @@ public class BlockInvisibleSlabHorizontal extends BlockSlab{
         return -1;
     }
 
+	@Override
+	public void setBlockBoundsForItemRender() {
+	    setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+	}
+    
+	@Override
+    public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z)
+    {
+    	int meta = block.getBlockMetadata(x, y, z);
+        if 	(meta%2==0)	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+        else 			setBlockBounds(0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 1.0F);  
+    }
+    
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
@@ -77,64 +85,7 @@ public class BlockInvisibleSlabHorizontal extends BlockSlab{
 	}
 
 
-	@Override
-	public String func_150002_b(int p_150002_1_) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack is) {
-		
-		if (!world.isRemote && Main.debug) {
-			File file = new File("E://adtime", "fileConstructor.txt");
-			if (!file.exists())
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-					return;
-				}
-			
-	        try(FileWriter writer = new FileWriter("E://adtime//fileConstructor.txt", true))
-	        {
-				String stringX = String.valueOf(0+x);
-				if (0+x>0)
-					stringX = "+" + stringX;
-				else if (x==0) 
-					stringX="";
-				
-				String stringY = String.valueOf(y-4);
-				if (0+y>4)
-					stringY = "+" + stringY;
-				else if (y==4) 
-					stringY="";
-				
-				String stringZ = String.valueOf(0+z);
-				if (0+z>0)
-					stringZ = "+" + stringZ;
-				else if (z==0) 
-					stringZ="";
-				
-	            String text = "setFrameBlock(world, x" + stringX + ", y"+stringY+", z" + stringZ + ", LoadBuildersBlocks."+this.getUnlocalizedName().substring(5) +", " + world.getBlockMetadata(x, y, z) +");\n";
-	            writer.write(text);
 
-	            writer.flush();
-	        }
-	        catch(IOException ex){
-	             
-	            System.out.println(ex.getMessage());
-	        } 
-		}
-		
-	}
-	
-	@Override
-    public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta)
-    {
-        return this.field_150004_a ? meta : (side != 0 && (side == 1 || (double)hitY <= 0.5D) ? meta : meta | 8);
-        
-    }
     
 
 }

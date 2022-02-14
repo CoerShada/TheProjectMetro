@@ -36,10 +36,10 @@ public class BlockInvisibleQuaterVertical extends BlockInvisible{
     {
     	int meta = block.getBlockMetadata(x, y, z);
     	
-        if 	(meta == 0) 	setBlockBounds(0.5F, 0.0F, 0.5F, 1.0F, 1.0F, 1.0F);
-        else if (meta == 1) setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 1.0F, 0.5F);
-        else if (meta == 2) setBlockBounds(0.0F, 0.0F, 0.5F, 0.5F, 1.0F, 1F);
-        else 				setBlockBounds(0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 0.5F);
+        if 		(meta == 0 || meta==1) 	setBlockBounds(0.5F, 0.0F, 0.5F, 1.0F, 1.0F, 1.0F);
+        else if (meta == 2 || meta==3) 	setBlockBounds(0.0F, 0.0F, 0.5F, 0.5F, 1.0F, 1.0F);
+        else if (meta == 4 || meta==5)  setBlockBounds(0.0F, 0.0F, 0.0F, 0.5F, 1.0F, 0.5F);
+        else 							setBlockBounds(0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 0.5F);
            
     	
 
@@ -71,46 +71,6 @@ public class BlockInvisibleQuaterVertical extends BlockInvisible{
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack is) {
 
-		if (!world.isRemote && Main.debug) {
-			File file = new File("E://adtime", "fileConstructor.txt");
-			if (!file.exists())
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-					return;
-				}
-			
-	        try(FileWriter writer = new FileWriter("E://adtime//fileConstructor.txt", true))
-	        {
-				String stringX = String.valueOf(0+x);
-				if (0+x>0)
-					stringX = "+" + stringX;
-				else if (x==0) 
-					stringX="";
-				
-				String stringY = String.valueOf(y-4);
-				if (0+y>4)
-					stringY = "+" + stringY;
-				else if (y==4) 
-					stringY="";
-				
-				String stringZ = String.valueOf(0+z);
-				if (0+z>0)
-					stringZ = "+" + stringZ;
-				else if (z==0) 
-					stringZ="";
-				
-	            String text = "setFrameBlock(world, x" + stringX + ", y"+stringY+", z" + stringZ + ", LoadBuildersBlocks."+this.getUnlocalizedName().substring(5) +", " + world.getBlockMetadata(x, y, z) +");\n";
-	            writer.write(text);
-
-	            writer.flush();
-	        }
-	        catch(IOException ex){
-	             
-	            System.out.println(ex.getMessage());
-	        } 
-		}
 	}
 	
 	@Override
@@ -125,15 +85,15 @@ public class BlockInvisibleQuaterVertical extends BlockInvisible{
 			hitZ = 1;
 		if (side==4)
 			hitX = 1;
-		
-		if (hitX<=0.5 && hitZ<=0.5) {
-			return 1;
+		if (hitX>0.5 && hitZ>0.5) {
+			return 0;
+		}
+		else if (hitX<=0.5 && hitZ<=0.5) {
+			return 4;
+			
 		}
 		else if (hitX>0.5 && hitZ<=0.5) {
-			return 3;
-		}
-		else if (hitX>0.5 && hitZ>0.5) {
-			return 0;
+			return 6;
 		}
 		else {
 			return 2;

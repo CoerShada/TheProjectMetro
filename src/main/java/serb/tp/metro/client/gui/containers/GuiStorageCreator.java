@@ -22,6 +22,7 @@ import serb.tp.metro.client.gui.elements.GuiButtonChooseRecipe;
 import serb.tp.metro.client.gui.elements.GuiScrollingList;
 import serb.tp.metro.client.resources.Resources;
 import serb.tp.metro.containers.ContainerCreator;
+import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.containers.InventoryItemStorage;
 import serb.tp.metro.items.ItemBackpack;
 import serb.tp.metro.items.ItemChestrig;
@@ -45,7 +46,7 @@ public class GuiStorageCreator extends GuiContainer {
 	private final InventoryPlayer inventoryDefault;
 	private int choosed;
 	private GuiButton buttonCraft;
-	private GuiScrollingList contentField;
+	//private GuiScrollingList contentField;
 	private int scrollOffset;
 
 	public static RenderItem itemRenderer = new RenderItem();
@@ -84,10 +85,6 @@ public class GuiStorageCreator extends GuiContainer {
 			
 			GuiButtonChooseRecipe button = new GuiButtonChooseRecipe(this, 399+i, guiLeft+1, guiTop-14+22*i, 136, 20, block.recipes[i], thisChoose);
 			this.buttonList.add(button);
-			/*if (i>=3) {
-					button.height = button.yPosition-guiTop+9;
-			}*/
-			//this.buttonList.add(button);
 			
 	
 		}
@@ -195,9 +192,9 @@ public class GuiStorageCreator extends GuiContainer {
 			}
 			drawTexturedModalRect(guiLeft + 65 + 18 * i, guiTop + 123, noEquip, 18 * i + ySize, 18, 18);
 		}
-		if (inventoryDefault.getStackInSlot(19)!=null && inventoryDefault.getStackInSlot(19).getItem() instanceof ItemChestrig) 
+		if (inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex())!=null && inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem() instanceof ItemChestrig) 
 		{
-			ItemChestrig item = (ItemChestrig) inventoryDefault.getStackInSlot(19).getItem();
+			ItemChestrig item = (ItemChestrig) inventoryDefault.getStackInSlot(CustomSlots.CHESTRIG.getIndex()).getItem();
 			mc.getTextureManager().bindTexture(Resources.chestrig_Texture);
 			drawTexturedModalRect(guiLeft+xSize-18, guiTop+60, 0, 0, xSize, ySize);
 			InventoryItemStorage inv = cont.inv;
@@ -217,8 +214,8 @@ public class GuiStorageCreator extends GuiContainer {
 				}
 			}
 		}
-		if (inventoryDefault.getStackInSlot(18)!=null && inventoryDefault.getStackInSlot(18).getItem() instanceof ItemBackpack) {
-			ItemBackpack itemBackpack = (ItemBackpack) inventoryDefault.getStackInSlot(18).getItem();
+		if (inventoryDefault.getStackInSlot(CustomSlots.BACKPACK.getIndex())!=null && inventoryDefault.getStackInSlot(CustomSlots.BACKPACK.getIndex()).getItem() instanceof ItemBackpack) {
+			ItemBackpack itemBackpack = (ItemBackpack) inventoryDefault.getStackInSlot(CustomSlots.BACKPACK.getIndex()).getItem();
 			InventoryItemStorage inv = cont.inventoryBackpack;
 			mc.getTextureManager().bindTexture(Resources.backpack_texture);
 			drawTexturedModalRect(guiLeft, guiTop+143, 0, 0, xSize, ySize);

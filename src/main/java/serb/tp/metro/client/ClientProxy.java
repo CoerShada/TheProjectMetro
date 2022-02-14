@@ -14,6 +14,7 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import serb.tp.metro.KeybindingRegistry;
 import serb.tp.metro.Main;
@@ -202,15 +203,59 @@ public class ClientProxy extends CommonProxy {
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
 		//OBJModel modelOBJ = OBJLoader.loadOBJModel("models/" + model + ".obj", loader);
 		//render.render(modelOBJ);
-		OBJLoader loader = new OBJLoader();
-		loader.render(loader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")));
+		//OBJLoader loader = new OBJLoader();
+		//loader.render(loader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")));
 		//loader.createDisplayList(loader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")));
-		//AdvancedModelLoaderModify.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")).renderAll();
+		AdvancedModelLoader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")).renderAll();
 		GL11.glEndList();
 		hash.put(model, displayList);
 		return displayList;
 	}
 	
+	public static int getRenderAll(ResourceLocation model) {
+		if (hash.containsKey(model.toString())) return hash.get(model.toString());
+		int displayList = GLAllocation.generateDisplayLists(1);
+		GL11.glNewList(displayList, GL11.GL_COMPILE);
+		//OBJModel modelOBJ = OBJLoader.loadOBJModel("models/" + model + ".obj", loader);
+		//render.render(modelOBJ);
+		//OBJLoader loader = new OBJLoader();
+		//loader.render(loader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")));
+		//loader.createDisplayList(loader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")));
+		AdvancedModelLoader.loadModel(model).renderAll();
+		GL11.glEndList();
+		hash.put(model.toString(), displayList);
+		return displayList;
+	}
+	
+	public static int getRenderAllTest(String model) {
+		if (hash.containsKey(model)) return hash.get(model);
+		int displayList = GLAllocation.generateDisplayLists(1);
+		GL11.glNewList(displayList, GL11.GL_COMPILE);
+		//OBJModel modelOBJ = OBJLoader.loadOBJModel("models/" + model + ".obj", loader);
+		//render.render(modelOBJ);
+		//OBJModel modelOBJ = new OBJModel(new PApplet(), new ResourceLocation(Main.modid, "models/" + model + ".obj"));
+		//modelOBJ.draw();
+		//loader.createDisplayList(loader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")));
+		//AdvancedModelLoader.loadModel(new ResourceLocation(Main.modid, "models/" + model + ".obj")).renderAll();
+		GL11.glEndList();
+		hash.put(model, displayList);
+		return displayList;
+	}
+	
+	public void initRender() {
+		/*RenderEngine engine = RenderEngine.init();
+
+		Scene scene = SceneLoader.loadScene(GeneralSettings.RES_FOLDER);
+
+		while (!Display.isCloseRequested()) {
+			scene.getCamera().move();
+			scene.getAnimatedModel().update();
+			engine.renderScene(scene);
+			engine.update();
+		}
+
+		engine.close();*/
+	}
 	
 
 }

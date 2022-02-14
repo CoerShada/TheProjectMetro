@@ -7,7 +7,7 @@ import serb.tp.metro.Main;
 import serb.tp.metro.blocks.tiles.storages.TileEntityStorage;
 import serb.tp.metro.blocks.tiles.storages.creators.TileEntityCreator;
 import serb.tp.metro.blocks.tiles.storages.spawners.TileEntityStorageSpawner;
-import serb.tp.metro.client.gui.clan.GuiClanCreate;
+import serb.tp.metro.client.gui.clan.GuiClanMainWindow;
 import serb.tp.metro.client.gui.containers.GuiBackpackStorage;
 import serb.tp.metro.client.gui.containers.GuiCustomPlayerInventory;
 import serb.tp.metro.client.gui.containers.GuiCustomization;
@@ -51,7 +51,7 @@ public class GuiHandler implements IGuiHandler {
 		
 		if (guiId == CommonProxy.GUI_STORAGE) return new GuiStorage(player, (TileEntityStorage) world.getTileEntity(x, y, z));
 		
-		if (guiId == CommonProxy.GUI_CLAN) return new GuiClanCreate(player);
+		if (guiId == CommonProxy.GUI_CLAN) return new GuiClanMainWindow(player);
 		
 		if (guiId == CommonProxy.GUI_STORAGE_SPAWNER) return new GuiStorageSpawner(player, (TileEntityStorageSpawner) world.getTileEntity(x, y, z));
 		

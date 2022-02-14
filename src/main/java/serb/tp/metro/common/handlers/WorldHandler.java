@@ -12,7 +12,9 @@ public class WorldHandler {
 	@SubscribeEvent
     public void worldLoad(WorldEvent.Load event)
     {
+		System.out.println("wh is loaded");
 		ClanHandler.get(event.world);
+		
     }
 
     @SubscribeEvent
@@ -20,4 +22,6 @@ public class WorldHandler {
     {
     	ClanHandler.get(event.world).markDirty();
     }
+    
+    
 }

@@ -1,32 +1,43 @@
 package serb.tp.metro.common.clans;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.DimensionManager;
+import serb.tp.metro.DebugMessage;
 
-public class Clan {
+public class Clan implements INBTSyncronized{
 	private int id = 0;
 	private String name = "";
 
 	public String description  = "";
 	private boolean isStaticClan = true;
-	private ClanType clanType = ClanType.Engineers;
-	private ClanStructure clanStructure = ClanStructure.Small;
+	private ClanType clanType = ClanType.ENGINEERS;
+	private ClanStructure clanStructure = ClanStructure.SMALL;
 	
 	private ArrayList<Rank> ranks = new ArrayList<Rank>();
 	private int lastRankIndex = 0;
-	private ArrayList<Member> members = new ArrayList<Member>();
-	//private ArrayList<Land> lands = new ArrayList<Land>();
+	
 	private ArrayList<Relation> relations = new ArrayList<Relation>();
+	private ArrayList<UUID> blackList = new ArrayList<UUID>();
+	private ArrayList<UUID> applications = new ArrayList<UUID>();
 	
 	private int defaultRankIndex = 0;
 	
-	public Clan() {
+	public void setRanksOnClanCreated() {
 		Map<Permission, Boolean> permissionsMap = new HashMap<Permission, Boolean>();
 		Permission[] permissions = Permission.values();
 		for (Permission permission: permissions) {
@@ -41,9 +52,23 @@ public class Clan {
 		addRank("Солдат", new HashMap<Permission, Boolean>(permissionsMap));
 	}
 	
+	public boolean isApplicationSubmitted(EntityPlayer player) {
+		return applications.contains(player.getUniqueID());
+	}
+	
+	public Relation getRelation(Clan clan) {
+		if (clan==this) return null;
+		for (Relation relation: relations) {
+			if (relation.isAThisClan(clan)) {
+				return relation;
+			}
+		}
+		return null;
+	}
+	
 	public void addRank(String name, Map<Permission, Boolean> permissions) {
-		this.lastRankIndex++;
 		ranks.add(new Rank(this.lastRankIndex, name, permissions));
+		this.lastRankIndex++;
 	}
 	
 	public void setId(int id) {
@@ -54,20 +79,50 @@ public class Clan {
 		return id;
 	}
 	
-	public boolean isClanPlayer(String playerName) {
-		for (Member member: members) {
+	
+	public String getLeaderName() {
 			
-			if (member.getPlayer().equals(playerName)) return true;
+		return ranks.get(0).getMembers().get(0).getPlayer();
+	}
+	
+	public boolean isClanPlayer(String playerName) {
+		for (Rank rank: ranks) {
+			if (rank.isARankPlayer(playerName)) return true;
 		}
 		return false;
 	}
 	
-	public boolean setName(String name) {
-		if (name.length()>=4) {
-			this.name = name;
-			return true;
+	public boolean applyToClan(EntityPlayer player) {
+		if (blackList.contains(player.getUniqueID()) || applications.contains(player.getUniqueID())) return false;
+		applications.add(player.getUniqueID());
+		return true;
+	}
+	
+	public boolean removeApplyToClan(EntityPlayer player) {
+		return applications.remove(player.getUniqueID());
+	}
+	
+	/*
+	 * Thank's tox1cozZ and timaxa007
+	 */
+	public boolean acceptMember(UUID idPlayer) throws IOException {
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		File file = new File(DimensionManager.getCurrentSaveRootDirectory(), "playerdata/"+ idPlayer + ".dat");
+		if (file != null && file.exists()) {
+			FileInputStream fileinputstream = new FileInputStream(file);
+			NBTTagCompound nbttagcompound = CompressedStreamTools.readCompressed(fileinputstream);
+			
+			
 		}
-		return false;
+		return true;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void setIsStaticClan(boolean isStaticClan) {
@@ -82,17 +137,13 @@ public class Clan {
 		this.clanStructure = structure;
 	}
 	
-	/*public void addLand(Land land) {
-		if(land!=null) {
-			this.lands.add(land);
-		}
+	public ClanType getClanType() {
+		return clanType;
 	}
 	
-	public void removeLand(Land land) {
-		if(land!=null) {
-			this.lands.remove(land);
-		}
-	}*/
+	public ClanStructure getClanStructure() {
+		return clanStructure;
+	}
 	
 	public void addRank(Rank rank) {
 		this.ranks.add(rank);
@@ -126,19 +177,15 @@ public class Clan {
 		this.relations.remove(relation);
 	}
 
-	public void addMember(EntityPlayer player) {
-		Member newMember = new Member(player.getDisplayName(), ranks.get(defaultRankIndex), new Date().getTime());
-		this.members.add(newMember);
-		System.out.println(this.members.size());
+	public void addMember(EntityPlayer invitedPlayer) {
+		Member newMember = new Member(invitedPlayer.getDisplayName(), new Date().getTime());
+		this.ranks.get(this.defaultRankIndex).addMember(newMember);	
 	}
 	
 	
 	public void removeMember(EntityPlayer player) {
-		for (Member member: members) {
-			if (member.getPlayer().equals(player.getDisplayName())) {
-				members.remove(member);
-				return;
-			}
+		for (Rank rank: ranks) {
+			if(rank.removeMember(player)) break;
 		}
 	}
 
@@ -147,46 +194,7 @@ public class Clan {
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("id", this.id);
-		nbt.setString("name", this.name);
-		nbt.setString("description", this.description);
-		nbt.setBoolean("isStaticClan", this.isStaticClan);
-		nbt.setString("clanType", clanType.toString());
-		nbt.setString("clanStructure", clanStructure.toString());
-		nbt.setInteger("quantityRanks", ranks.size());
-		int counter = 0;
-		for (Rank rank: ranks) {
-			
-			NBTTagCompound tagRank = new NBTTagCompound();
-			tagRank.setInteger("index", rank.getIndex());
-			tagRank.setString("name", rank.getName());
-			
-			Map<Permission, Boolean> perms = rank.getPermissions();
-			tagRank.setInteger("permsSize", perms.size());
-			
-			NBTTagCompound tagPerms = new NBTTagCompound();
-			for (Entry<Permission, Boolean> perm: perms.entrySet()) {
-				tagPerms.setBoolean(perm.getKey().toString(), perm.getValue());
-			}
-			tagRank.setTag("perms:", tagPerms);
-			
-			nbt.setTag("rank:"+counter, tagRank);
-			counter++;
-		}
 		
-		counter = 0;
-		nbt.setInteger("quantityMembers", members.size());
-		for (Member member: members) {
-			System.out.println(member.getRank().getIndex());
-			NBTTagCompound tagMember = new NBTTagCompound();
-			tagMember.setString("player", member.getPlayer());
-			tagMember.setInteger("rankIndex", member.getRank().getIndex());
-			tagMember.setLong("entryTime", member.getEntryTime());
-			nbt.setTag("member:"+counter, tagMember);
-			counter++;
-		}
-		
-		nbt.setInteger("defaultRank", this.defaultRankIndex);
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -196,36 +204,41 @@ public class Clan {
 		this.isStaticClan = nbt.getBoolean("isStaticClan");
 		this.clanType = ClanType.valueOf(nbt.getString("clanType"));
 		this.clanStructure = ClanStructure.valueOf(nbt.getString("clanStructure"));
-		int size = nbt.getInteger("permsSize");
+		int size = nbt.getInteger("quantityRanks");
+		
 		ArrayList<Rank> tempRanks = new ArrayList<Rank>();
 		//Выгрузка из nbt рангов данного клана
 		for (int i = 0; i<size; i++) {	
-			NBTTagCompound tagRank = nbt.getCompoundTag("rank:"+i);
-			int index = tagRank.getInteger("index");
-			System.out.println(index);
-			String name = tagRank.getString("name");
-			
-			//Выгрузка прав этого ранга
-			Map<Permission, Boolean> permissions = new HashMap<Permission, Boolean>();
-			for(Permission key: Permission.values()) {	
-				boolean value = tagRank.getBoolean("perms:" + key.toString());
-				permissions.put(key, value);
-			}
-			tempRanks.add(new Rank(index, name, permissions));
+			Rank rank = new Rank();
+			rank.readFromNBT(nbt.getCompoundTag("rank:"+i));
+			tempRanks.add(rank);
 		}
 		this.ranks = tempRanks;
-		size = nbt.getInteger("quantityMembers");
-		ArrayList<Member> tempMembers = new ArrayList<Member>();
-		for (int i = 0; i<size; i++) {
-			
-			NBTTagCompound tagMember = nbt.getCompoundTag("member:"+i);
-			String playerName = tagMember.getString("player");
-			Rank rank = this.getRankFromIndex(tagMember.getInteger("rankIndex"));
-			Long entryTime = tagMember.getLong("entryTime");
-			tempMembers.add(new Member(playerName, rank, entryTime));
-		}
-		this.members = tempMembers;
+		
 		this.defaultRankIndex = nbt.getInteger("defaultRank");
 		
+	}
+
+	@Override
+	public NBTTagCompound getNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("id", this.id);
+		nbt.setString("name", this.name);
+		nbt.setString("description", this.description);
+		nbt.setBoolean("isStaticClan", this.isStaticClan);
+		nbt.setString("clanType", clanType.toString());
+		nbt.setString("clanStructure", clanStructure.toString());
+		nbt.setInteger("quantityRanks", ranks.size());
+		int counter = 0;
+		for (Rank rank: ranks) {
+			NBTTagCompound tagRank = rank.getNBT();
+			nbt.setTag("rank:"+counter, tagRank);
+			counter++;
+		}
+		
+
+		
+		nbt.setInteger("defaultRank", this.defaultRankIndex);
+		return nbt;
 	}
 }

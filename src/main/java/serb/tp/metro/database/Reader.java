@@ -122,7 +122,8 @@ public class Reader {
 				MinecraftForgeClient.registerItemRenderer(item, new RenderItem3D(item));
 			}
 			catch(Exception e){
-				System.out.println("[Reader]Ошибка при регистрации рендера предмета" + item.getUnlocalizedName());
+				System.out.println("[Reader]Ошибка при регистрации рендера предмета " + item.getUnlocalizedName());
+				e.printStackTrace();
 			}
 		}
 	}

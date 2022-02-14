@@ -13,11 +13,12 @@ public class CustomizationSlotsReader extends Reader{
 	
 	public static void LoadCustomizationSlots() {
 
-		String[] modules;
+		String[] slots;
 
-		modules = DBParser.readDB("custom_slots");
+		slots = DBParser.readDB("custom_slots");
+		if (slots==null) return;
 		
-		for (String module: modules) {
+		for (String module: slots) {
 			addSlot(module.substring(module.indexOf("{")+1));
 			
 		}

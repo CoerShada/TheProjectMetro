@@ -8,6 +8,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.Tessellator;
+
 import static org.lwjgl.opengl.GL11.GL_FLAT;
 import static org.lwjgl.opengl.GL11.GL_SMOOTH;
 
@@ -106,10 +110,13 @@ public class Obj extends Object {
             super();
 
             this.vertexIndices = vertexIndices;
-            this.normalIndices = normalIndices;
             this.textureCoordinateIndices = textureCoordinateIndices;
+            this.normalIndices = normalIndices;
+            
+
         }
 
+        
         @Override
         public String toString() {
             return String.format("Face[vertexIndices%s normalIndices%s textureCoordinateIndices%s]",

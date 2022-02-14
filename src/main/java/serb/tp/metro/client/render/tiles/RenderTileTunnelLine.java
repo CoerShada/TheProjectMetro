@@ -11,7 +11,7 @@ import net.minecraftforge.client.model.IModelCustom;
 import serb.tp.metro.Main;
 import serb.tp.metro.client.ClientProxy;
 
-public class RenderTileTunnelLine1 extends TileEntitySpecialRenderer {
+public class RenderTileTunnelLine extends TileEntitySpecialRenderer {
 
 	private int list;
 	private float xOffset = 0;
@@ -19,7 +19,7 @@ public class RenderTileTunnelLine1 extends TileEntitySpecialRenderer {
 	private float zOffset = 0;
 	ResourceLocation texture =  new ResourceLocation(Main.modid, "textures/models/items/armor/backpack_gekkon.png");
 	
-    public RenderTileTunnelLine1(ResourceLocation res)
+    public RenderTileTunnelLine(ResourceLocation res)
     {
         IModelCustom model;
         model = AdvancedModelLoader.loadModel(res);
@@ -31,7 +31,7 @@ public class RenderTileTunnelLine1 extends TileEntitySpecialRenderer {
         GL11.glEndList();
     }
     
-    public RenderTileTunnelLine1(ResourceLocation res, float xOffset, float yOffset, float zOffset) {
+    public RenderTileTunnelLine(ResourceLocation res, float xOffset, float yOffset, float zOffset) {
     	this(res);
     	this.xOffset = xOffset;
     	this.yOffset = yOffset;
@@ -49,7 +49,7 @@ public class RenderTileTunnelLine1 extends TileEntitySpecialRenderer {
 		//GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		GL11.glTranslated(this.xOffset, this.yOffset, this.zOffset);
-		int meta = tileentity.getBlockMetadata()-2;
+		int meta = tileentity.getBlockMetadata();
 		if(meta==0) {
 			GL11.glTranslated(d0 + 0.405, d1+4.835, d2 + 4.596);
 			GL11.glRotated(180, 0, 1, 0);

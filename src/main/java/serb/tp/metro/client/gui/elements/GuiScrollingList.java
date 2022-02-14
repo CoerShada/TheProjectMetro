@@ -18,9 +18,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
 @SideOnly(Side.CLIENT)
-public class GuiScrollingList<T> extends Gui{
+public class GuiScrollingList<T extends GuiButton> extends Gui{
 
-    public static final float DEFAULT_SCROLL_SPEED = 10.0F;
+    public static final float DEFAULT_SCROLL_SPEED = 50.0F;
 
     protected final GuiScreen parent;
     protected final Minecraft mc;
@@ -31,7 +31,7 @@ public class GuiScrollingList<T> extends Gui{
     protected int height;
     protected int entryHeight;
 
-    protected int scrollOffset;
+    protected float scrollOffset;
     protected float scrollSpeed;
 
     protected int hoverIndex;
@@ -45,6 +45,9 @@ public class GuiScrollingList<T> extends Gui{
 
     private boolean dragging;
     private int dragged, mouseYOffset;
+    private int globalOffset = 0;
+    
+    private int maxScrollOffset;
   
     protected List<T> elementData;
 
@@ -65,7 +68,7 @@ public class GuiScrollingList<T> extends Gui{
         selected = -1;
         hoverColor = 839518730;
         selectedColor = -1778384896;
-        sliderColor = new Color(0, 0, 0, 125).getRGB();
+        sliderColor = new Color(125, 125, 125, 125).getRGB();
         sliderBackgroundColor = new Color(14, 18, 30).getRGB();
         textColor = selectedTextColor = hoverTextColor = -1;
         sliderOffset = 1;
@@ -76,6 +79,7 @@ public class GuiScrollingList<T> extends Gui{
         canSelect = true;
         drawSliderBackground = true;
         elementData = Lists.newArrayList();
+        updateMaxScrollOffset();
     }
 
     public void onEntryClicked(T entry, int index, int mouseX, int mouseY, int button){}
@@ -84,6 +88,14 @@ public class GuiScrollingList<T> extends Gui{
         drawCenteredString(mc.fontRenderer, entry.toString(), x + width / 2, y + entryHeight / 2 - mc.fontRenderer.FONT_HEIGHT / 2, isSelected(index) ? selectedTextColor : hovered ? hoverTextColor : textColor);
     }
 
+    private void updateMaxScrollOffset() {
+    	maxScrollOffset = this.y + getSizeVisibleList()*this.entryHeight;
+
+    }
+    
+    private int getSizeVisibleList() {
+    	return this.height/this.entryHeight;
+    }
     public void drawEntryForeground(T entry, int index, int x, int y, boolean hovered){}
 
     public int getSize(){
@@ -103,12 +115,14 @@ public class GuiScrollingList<T> extends Gui{
     }
 
     public void mouseClicked(int mouseX, int mouseY, int button){
+    	
         if(hoverIndex != -1){
             if(canSelect){
                 selected = hoverIndex;
             }
             T entry = getElement(hoverIndex);
             if(entry != null){
+            	
                 onEntryClicked(entry, hoverIndex, mouseX, mouseY, button); // TODO:
             }
         }else{
@@ -131,7 +145,7 @@ public class GuiScrollingList<T> extends Gui{
                 length = height - 8;
             }
   
-            int end = scrollOffset * (height - length) / start + y;
+            int end = (int) (scrollOffset * (height - length) / start + y);
   
             if(end < y){
                 end = y;
@@ -169,43 +183,90 @@ public class GuiScrollingList<T> extends Gui{
             if(delta != 0){
                 if(delta > 0){
                     delta = -1;
-                }else if(delta < 0){
+                }
+                else if(delta < 0){
                     delta = 1;
                 }
-                int maxScrollOffset = Math.max(0, getSize() * entryHeight - height);
-                scrollOffset = (int)Math.max(Math.min(scrollOffset + (delta * scrollSpeed), maxScrollOffset), 0);
+                scrollOffset = (int) (delta * scrollSpeed);
+                globalOffset += (int) (delta * scrollSpeed);
+                if (globalOffset<0) globalOffset = 0;
+                else if (globalOffset>=maxScrollOffset) globalOffset = maxScrollOffset;
             }
+            else {
+            	scrollOffset = 0;
+        		
+            }
+            
+        }
+        else {
+        	scrollOffset = 0;
+        }
+        for(int l = 0; l < getSize(); l++){
+
+            GuiButton entry = getElement(l);
+            
+            if(entry != null){
+                
+                entry.yPosition -=scrollOffset;
+               
+            }
+
         }
     }
 
     public void updateScreen(){
         if(isMouseOver()){
-            hoverIndex = (mouseY - y + scrollOffset) / entryHeight;
+            hoverIndex = (int) ((mouseY - y + scrollOffset) / entryHeight);
             if(hoverIndex >= getSize() || hoverIndex < 0){
                 hoverIndex = -1;
             }
-        }else{
-            hoverIndex = -1;
+            if (elementData.size()>0) {
+            	
+	            GuiButton button = elementData.get(elementData.size()-1);
+	            if (button.yPosition+button.height<maxScrollOffset) {
+	            	
+	            	scrollOffset = 0;
+	            	int offset = button.yPosition +button.height - maxScrollOffset;
+	            	for (GuiButton lButton: elementData) {
+	            		lButton.yPosition-=offset;
+	            		
+	            	}
+	            }
+	            button = elementData.get(0);
+	            if (button.yPosition>this.y) {
+	            	scrollOffset = 0;
+	            	int offset = button.yPosition - this.y;
+	            	for (GuiButton lButton: elementData) {
+	            		lButton.yPosition-=offset;
+	            	}
+	            }
+
+
+            }
+            
         }
+        
+        hoverIndex = -1;
     }
 
     public void drawScreen(int mX, int mY, float ticks){
         mouseX = mX;
         mouseY = mY;
-        
+      //  System.out.println(this.);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         glScissor(x, y, width, height);
+		this.drawRect(this.x, this.y, this.x+this.width, this.y+this.height, 0xFFFFFF);
 
-        int currentY = y - scrollOffset;
+        int currentY = (int) (y - scrollOffset);
         for(int l = 0; l < getSize(); l++){
-            if(currentY >= y - entryHeight && currentY <= y + height){
-                boolean isHover = hoverIndex == l;
-                GuiButton entry = (GuiButton) getElement(l);
-                if(entry != null){
-                    
-                    entry.drawButton(mc, mouseX, mouseY);
-                    entry.yPosition = entry.yPosition-scrollOffset;
-                }
+
+            GuiButton entry = getElement(l);
+            
+            if(entry != null){
+                
+                entry.drawButton(mc, mouseX, mouseY);
+                //entry.yPosition -=scrollOffset;
+               
             }
             currentY += entryHeight;
         }
@@ -215,21 +276,24 @@ public class GuiScrollingList<T> extends Gui{
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
+        float coef = ((float)height/(this.maxScrollOffset + (this.entryHeight*this.getSizeVisibleList())));
+        
+        int start = (int)(coef * this.globalOffset) + y;
+        //System.out.println();
+        if(start >= 0){
+        	
+            int length = getSize()>0? height * this.getSizeVisibleList()/getSize(): height; 
+            
 
-        int start = getContentSize() - height;
-
-        if(start > 0){
-            int length = height * height / getContentSize(); // height * height / (getSize() * entryHeight);
-
-            if(length < 8){
-                length = 8;
+            if(length > height){
+                length = height;
             }
 
-            if(length > height - 8){
+            /*if(length > height - 8){
                 length = height - 8;
-            }
+            }*/
 
-            int end = scrollOffset * (height - length) / start + y;
+            int end = (int) (scrollOffset * (height - length) / start + y);
 
             if(end < y){
                 end = y;
@@ -242,14 +306,14 @@ public class GuiScrollingList<T> extends Gui{
             if(drawSliderBackground){
                 drawRect(scrollBarXStart, y, scrollBarXEnd, y + height, sliderBackgroundColor); // Background
             }
-            drawRect(scrollBarXStart, end + length, scrollBarXEnd, end, sliderColor);
+            drawRect(scrollBarXStart, start, scrollBarXEnd, start+length, sliderColor);
         }
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDisable(GL11.GL_BLEND);
 
         // Foreground
-        currentY = y - scrollOffset;
+        currentY = (int) (y - scrollOffset);
         for(int l = 0; l < getSize(); l++){
             if(currentY >= y - entryHeight && currentY <= y + height){
                 boolean isHover = hoverIndex == l;
@@ -306,7 +370,10 @@ public class GuiScrollingList<T> extends Gui{
     }
 
     public boolean addElement(T element){
-        return elementData.add(element);
+    	
+        boolean isAdded = elementData.add(element);
+        updateMaxScrollOffset();
+        return isAdded;
     }
 
     public boolean addElements(T... elements){
@@ -443,7 +510,7 @@ public class GuiScrollingList<T> extends Gui{
     }
 
     public int getScrollOffset(){
-        return scrollOffset;
+        return (int) scrollOffset;
     }
 
     public void setScrollOffset(int offset){
@@ -531,7 +598,6 @@ public class GuiScrollingList<T> extends Gui{
         int scissorHeight = height * scale;
         int scissorX = x * scale;
         int scissorY = mc.displayHeight - scissorHeight - (y * scale);
-
         GL11.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);
     }
 }

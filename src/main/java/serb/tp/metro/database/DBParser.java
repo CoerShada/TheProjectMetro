@@ -36,7 +36,9 @@ public class DBParser {
 	            
 	            String line = null;
 	            while ((line = reader.readLine()) != null){
-	                sb.append(line);
+
+	            	sb.append(line);
+	            	
 	                break;
 	            }	            
 	        }
@@ -46,7 +48,11 @@ public class DBParser {
 	            return null;
 	        }
 		}
-		return sb.toString().split("}");
+		if (sb.toString().length()==0) 
+			return null;
+		
+		else
+			return sb.toString().split("}");
 	}
 	
 }

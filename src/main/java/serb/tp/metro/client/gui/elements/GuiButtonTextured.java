@@ -11,12 +11,12 @@ import serb.tp.metro.Main;
 
 public class GuiButtonTextured extends GuiButton{
 	
-	private ResourceLocation buttonTextures;
+	protected ResourceLocation buttonTextures;
 
-	public GuiButtonTextured(int id, int xPos, int yPos, String string, String textureName) {
-		super(id, xPos, yPos, 68, 20, string);
+	public GuiButtonTextured(int id, int xPos, int yPos, String string, int width, int height ,String textureName) {
+		super(id, xPos, yPos, width, height, string);
 		buttonTextures = new ResourceLocation(Main.modid, "textures/gui/guiScreen/" + textureName);
-		
+
 	}
 	
 	public void drawButton(Minecraft mc, int mouseX_, int mouseY)
@@ -34,7 +34,7 @@ public class GuiButtonTextured extends GuiButton{
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glScalef(0.5F, 0.5F, 0.5F);
 
-            this.drawTexturedModalRect(this.xPosition*2, this.yPosition*2, 0,  (k-1) * this.height * 2, this.width * 2, this.height * 2);
+            this.drawTexturedModalRect(this.xPosition*2, this.yPosition*2, 0,  (k-1) * this.height * 2, this.width*2, this.height * 2);
             //this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition,  this.width / 2,  k * 20, this.width / 2, this.height);
             this.mouseDragged(mc, mouseX_, mouseY);
             int l = 14737632;

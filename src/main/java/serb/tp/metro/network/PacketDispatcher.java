@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import serb.tp.metro.Main;
+import serb.tp.metro.network.AbstractMessage.AbstractClientMessage;
 import serb.tp.metro.network.client.SoundsToPlayersMessage;
 import serb.tp.metro.network.client.SyncCraftTimeMessage;
 import serb.tp.metro.network.client.SyncEquipBackpuckMessage;
@@ -18,7 +19,8 @@ import serb.tp.metro.network.client.SyncEquipPantsMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerMaxQuantityLootMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerSpawnTimeMessage;
-import serb.tp.metro.network.server.AddClanMessage;
+import serb.tp.metro.network.general.AddClanMessage;
+import serb.tp.metro.network.general.UpdateClanMessage;
 import serb.tp.metro.network.server.ChangeAmmoMessage;
 import serb.tp.metro.network.server.ChangeFilterMessage;
 import serb.tp.metro.network.server.ChangeFireModMessage;
@@ -48,59 +50,72 @@ public class PacketDispatcher {
 
 	private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(Main.modid);
 
-	public static final void registerPackets() {
-		
-		
-		registerMessage(SyncEquipMaskMessage.class);
-		registerMessage(SyncEquipOuterwearMessage.class);
-		registerMessage(SyncEquipPantsMessage.class);
-		registerMessage(SyncEquipBackpuckMessage.class);
-		registerMessage(SyncEquipGunMessage.class);
-		registerMessage(SyncGuiContainerSpawnerMessage.class);
-		registerMessage(ChengeMaxQuantityLootMessage.class);
-		registerMessage(SyncGuiContainerSpawnerSpawnTimeMessage.class);
-		registerMessage(SoundsToPlayersMessage.class);
-		registerMessage(SyncCraftTimeMessage.class);
-		
+	private static final Class[] clientMessages = new Class[] {
+			SyncEquipMaskMessage.class,
+			SyncEquipOuterwearMessage.class,
+			SyncEquipPantsMessage.class,
+			SyncEquipBackpuckMessage.class,
+			SyncEquipGunMessage.class,
+			SyncGuiContainerSpawnerMessage.class,
+			ChengeMaxQuantityLootMessage.class,
+			SyncGuiContainerSpawnerSpawnTimeMessage.class,
+			SoundsToPlayersMessage.class,
+			SyncCraftTimeMessage.class
+	};
+	
+	private static final Class[] serverMessages = new Class[] {
+			ShootMessage.class,
+			ChangeSafetyModMessage.class,
+			ChangeFireModMessage.class,
+			OpenGuiMessage.class,
+			PickupMessage.class, 
+			LoadAmmoMessage.class,
+			UnloadAmmoMessage.class,
+			ChangeAmmoMessage.class,
+			LoadGunMagMessage.class,
+			ChangeVisorMessage.class,
+			ResperatingMessage.class,
+			ChangeFilterMessage.class,
+			ChangeItemWeight.class,
+			RemovingFilterMessage.class,
+			ChangeSpawnProbabilityMessage.class,
+			SaveContainerServerMessage.class,
+			SyncGuiContainerSpawnerMaxQuantityLootMessage.class,
+			ChangeSpawnTimeMessage.class,
+			NewCraftMessage.class,
+			OnItemLeftClickMessage.class,
+			EditCustomizationMessage.class
+			
+	};
+	
+	private static final Class[] generalMessages = new Class[] {
+			AddClanMessage.class,
+			UpdateClanMessage.class
+			
 
-		registerMessage(ShootMessage.class);
-		registerMessage(ChangeSafetyModMessage.class);
-		registerMessage(ChangeFireModMessage.class);
-		registerMessage(OpenGuiMessage.class);
-		registerMessage(PickupMessage.class);
-		registerMessage(LoadAmmoMessage.class);
-		registerMessage(UnloadAmmoMessage.class);
-		registerMessage(ChangeAmmoMessage.class);
-		registerMessage(LoadGunMagMessage.class);
-		registerMessage(UnloadGunMagMessage.class);
-		registerMessage(ChangeVisorMessage.class);
-		registerMessage(ResperatingMessage.class);
-		registerMessage(ChangeFilterMessage.class);
-		registerMessage(ChangeItemWeight.class);
-		registerMessage(RemovingFilterMessage.class);
-		registerMessage(ChangeSpawnProbabilityMessage.class);
-		registerMessage(SaveContainerServerMessage.class);
-		registerMessage(SyncGuiContainerSpawnerMaxQuantityLootMessage.class);
-		registerMessage(ChangeSpawnTimeMessage.class);
-		registerMessage(NewCraftMessage.class);
-		registerMessage(OnItemLeftClickMessage.class);
-		registerMessage(EditCustomizationMessage.class);
-		registerMessage(AddClanMessage.class);
+	};
+	
+	public static final void registerPackets() {
+		registerMessages(clientMessages);
+		registerMessages(serverMessages);
+		registerMessages(generalMessages);
 	}
 
-	private static final <T extends AbstractMessage<T> & IMessageHandler<T, IMessage>> void registerMessage(Class<T> clazz) {
-		if (AbstractMessage.AbstractClientMessage.class.isAssignableFrom(clazz)) 
-		{
-			PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId++, Side.CLIENT);
-		} 
-		else if (AbstractMessage.AbstractServerMessage.class.isAssignableFrom(clazz)) 
-		{
-			PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId++, Side.SERVER);
-		} 
-		else 
-		{
-			PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId, Side.CLIENT);
-			PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId++, Side.SERVER);
+	private static final <T extends AbstractMessage<T> & IMessageHandler<T, IMessage>> void registerMessages(Class<T>[] classes) {
+		for (Class<T> clazz: classes) {
+			if (AbstractMessage.AbstractClientMessage.class.isAssignableFrom(clazz)) 
+			{
+				PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId++, Side.CLIENT);
+			} 
+			else if (AbstractMessage.AbstractServerMessage.class.isAssignableFrom(clazz)) 
+			{
+				PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId++, Side.SERVER);
+			} 
+			else 
+			{
+				PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId, Side.CLIENT);
+				PacketDispatcher.dispatcher.registerMessage(clazz, clazz, packetId++, Side.SERVER);
+			}
 		}
 	}
 
