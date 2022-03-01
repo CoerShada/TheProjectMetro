@@ -13,7 +13,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import serb.tp.metro.Main;
 import serb.tp.metro.common.clans.Clan;
-import serb.tp.metro.common.handlers.ClanHandler;
+import serb.tp.metro.common.clans.ClanHandler;
 import serb.tp.metro.common.ieep.ExtendedPlayer;
 import serb.tp.metro.network.AbstractMessage;
 import serb.tp.metro.network.PacketDispatcher;
@@ -42,12 +42,12 @@ public class UpdateClanMessage extends AbstractMessage<UpdateClanMessage>{
 			PacketDispatcher.sendToAll(new UpdateClanMessage());
 		}*/
 		World world = side.isServer()? MinecraftServer.getServer().getEntityWorld(): Minecraft.getMinecraft().theWorld;
-		ExtendedPlayer clanIEEP = Main.proxy.clanIEEP.get(player);
+		ExtendedPlayer clanIEEP = Main.proxyCommon.clanIEEP.get(player);
 		
 
 		ClanHandler handler = ClanHandler.get(world);
-		Clan clan = handler.getAPlayersClan(player);
-		clanIEEP.setClan(clan);
+		/*Clan clan = handler.getAPlayersClan(player);
+		clanIEEP.setClan(clan);*/
 
 
 	}

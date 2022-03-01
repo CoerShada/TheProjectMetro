@@ -20,15 +20,18 @@ import serb.tp.metro.common.ieep.ExtendedPlayer;
 public class GuiButtonClan extends GuiButtonTextured{
 
 	private Clan clan;
-	private ExtendedPlayer extendedPlayer;
+	private Clan playersClan;
 	private EntityPlayer player;
+	private Relation relation;
 	
-    public GuiButtonClan(int id, int posX, int posY, String texture, Clan clan, EntityPlayer player)
+	
+    public GuiButtonClan(int id, int posX, int posY, String texture, Clan clan, Clan playersClan, Relation relation, EntityPlayer player)
     {
-    	super(id, posX, posY, clan.getName(), 70, 20, texture);
+    	super(id, posX, posY, clan.getName(), 105, 10, texture);
     	this.clan = clan;
-    	this.extendedPlayer = Main.proxy.clanIEEP.get(player);
+    	this.playersClan = playersClan;
     	this.player = player;
+    	this.relation = relation;
     }
     
 	public void drawButton(Minecraft mc, int mouseX_, int mouseY)
@@ -47,58 +50,52 @@ public class GuiButtonClan extends GuiButtonTextured{
             GL11.glScalef(0.5F, 0.5F, 0.5F);
 
             this.drawTexturedModalRect(this.xPosition*2, this.yPosition*2, 0,  (k-1) * this.height * 2, this.width*2, this.height * 2);
-            //this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition,  this.width / 2,  k * 20, this.width / 2, this.height);
             this.mouseDragged(mc, mouseX_, mouseY);
             int l = 14737632;
+            
+            if (relation!=null) {
+            	k = 3;
+            	if (relation.getImprooveRelations()==playersClan.getId()) {
+            		k=2;
+            	}
+            	else if (relation.getImprooveRelations()==clan.getId()) {
+            		k=1;
+            	}
+            	this.drawTexturedModalRect((this.xPosition + this.width)*2-30, this.yPosition*2, 0,  k * this.height * 2 + this.height * 2, 22, 20);            
+            }
             GL11.glPopMatrix();
-
 
             int color = EColor.FREE.color;
             
-            if (extendedPlayer.getClan()==null) {
-            	if (clan.isApplicationSubmitted(player))
-            		color = EColor.APPLY_FOR_ADMISSION.color;
-            	else
-            		color = EColor.FREE.color;
+            if (playersClan==null) {
+            	color = EColor.FREE.color;
+            }
+            else if (relation== null) {
+            	color = EColor.SELF.color;
+            }
+            else if (relation.getType() == RelationType.WAR) {
+            	color = EColor.ENEMY.color;
+            }
+            else if (relation.getType() == RelationType.NEUTRAL) {
+            	color = EColor.NEUTRAL.color;
             }
             else {
-            	Clan playerClan = extendedPlayer.getClan();
-            	Relation relation = playerClan.getRelation(clan);
-            	if (relation== null) {
-            		color = EColor.SELF.color;
-            	}
-            	else if(relation.getType() == RelationType.WAR && relation.getImprooveRelations() == clan) {
-            		color = EColor.REQUEST_NEUTRAL.color;
-            	}
-            	else if (relation.getType() == RelationType.WAR) {
-            		color = EColor.ENEMY.color;
-            	}
-            	else if(relation.getType() == RelationType.NEUTRAL && relation.getImprooveRelations() == clan) {
-            		color = EColor.REQUEST_ALLIANCE.color;
-            	}
-            	else if (relation.getType() == RelationType.NEUTRAL) {
-            		color = EColor.NEUTRAL.color;
-            	}
-            	else {
-            		color = EColor.ALLIANCE.color;
-            	}
-            	
+            	color = EColor.ALLIANCE.color;
             }
+            	
             
-            this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2 , this.yPosition + (this.height - 8) / 2, color);
+            
+            this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2 , this.yPosition + (this.height - 9) / 2, color);
             
         }
     }
     
     enum EColor{
     	ENEMY(new Color(220, 75, 35)), 
-    	NEUTRAL(new Color(235, 235, 30)),
-    	ALLIANCE(new Color(15, 235, 30)),
-    	SELF(new Color(45, 45, 235)),
-    	REQUEST_NEUTRAL(new Color(220, 100, 70)),
-    	REQUEST_ALLIANCE(new Color(135, 235, 30)),
-    	FREE(new Color(255, 255, 255)),
-    	APPLY_FOR_ADMISSION(new Color(100, 126, 232));
+    	NEUTRAL(new Color(255, 255, 255)),
+    	ALLIANCE(new Color(45, 45, 235)),
+    	SELF(new Color(219, 163, 22)),
+    	FREE(new Color(255, 255, 255));
     	private int color;
     	
     	EColor(Color color) {
@@ -106,5 +103,28 @@ public class GuiButtonClan extends GuiButtonTextured{
     	}
     	
     }
+
+    @Override
+    public boolean mousePressed(Minecraft mc, int x, int y)
+    {
+
+        return this.enabled && this.visible && x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
+    }
+    
+	public final Clan getClan() {
+		return clan;
+	}
+
+	public final Clan getPlayersClan() {
+		return playersClan;
+	}
+
+	public final EntityPlayer getPlayer() {
+		return player;
+	}
+
+	public final Relation getRelation() {
+		return relation;
+	}
     
 }

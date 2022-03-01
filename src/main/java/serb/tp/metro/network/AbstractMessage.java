@@ -52,7 +52,7 @@ public abstract class AbstractMessage<T extends AbstractMessage<T>> implements I
 		{
 			throw new RuntimeException("Invalid side " + ctx.side.name() + " for " + msg.getClass().getSimpleName());
 		}
-		msg.process(Main.proxy.getPlayerEntity(ctx), ctx.side);
+		msg.process(Main.proxyCommon.getPlayerEntity(ctx), ctx.side);
 		return null;
 	}
 
@@ -64,6 +64,8 @@ public abstract class AbstractMessage<T extends AbstractMessage<T>> implements I
 	}
 
 	public static abstract class AbstractServerMessage<T extends AbstractMessage<T>> extends AbstractMessage<T> {
+
+		
 		@Override
 		protected final boolean isValidOnSide(Side side) 
 		{

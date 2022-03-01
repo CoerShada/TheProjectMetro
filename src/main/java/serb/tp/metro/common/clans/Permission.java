@@ -16,7 +16,8 @@ public enum Permission {
 	BeginClaim,
 	ChangePerms,
 	CreateOrder,
-	AcceptOrder;
+	AcceptOrder,
+	ChangeSubordination;
 	
 	public static HashMap<Permission, Boolean> getDefaultPermissions(){
 		HashMap<Permission, Boolean> result = new HashMap<Permission, Boolean>();

@@ -1,5 +1,6 @@
 package serb.tp.metro.client.gui.clan;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -9,23 +10,26 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
+import serb.tp.metro.client.ClientProxy;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.client.gui.elements.GuiButtonTextured;
+import serb.tp.metro.common.clans.Clan;
 import serb.tp.metro.common.ieep.ExtendedPlayer;
+import serb.tp.metro.network.PacketDispatcher;
+import serb.tp.metro.network.server.GetClanByPlayerMessage;
 
 public abstract class GuiSubscreen extends GuiScreen{
 
 	 EntityPlayer player;
-	 ExtendedPlayer clan;
 	 int x, y;
-	 GuiScreen parent;
+	 GuiClanMainWindow parent;
 
 	 
-	 public GuiSubscreen(EntityPlayer player, int x, int y, GuiScreen parent) {
+	 public GuiSubscreen(EntityPlayer player, int x, int y, GuiClanMainWindow parent) {
 		 this.player = player;
 		 this.x = x;
 		 this.y = y;
-		 this.clan = Main.proxy.clanIEEP.get(player);
+
 		 this.parent = parent;
 	 }
 	 
@@ -53,23 +57,46 @@ public abstract class GuiSubscreen extends GuiScreen{
 		 this.drawRect(this.x, this.y, this.x+this.width, this.y+this.height, 0xFFFFFF);
 	 }
 	    
-	 @Override
-	 protected void mouseClicked(int mouseX, int mouseY, int mouseButton)  {
 
-		 super.mouseClicked(mouseX, mouseY, mouseButton);
-
-		 
-	 }
-
-	 @Override
-	 public void updateScreen() {
-
-	 }
-	    
+	 	 
 	 @Override
 	 public boolean doesGuiPauseGame()
 	 {
 		 return false;
+	 }
+	 
+	 public void handleMouseInput()
+	 {
+		 int i = Mouse.getEventX() * this.parent.width / this.mc.displayWidth;
+	     int j = this.parent.height - Mouse.getEventY() * this.parent.height / this.mc.displayHeight - 1;
+	     
+	     int k = Mouse.getEventButton();
+
+	     if (Mouse.getEventButtonState())
+	     {
+	    	 if (this.mc.gameSettings.touchscreen && this.field_146298_h++ > 0)
+	         {
+	    		 return;
+	         }
+	         this.eventButton = k;
+	         this.lastMouseEvent = Minecraft.getSystemTime();
+	         this.mouseClicked(i, j, this.eventButton);
+	     }
+	     else if (k != -1)
+	     {
+	    	 if (this.mc.gameSettings.touchscreen && --this.field_146298_h > 0)
+	         {
+	    		 return;
+	         }
+
+	         this.eventButton = -1;
+	         this.mouseMovedOrUp(i, j, k);
+	     }
+	     else if (this.eventButton != -1 && this.lastMouseEvent > 0L)
+	     {
+	    	 long l = Minecraft.getSystemTime() - this.lastMouseEvent;
+	         this.mouseClickMove(i, j, this.eventButton, l);
+	     }
 	 }
 	 
 	 protected void glScissor(int x, int y, int width, int height){

@@ -55,7 +55,7 @@ public class CommandCreateFrame extends CommandBase{
 
 		try {
 			EntityPlayer player = (EntityPlayer) sender;
-			Main.proxy.bs.get(player).saveFrame(player.worldObj);
+			Main.proxyCommon.bs.get(player).saveFrame(player.worldObj);
 			ChatComponentTranslation chatMessage = new ChatComponentTranslation("frames.createSuccessful");
 			chatMessage.getChatStyle().setColor(EnumChatFormatting.GREEN);
 			sender.addChatMessage(chatMessage);

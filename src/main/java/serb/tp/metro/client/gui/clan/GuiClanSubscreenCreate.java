@@ -14,7 +14,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.client.gui.elements.GuiButtonTextured;
-import serb.tp.metro.common.handlers.ClanHandler;
+import serb.tp.metro.common.clans.ClanHandler;
 import serb.tp.metro.network.PacketDispatcher;
 import serb.tp.metro.network.general.AddClanMessage;
 import serb.tp.metro.utils.StringHelper;
@@ -25,7 +25,7 @@ public class GuiClanSubscreenCreate extends GuiSubscreen{
     private String str = "Это тестовый текст для описания создания клана";
 	private boolean error = false;
     
-	public GuiClanSubscreenCreate(EntityPlayer player, int x, int y, GuiScreen parent) {
+	public GuiClanSubscreenCreate(EntityPlayer player, int x, int y, GuiClanMainWindow parent) {
 		super(player, x, y, parent);
 		
 	}
@@ -43,7 +43,7 @@ public class GuiClanSubscreenCreate extends GuiSubscreen{
 	 @Override
 	 protected void actionPerformed(GuiButton button) {
 		 
-	        if(button.id == 11) {
+		 if(button.id == 11) {
 	        	nameFaction.setText("");
 	        }
 	        if(button.id == 12) {
@@ -56,13 +56,10 @@ public class GuiClanSubscreenCreate extends GuiSubscreen{
 	            	return;
 	            }
 	            PacketDispatcher.sendToServer(new AddClanMessage(nameFaction.getText()));
-	    		handler.createClan(nameFaction.getText(), player);
-	    		handler.markDirty();
-
-	    		
+	    		handler.createClan(name, player.getUniqueID());
 	        }
 		 
-		 super.actionPerformed(button);
+	        super.actionPerformed(button);
 
 	 }
 	 

@@ -11,6 +11,7 @@ guiElements.guiSliderSpawnItems.spawnProbability=Шанс спавна
 guiElements.guiSliderQuantityItems.maxQuantity=Максимальное количество заполняемых слотов
 gui.button.saveTime=Сохранить время
 gui.button.create=Создать 
+gui.button.edit=Редактировать
 gui.button.clear=Очистить
 gui.clan.button.main=Главная
 gui.clan.button.profile=Профиль

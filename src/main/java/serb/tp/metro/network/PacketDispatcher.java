@@ -9,7 +9,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import serb.tp.metro.Main;
 import serb.tp.metro.network.AbstractMessage.AbstractClientMessage;
+import serb.tp.metro.network.client.WriterNBTDataToClientBufferMessage;
 import serb.tp.metro.network.client.SoundsToPlayersMessage;
+import serb.tp.metro.network.client.SyncCHMessage;
 import serb.tp.metro.network.client.SyncCraftTimeMessage;
 import serb.tp.metro.network.client.SyncEquipBackpuckMessage;
 import serb.tp.metro.network.client.SyncEquipGunMessage;
@@ -19,6 +21,7 @@ import serb.tp.metro.network.client.SyncEquipPantsMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerMaxQuantityLootMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerMessage;
 import serb.tp.metro.network.client.SyncGuiContainerSpawnerSpawnTimeMessage;
+import serb.tp.metro.network.client.SyncRelationMessage;
 import serb.tp.metro.network.general.AddClanMessage;
 import serb.tp.metro.network.general.UpdateClanMessage;
 import serb.tp.metro.network.server.ChangeAmmoMessage;
@@ -29,8 +32,12 @@ import serb.tp.metro.network.server.ChangeSafetyModMessage;
 import serb.tp.metro.network.server.ChangeSpawnProbabilityMessage;
 import serb.tp.metro.network.server.ChangeSpawnTimeMessage;
 import serb.tp.metro.network.server.ChangeVisorMessage;
+import serb.tp.metro.network.server.ChangeRelationMessage;
 import serb.tp.metro.network.server.ChengeMaxQuantityLootMessage;
 import serb.tp.metro.network.server.EditCustomizationMessage;
+import serb.tp.metro.network.server.GetAllClansMessage;
+import serb.tp.metro.network.server.GetClanByPlayerMessage;
+import serb.tp.metro.network.server.GetServerCHMessage;
 import serb.tp.metro.network.server.LoadAmmoMessage;
 import serb.tp.metro.network.server.LoadGunMagMessage;
 import serb.tp.metro.network.server.NewCraftMessage;
@@ -60,7 +67,10 @@ public class PacketDispatcher {
 			ChengeMaxQuantityLootMessage.class,
 			SyncGuiContainerSpawnerSpawnTimeMessage.class,
 			SoundsToPlayersMessage.class,
-			SyncCraftTimeMessage.class
+			SyncCraftTimeMessage.class,
+			WriterNBTDataToClientBufferMessage.class,
+			SyncCHMessage.class,
+			SyncRelationMessage.class
 	};
 	
 	private static final Class[] serverMessages = new Class[] {
@@ -84,7 +94,11 @@ public class PacketDispatcher {
 			ChangeSpawnTimeMessage.class,
 			NewCraftMessage.class,
 			OnItemLeftClickMessage.class,
-			EditCustomizationMessage.class
+			EditCustomizationMessage.class,
+			GetClanByPlayerMessage.class,
+			GetAllClansMessage.class,
+			GetServerCHMessage.class,
+			ChangeRelationMessage.class
 			
 	};
 	

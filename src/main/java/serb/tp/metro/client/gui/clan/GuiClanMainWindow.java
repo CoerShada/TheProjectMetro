@@ -7,14 +7,22 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
 import net.minecraftforge.common.MinecraftForge;
+import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
+import serb.tp.metro.client.ClientProxy;
 import serb.tp.metro.client.Type;
 import serb.tp.metro.client.gui.elements.GuiButtonTextured;
 import serb.tp.metro.client.resources.Resources;
+import serb.tp.metro.common.clans.Clan;
+import serb.tp.metro.common.clans.ClanHandler;
+import serb.tp.metro.common.clans.Rank;
 import serb.tp.metro.common.ieep.ExtendedPlayer;
+import serb.tp.metro.network.PacketDispatcher;
+import serb.tp.metro.network.server.GetClanByPlayerMessage;
 
 public class GuiClanMainWindow extends GuiScreen
 {
@@ -26,15 +34,18 @@ public class GuiClanMainWindow extends GuiScreen
     private int ySize = 143;
     protected int centerX;
     protected int centerY;
-    GuiSubscreen subscreen;
-    ExtendedPlayer clan;
+    protected GuiSubscreen subscreen;
+    protected Clan clan;
+    protected Rank rank;
     protected boolean needUpdated = true;
     
     public GuiClanMainWindow(EntityPlayer player) {
-		super();
+	
 		this.player = player;
-		this.clan = Main.proxy.clanIEEP.get(player);
-		System.out.println(this.clan.getClan());
+		
+		ClanHandler handler = ClanHandler.get(Minecraft.getMinecraft().theWorld);
+		clan = handler.getAPlayersClan(player.getUniqueID());
+		rank = handler.getAPlayersRank(player.getUniqueID());
 	}
     
     @Override
@@ -57,7 +68,7 @@ public class GuiClanMainWindow extends GuiScreen
     }
     
     public void updateButtons() {
-        if (clan.getClan()==null) {
+        if (clan==null) {
         	subscreen = new GuiClanSubscreenCreate(player, centerX+63, centerY, this);
         	for (int i = 3; i<buttonList.size(); i++) {
         		GuiButton button = (GuiButton) buttonList.get(i);
@@ -133,14 +144,11 @@ public class GuiClanMainWindow extends GuiScreen
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
     {
     	
-        if (subscreen!=null) {
-        	subscreen.mouseClicked(mouseX, mouseY, mouseButton);
-        }
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
         
     }
-
+    
     @Override
     public void drawScreen(int x, int y, float p_73863_3_)
     {
@@ -159,8 +167,8 @@ public class GuiClanMainWindow extends GuiScreen
     }
     
     public void updateMainPageClan() {
-		if (clan.getClan()!=null){
-			mc.fontRenderer.drawString(Type.getTranslate("clans.isClan")+" «"+clan.getClan().getName()+ "» "+mc.thePlayer.getDisplayName(), centerX+65, centerY+4, 15526880);
+		if (clan!=null){
+			mc.fontRenderer.drawString(Type.getTranslate("clans.isClan")+" «"+clan.getName()+ "» "+mc.thePlayer.getDisplayName(), centerX+65, centerY+4, 15526880);
     	}
 		else {
 			mc.fontRenderer.drawString(Type.getTranslate("clans.noneClan")+" "+mc.thePlayer.getDisplayName(), centerX+65, centerY+4, 15526880);

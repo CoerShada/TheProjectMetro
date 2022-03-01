@@ -14,23 +14,19 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
 import serb.tp.metro.common.clans.Clan;
-import serb.tp.metro.common.handlers.ClanHandler;
+import serb.tp.metro.common.clans.ClanHandler;
 
 
 public class ExtendedPlayer implements IExtendedEntityProperties {
 	
 	public final static String TAG = Main.modid + ":ExtendedPlayer";
 	protected EntityPlayer player;
-	private Clan clan;
 	private ArrayList<Clan> invites = new ArrayList<Clan>();
 	private ArrayList<Clan> ignore = new ArrayList<Clan>();
 	private short reputation; 
 
-	public Clan getClan() {
-		return clan;
-	}
 	
-	public boolean inviteToClan(Clan clan) {
+	/*public boolean inviteToClan(Clan clan) {
 		if (this.clan!=null || invites.contains(clan)) return false;
 		if (!ignore.contains(clan))
 			invites.add(clan);
@@ -58,7 +54,7 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 	
 	public void reg(EntityPlayer player) {
 		player.registerExtendedProperties(TAG, new ExtendedPlayer());		
-	}
+	}*/
 	
 	public ExtendedPlayer get(EntityPlayer player) {
 		return player != null ? (ExtendedPlayer)player.getExtendedProperties(TAG) : null;
@@ -113,6 +109,11 @@ public class ExtendedPlayer implements IExtendedEntityProperties {
 		}
 		
 	}
+
+	public void reg(EntityPlayer player) {
+		player.registerExtendedProperties(TAG, new ExtendedPlayer());		
+	}
+
 
 	
 

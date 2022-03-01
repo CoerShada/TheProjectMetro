@@ -12,37 +12,62 @@ import serb.tp.metro.DebugMessage;
 
 public class Rank implements INBTSyncronized{
 
-	private int index;
+	private int id;
+	private int clanId;
+	private int subordinationIndex = 0;
+	
 	private String name;
-	private ArrayList<Member> members = new ArrayList<Member>();
 	Map<Permission, Boolean> permissions = new HashMap<Permission, Boolean>();
 	
-	@SuppressWarnings("null")
-	public Rank(int index, String name, Map<Permission, Boolean> permissions) {
-		this.index = index;
+
+	public Rank(int id, int clanId, int subordinationIndex, String name, Map<Permission, Boolean> permissions) {
+		this.id = id;
+		this.clanId = clanId;
+		this.subordinationIndex = subordinationIndex;
 		this.name = name;
-		this.permissions = permissions;
+		
 		if (permissions==null) {
+			permissions = new HashMap<Permission, Boolean>();
 			permissions.putAll(Permission.getDefaultPermissions());
 		}
+		this.permissions = permissions;
 
 	}
 	
 	public Rank() {}
 	
-	public void setIndex(int index) {
-		this.index = index;
+	public boolean isPermitted(Permission permission) {
+		return this.permissions.get(permission);
 	}
 	
-	public int getIndex() {
-		return index;
+	public void setId(int index) {
+		this.id = index;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 	
 	public String getName() {
 		return this.name;
 	}
 	
+	public int getClanId() {
+		return this.clanId;
+	}
 
+	public void increaseSubordinationIndex() {
+		this.subordinationIndex++;
+	}
+	
+	public void decreaseSubordinationIndex() {
+		this.subordinationIndex--;
+	}
+	
+	public int getSubordinationIndex() {
+		return this.subordinationIndex;
+	}
+	
 	public void updatePermissions() {
 		Permission[] permissions = Permission.values();
 		for(int i = 0; i<permissions.length; i++) {
@@ -58,31 +83,20 @@ public class Rank implements INBTSyncronized{
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		// TODO Auto-generated method stub
+		nbt = this.getNBT();
 		
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		
-		index = nbt.getInteger("index");
-		String name = nbt.getString("name");
-		DebugMessage.printMessage("Выгружен ранг " + name);
+		id = nbt.getInteger("id");
+		name = nbt.getString("name");
+		clanId = nbt.getInteger("clanId");
+		subordinationIndex = nbt.getInteger("subordinationIndex");
 		NBTTagCompound perms = nbt.getCompoundTag("perms");
-		
-		int size = nbt.getInteger("quantityMembers");
-		ArrayList<Member> tempMembers = new ArrayList<Member>();
-		for (int i = 0; i<size; i++) {
 
-			Member member = new Member();
-			member.readFromNBT(nbt.getCompoundTag("member:"+i));
-
-			tempMembers.add(member);
-		}
-		this.members = tempMembers;
-		
 		for(Permission key: Permission.values()) {	
-			permissions.put(key, nbt.getBoolean(key.toString()));
+			permissions.put(key, perms.getBoolean(key.toString()));
 		}
 		if (permissions==null) {
 			permissions.putAll(Permission.getDefaultPermissions());
@@ -91,10 +105,12 @@ public class Rank implements INBTSyncronized{
 
 	@Override
 	public NBTTagCompound getNBT() {
+		
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger("index", this.getIndex());
+		tag.setInteger("id", this.getId());
 		tag.setString("name", this.getName());
-		DebugMessage.printMessage("Загружен ранг " + this.getName());
+		tag.setInteger("clanId", clanId);
+		tag.setInteger("subordinationIndex", subordinationIndex);
 		Map<Permission, Boolean> perms = this.getPermissions();
 		tag.setInteger("permsSize", perms.size());
 		
@@ -102,47 +118,8 @@ public class Rank implements INBTSyncronized{
 		for (Entry<Permission, Boolean> perm: perms.entrySet()) {
 			tagPerms.setBoolean(perm.getKey().toString(), perm.getValue());
 		}
-		
-		int counter = 0;
-		tag.setInteger("quantityMembers", members.size());
-		for (Member member: members) {
-			NBTTagCompound tagMember = member.getNBT();
-			tag.setTag("member:"+counter, tagMember);
-			counter++;
-		}
-		
 		tag.setTag("perms", tagPerms);
 		return tag;
 	}
 
-	public void addMember(Member newMember) {
-		
-		this.members.add(newMember);
-	}
-
-	public boolean removeMember(EntityPlayer player) {
-		for (Member member: members) {
-			if (member.getPlayer().equals(player.getDisplayName())) {
-				members.remove(member);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isARankPlayer(String playerName) {
-		for (Member member: members) {
-			DebugMessage.printMessage(member.getPlayer() + " " + playerName);
-			if (member.getPlayer().equalsIgnoreCase(playerName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public ArrayList<Member> getMembers() {
-		return members;
-	}
-	
-	
 }

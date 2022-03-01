@@ -1,17 +1,42 @@
 package serb.tp.metro.common.clans;
 
-public class Relation {
+import com.google.common.base.Throwables;
+
+import net.minecraft.nbt.NBTTagCompound;
+import serb.tp.metro.DebugMessage;
+
+public class Relation implements INBTSyncronized{
 	private int id;
-	private RelationType relationType;
-	private Clan[] clans = new Clan[2];
-	private Clan clanImprovingRelation;
+	private RelationType relationType = RelationType.NEUTRAL;
+	private int[] clansId = new int[] {-1, -1};
+	private int clanImprovingRelation = -1;
 	
-	public void improveRelations(Clan clan) {
-		if (clanImprovingRelation==null) {
-			clanImprovingRelation = clan;
+	public void setClansId(int[] clansId) {
+		if (this.clansId[0]==-1 && this.clansId[1]==-1) {
+			this.clansId = clansId;
+		}	
+	}
+	
+	public int[] getClansId() {
+		return this.clansId;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	
+	public void improveRelations(int clanId) {
+
+		if (clanImprovingRelation==-1) {
+			clanImprovingRelation = clanId;
 			return;
 		}
-		if (!clan.equals(this.clanImprovingRelation)) {
+		if (clanId != this.clanImprovingRelation) {
 			RelationType type;
 			switch (relationType) {
 				case WAR:
@@ -30,8 +55,7 @@ public class Relation {
 	}
 	
 	public void toDeclare(RelationType type) {
-		if (relationType.equals(type)) return;
-		clanImprovingRelation = null;
+		clanImprovingRelation = -1;
 		relationType = type;
 	}
 
@@ -39,12 +63,34 @@ public class Relation {
 		return relationType;
 	}
 	
-	public boolean isAThisClan(Clan clan) {
-		return (clans[0] == clan || clans[1]==clan);
-	}
-	
-	public Clan getImprooveRelations() {
+
+	public int getImprooveRelations() {
 		return clanImprovingRelation;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		nbt = getNBT();
+		
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		this.id = nbt.getInteger("id");
+		this.clansId = nbt.getIntArray("clansId");
+		this.clanImprovingRelation = nbt.getInteger("clanImprovingRelation");
+		this.relationType = RelationType.valueOf(nbt.getString("relationType"));
+		
+	}
+
+	@Override
+	public NBTTagCompound getNBT() {
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger("id", this.id);
+		tag.setIntArray("clansId", this.clansId);
+		tag.setInteger("clanImprovingRelation", this.clanImprovingRelation);
+		tag.setString("relationType", relationType.toString());
+		return tag;
 	}
 }
 

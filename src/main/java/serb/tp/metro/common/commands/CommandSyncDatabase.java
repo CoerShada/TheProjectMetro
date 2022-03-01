@@ -53,7 +53,7 @@ public class CommandSyncDatabase extends CommandBase{
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		try {
-			Main.proxy.loadOrUpdateContent();
+			Main.proxyCommon.loadOrUpdateContent();
 			ChatComponentTranslation chatMessage = new ChatComponentTranslation("database.updated");
 			chatMessage.getChatStyle().setColor(EnumChatFormatting.GREEN);
 			sender.addChatMessage(chatMessage);

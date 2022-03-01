@@ -1,5 +1,7 @@
 package serb.tp.metro.common;
 
+import java.util.HashMap;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -38,7 +40,7 @@ import serb.tp.metro.entities.player.handlers.WeightHandler;
 import serb.tp.metro.items.ItemSelector;
 
 public class CommonProxy {
-	
+	public static Object buffer;
 	private static int modGuiIndex = 0;
 	public WeaponSystem ws;
 	public BuildingSystem bs;
@@ -76,6 +78,8 @@ public class CommonProxy {
 		
 	}
 
+
+	
 	public void postInit() {
 
 	}

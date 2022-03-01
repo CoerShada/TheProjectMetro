@@ -25,7 +25,7 @@ public final class ItemSelector extends Item{
     	if (!player.worldObj.isRemote) {
 	    	if (player.isSneaking())
 	    	{
-	    		Main.proxy.bs.get(player).clearSelection();
+	    		Main.proxyCommon.bs.get(player).clearSelection();
 		    	ChatComponentText chatMessage = new ChatComponentText("Selection has been cleared!");
 				chatMessage.getChatStyle().setColor(EnumChatFormatting.LIGHT_PURPLE);
 				player.addChatMessage(chatMessage);
@@ -34,7 +34,7 @@ public final class ItemSelector extends Item{
 		    	ChatComponentText chatMessage = new ChatComponentText("Second position [x=" + x + ", y="+ y +", z=" + (z + 1) + "]");
 				chatMessage.getChatStyle().setColor(EnumChatFormatting.AQUA);
 				player.addChatMessage(chatMessage);
-				Main.proxy.bs.get(player).selectSecondPostion(x, y, z);
+				Main.proxyCommon.bs.get(player).selectSecondPostion(x, y, z);
 	    	}
     	}
         return false;
@@ -49,13 +49,13 @@ public final class ItemSelector extends Item{
 	        	ChatComponentText chatMessage = new ChatComponentText("Main block position [x=" + x + ", y="+ y +", z=" + (z + 1) + "]");
 	        	chatMessage.getChatStyle().setColor(EnumChatFormatting.GOLD);
 	        	player.addChatMessage(chatMessage);
-	    		Main.proxy.bs.get(player).selectMainBlock(x, y, z);
+	    		Main.proxyCommon.bs.get(player).selectMainBlock(x, y, z);
 	    	}
 	    	else {
 	        	ChatComponentText chatMessage = new ChatComponentText("First position [x=" + x + ", y="+ y +", z=" + (z + 1) + "]");
 	        	chatMessage.getChatStyle().setColor(EnumChatFormatting.AQUA);
 	        	player.addChatMessage(chatMessage);
-	    		Main.proxy.bs.get(player).selectFirstPosition(x, y, z);
+	    		Main.proxyCommon.bs.get(player).selectFirstPosition(x, y, z);
 	    	}
     	}
         return true;

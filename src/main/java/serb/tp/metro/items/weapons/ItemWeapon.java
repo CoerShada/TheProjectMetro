@@ -195,7 +195,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
     	else {
     		itemStack.getTagCompound().setString("fireMod", this.fireMods[index+1].toString());
     	}
-    	WeaponSystem ws = Main.proxy.ws.get(player);
+    	WeaponSystem ws = Main.proxyCommon.ws.get(player);
     	ws.updateCurrentItem();
     	//PacketDispatcher.sendToServer(new ChangeFireModMessage(fireMods[index].toString()));
     	
@@ -204,7 +204,7 @@ public abstract class ItemWeapon extends Item3D implements ICustomizable {
     public void safetyModChange(ItemStack itemStack, World world, EntityPlayer player) 
     {
     	itemStack.getTagCompound().setBoolean("safetyMod", !itemStack.getTagCompound().getBoolean("safetyMod"));
-    	WeaponSystem ws = Main.proxy.ws.get(player);
+    	WeaponSystem ws = Main.proxyCommon.ws.get(player);
     	ws.updateCurrentItem();
     }
     

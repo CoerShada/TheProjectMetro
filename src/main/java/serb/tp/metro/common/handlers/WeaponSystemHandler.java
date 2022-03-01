@@ -18,12 +18,14 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import serb.tp.metro.DebugMessage;
 import serb.tp.metro.Main;
+import serb.tp.metro.common.clans.ClanHandler;
 import serb.tp.metro.common.ieep.ExtendedPlayer;
 import serb.tp.metro.common.ieep.WeaponSystem;
 import serb.tp.metro.containers.CustomSlots;
 import serb.tp.metro.customization.ICustomizable;
 import serb.tp.metro.network.PacketDispatcher;
 import serb.tp.metro.network.general.UpdateClanMessage;
+import serb.tp.metro.network.server.GetServerCHMessage;
 
 public class WeaponSystemHandler {
 
@@ -34,18 +36,18 @@ public class WeaponSystemHandler {
 		
 		if (event.entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)event.entity;
-			if (Main.proxy.ws.get(player) == null) {
-				Main.proxy.ws.reg(player);
+			if (Main.proxyCommon.ws.get(player) == null) {
+				Main.proxyCommon.ws.reg(player);
 				
 			}
 			
-			if (Main.proxy.bs.get(player) == null) {
-				Main.proxy.bs.reg(player);
+			if (Main.proxyCommon.bs.get(player) == null) {
+				Main.proxyCommon.bs.reg(player);
 				
 			}
 			
-			if (Main.proxy.clanIEEP.get(player)==null) {
-				Main.proxy.clanIEEP.reg(player);
+			if (Main.proxyCommon.clanIEEP.get(player)==null) {
+				Main.proxyCommon.clanIEEP.reg(player);
 		
 			}
 
@@ -56,7 +58,15 @@ public class WeaponSystemHandler {
 	@SubscribeEvent
 	public void onPlayerLoadFromFile(PlayerEvent.PlayerLoggedInEvent event) {
 		EntityPlayer player = event.player;
-		System.out.println("player " + player);
+		
+		if (!player.worldObj.isRemote) {
+			World world = MinecraftServer.getServer().getEntityWorld();
+			ClanHandler ch = ClanHandler.get(world);
+			if (!ch.isExistsMember(player.getUniqueID())) {
+				ch.reassignAMember(player.getUniqueID());
+				DebugMessage.printMessage("Member has been created");
+			}
+		}
 		
 		/*if (!player.worldObj.isRemote)
 			PacketDispatcher.sendToAll(new UpdateClanMessage());
@@ -87,22 +97,22 @@ public class WeaponSystemHandler {
 				
 					
 			}
-			
-
-			//PacketDispatcher.sendToServer(new UpdateClanMessage());
 		}
-		
-
-
 	}
 
+	@SubscribeEvent
+	public void LoadClans(EntityJoinWorldEvent event) {
+		if (event.world.isRemote) {
+			PacketDispatcher.sendToServer(new GetServerCHMessage());
+		}
+	}
 	
 	
 	@SubscribeEvent
 	public void onLivingEvent(LivingEvent.LivingUpdateEvent event) {
 		if (event.entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)event.entityLiving;
-			WeaponSystem ws = Main.proxy.ws.get(player);
+			WeaponSystem ws = Main.proxyCommon.ws.get(player);
 			if (ws == null) return;
 				ws.onUpdate();
 			if (player.worldObj.isRemote)

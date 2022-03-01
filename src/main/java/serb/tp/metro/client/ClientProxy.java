@@ -66,6 +66,7 @@ import serb.tp.metro.items.armor.LoadItemArmor;
 
 public class ClientProxy extends CommonProxy {
 	
+	
 	public static boolean isAiming = false;
 	private GameSettings gs;
 	public static OBJLoader loader = new OBJLoader();
